@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="PagerSlidingTabStrip">
+        <attr name="pstsIndicatorColor" format="color" />
+        <attr name="pstsUnderlineColor" format="color" />
+        <attr name="pstsDividerColor" format="color" />
+        <attr name="pstsIndicatorHeight" format="dimension" />
+        <attr name="pstsUnderlineHeight" format="dimension" />
+        <attr name="pstsDividerPadding" format="dimension" />
+        <attr name="pstsTabPaddingLeftRight" format="dimension" />
+        <attr name="pstsScrollOffset" format="dimension" />
+        <attr name="pstsTabBackground" format="reference" />
+        <attr name="pstsShouldExpand" format="boolean" />
+        <attr name="pstsTextAllCaps" format="boolean" />
+    </declare-styleable>
+
+    <!--
+    pstsIndicatorColor Color of the sliding indicator  滑动条的颜色
+	pstsUnderlineColor Color of the full-width line on the bottom of the view  滑动条所在的那个全宽线的颜色
+	pstsDividerColor Color of the dividers between tabs   每个标签的分割线的颜色
+	pstsIndicatorHeightHeight of the sliding indicator       滑动条的高度
+	pstsUnderlineHeight Height of the full-width line on the bottom of the view    滑动条所在的那个全宽线的高度
+	pstsDividerPadding Top and bottom padding of the dividers   分割线底部和顶部的填充宽度
+	pstsTabPaddingLeftRight Left and right padding of each tab   每个标签左右填充宽度
+	pstsScrollOffset Scroll offset of the selected tab
+	pstsTabBackground Background drawable of each tab, should be a StateListDrawable  每个标签的背景，应该是一个StateListDrawable
+	pstsShouldExpand If set to true, each tab is given the same weight, default false   如果设置为true，每个标签是相同的控件，均匀平分整个屏幕，默认是false
+	pstsTextAllCaps If true, all tab titles will be upper case, default true   如果为true，所有标签都是大写字母，默认为true
+
+    -->
+</resources>

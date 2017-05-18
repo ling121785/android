@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item>
+        <shape android:shape="rectangle" >
+            <!-- draw corners -->
+            <corners 
+                android:radius="@dimen/toast_radius" />   
+			<!-- draw inner space --> 
+			<solid 
+			    android:color="#AF000000"/>
+        </shape>
+    </item>
+
+</layer-list>
