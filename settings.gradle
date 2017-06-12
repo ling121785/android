@@ -1,1 +1,1 @@
-include ':app', ':common', ':pulltorefresh', ':universalimageloader'
+include ':app', ':common', ':pulltorefresh', ':universalimageloader', ':businessmodule'
