@@ -1,1 +1,3 @@
-include ':app', ':common', ':pulltorefresh', ':universalimageloader', ':businessmodule'
+include ':app', ':common', ':pulltorefresh', ':universalimageloader', ':businessmodule', ':baseui'
+project(':universalimageloader').projectDir = new File('libs/universalimageloader')
+project(':pulltorefresh').projectDir = new File('libs/pulltorefresh')

@@ -1,0 +1,15 @@
+//版本管理
+buildscript {
+    ext {
+        compileSdkVersion = 25
+        buildToolsVersion = "25.0.0"
+        minSdkVersion = 14
+        targetSdkVersion = 23
+
+        //dependencies
+        appcompatV7= 'com.android.support:appcompat-v7:25.1.0'
+        recyclerviewV7= "com.android.support:recyclerview-v7:25.1.0"
+        design= 'com.android.support:design:23.2.1'
+    }
+
+}
