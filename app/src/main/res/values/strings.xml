@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">ToolBox</string>
+    <string name="login_account_txt">账号</string>
+    <string name="login_pwd_txt">密码</string>
+    <string name="login_account_hint">请输入手机号码</string>
+    <string name="login_pwd_hint">请输入密码</string>
+    <string name="login_btn">登录</string>
 </resources>
