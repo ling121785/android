@@ -9,6 +9,10 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        ndk {
+            //设置支持的SO库架构
+            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+        }
 
     }
     buildTypes {
@@ -32,4 +36,20 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'
     compile 'com.squareup.retrofit2:adapter-rxjava:2.0.0'
     compile project(':common')
+
+    // 添加依赖。注意，版本号必须一致。
+    // 基础功能 (必需)
+    compile 'com.netease.nimlib:basesdk:4.4.0'
+    // 音视频和互动白板服务需要
+    compile 'com.netease.nimlib:nrtc:4.4.0'
+    // 音视频需要
+    compile 'com.netease.nimlib:avchat:4.4.0'
+    // 聊天室需要
+    compile 'com.netease.nimlib:chatroom:4.4.0'
+    // 互动白板服务需要
+    compile 'com.netease.nimlib:rts:4.4.0'
+    // 全文检索服务需要
+    compile 'com.netease.nimlib:lucene:4.4.0'
+
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 }

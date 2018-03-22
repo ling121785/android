@@ -13,7 +13,8 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 
-import toolbox.ll.com.toolbox.R;
+import toolbox.ll.com.common.R;
+
 
 /**
  * Created by root on 2016/7/21.

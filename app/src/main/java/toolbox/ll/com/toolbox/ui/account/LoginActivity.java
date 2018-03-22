@@ -2,7 +2,14 @@ package toolbox.ll.com.toolbox.ui.account;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
+
+import com.example.businessmodule.core.BusinessInterface;
+import com.example.businessmodule.event.account.LoginEvent;
+import com.example.businessmodule.utils.EventId;
+import com.orhanobut.logger.Logger;
+import com.squareup.otto.Subscribe;
 
 import org.apache.lucene.util.ToStringUtils;
 
@@ -22,7 +29,7 @@ public class LoginActivity  extends BaseActivity {
 
     @Override
     public void beforeInit(Bundle savedInstanceState) {
-
+        BusinessInterface.getInstance().registerResponse(this);
     }
 
     @Override
@@ -47,6 +54,19 @@ public class LoginActivity  extends BaseActivity {
             ToastUtils.showInForeground(this,"请输入密码");
             return;
         }
-
+        BusinessInterface.getInstance().request(new LoginEvent(EventId.ACCOUNT_LOGIN,account,pwd));
     }
+
+    @Subscribe
+    public void loginResponse(LoginEvent event){
+        if(event.isSuccess()){
+            ToastUtils.showToast(this,"登陆成功");
+            this.finish();
+            return;
+
+        }
+        ToastUtils.showToast(this,"登陆失败");
+    }
+
+
 }

@@ -5,10 +5,7 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 
-import com.evideo.o2o.resident.event.BaseEvent;
-import com.evideo.o2o.resident.rest.RestApiUrl;
-import com.evideo.o2o.resident.utils.StringUtils;
-import com.evideo.o2o.resident.voip.EVideoVoipHelper;
+import com.example.businessmodule.event.BaseEvent;
 import com.orhanobut.logger.LogLevel;
 import com.orhanobut.logger.Logger;
 
@@ -44,14 +41,15 @@ public class BusinessInterface {
                 .logLevel(logEnable ? LogLevel.FULL: LogLevel.NONE);  // default : LogLevel.FULL;
         BusinessPrefences.getInstance().init(context);
         //如果是debugMode 登录页面允许切换 url,并记录
-        if(debugMode){
-            String debugUrl=BusinessPrefences.getInstance().getServerIp();
-            Logger.i("baseUrl="+BusinessPrefences.getInstance().getServerIp());
-            if(!StringUtils.isEmpty(debugUrl))
-                RestApiUrl.resetBaseUrl(debugUrl);
-        }else{
-            RestApiUrl.resetBaseUrl(baseUrl);//初始化url;
-        }
+//        if(debugMode){
+//            String debugUrl=BusinessPrefences.getInstance().getServerIp();
+//            Logger.i("baseUrl="+BusinessPrefences.getInstance().getServerIp());
+//            if(!StringUtils.isEmpty(debugUrl))
+//                RestApiUrl.resetBaseUrl(debugUrl);
+//        }else{
+//            RestApiUrl.resetBaseUrl(baseUrl);//初始化url;
+//        }
+        Logger.e("service准备启动");
         context.startService(new Intent(context.getApplicationContext(), BusinessService.class));
     }
 
@@ -63,7 +61,6 @@ public class BusinessInterface {
     public void uninit(Context context) {
         // TODO 暂时不结束 business 服务
         context.stopService(new Intent(context.getApplicationContext(), BusinessService.class));
-        EVideoVoipHelper.getInstance().deinitVoip(context);
     }
 
     /**

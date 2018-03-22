@@ -1,14 +1,14 @@
 package com.example.businessmodule.event;
 
 
-import com.evideo.o2o.resident.rest.PageRequest;
+import com.example.businessmodule.rest.PageRequest;
 
 /**
  * 列表请求事件基类
  */
 public abstract class BaseListEvent<T> extends BaseEvent<BaseListEvent.Request, T> {
 
-    public  static class Request extends PageRequest{
+    public  static class Request extends PageRequest {
         private transient boolean fromeServer = true;
         private transient long startTime = -1;
         private transient long endTime = -1;

@@ -46,19 +46,5 @@ dependencies {
     compile project(':businessmodule')
 
     compile rootProject.ext.appcompatV7
-    // 添加依赖。注意，版本号必须一致。
-    // 基础功能 (必需)
-    compile 'com.netease.nimlib:basesdk:4.4.0'
-    // 音视频和互动白板服务需要
-    compile 'com.netease.nimlib:nrtc:4.4.0'
-    // 音视频需要
-    compile 'com.netease.nimlib:avchat:4.4.0'
-    // 聊天室需要
-    compile 'com.netease.nimlib:chatroom:4.4.0'
-    // 互动白板服务需要
-    compile 'com.netease.nimlib:rts:4.4.0'
-    // 全文检索服务需要
-    compile 'com.netease.nimlib:lucene:4.4.0'
 
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
 }

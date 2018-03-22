@@ -3,10 +3,17 @@ package com.example.businessmodule.core;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
+import android.util.Log;
 
+import com.example.businessmodule.business.AccountBusiness;
 import com.example.businessmodule.business.BaseBusiness;
+import com.example.businessmodule.business.RoomBusiness;
 import com.example.businessmodule.event.BaseEvent;
+import com.example.businessmodule.event.account.LoginEvent;
+import com.example.businessmodule.event.roomBusiness.CreateRoomEvent;
+import com.example.businessmodule.event.roomBusiness.JoinRoomEvent;
 import com.orhanobut.logger.Logger;
+import com.squareup.otto.Subscribe;
 
 import toolbox.ll.com.common.utility.StringUtils;
 
@@ -66,10 +73,18 @@ public class BusinessService extends Service {
                     }
                 });
     }
-////account
-//    @Subscribe
-//    public void processEvent(AccountLoginEvent event) {
-//        executeBusiness(new AccountBusiness(event));
-//    }
-
+//account
+    @Subscribe
+    public void processEvent(LoginEvent event) {
+        executeBusiness(new AccountBusiness(event));
+    }
+    // room
+    @Subscribe
+    public void processEvent(CreateRoomEvent event) {
+        executeBusiness(new RoomBusiness(event));
+    }
+    @Subscribe
+    public void processEvent(JoinRoomEvent event) {
+        executeBusiness(new RoomBusiness(event));
+    }
 }

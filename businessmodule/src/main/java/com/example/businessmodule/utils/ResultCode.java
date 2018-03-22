@@ -30,4 +30,7 @@ public class ResultCode {
     public static final int BATABASE_NO_DATA = -11;
     public static final int PARAMETER_ERROR = -12;
     public static final int DOWN_APK_URL_ERROR = -13;//apk下载地址有误
+
+
+    public static final int NETEASE_ERR=-22;
 }

@@ -27,4 +27,6 @@ dependencies {
     // logger
     compile 'com.github.orhanobut:logger:1.12'
     compile 'com.squareup.retrofit2:converter-gson:2.0.0'
+    compile rootProject.ext.appcompatV7
+    compile rootProject.ext.recyclerviewV7
 }

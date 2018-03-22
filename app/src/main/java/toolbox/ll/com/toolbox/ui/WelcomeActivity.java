@@ -1,6 +1,7 @@
 package toolbox.ll.com.toolbox.ui;
 
 import android.content.Intent;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -21,6 +22,17 @@ public class WelcomeActivity  extends BaseActivity {
 
     @Override
     public void afterInit(Bundle savedInstanceState) {
-
+        // 延迟2秒，然后跳转到登录页面
+        new Handler().postDelayed(r, 2000);
     }
+
+    Runnable r = new Runnable() {
+        @Override
+        public void run() {
+            Intent intent = new Intent();
+            intent.setClass(WelcomeActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
+    };
 }

@@ -9,7 +9,7 @@ import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
-import toolbox.ll.com.toolbox.R;
+import toolbox.ll.com.common.R;
 
 /**
  * 
