@@ -17,6 +17,11 @@ import com.netease.nimlib.sdk.avchat.model.AVChatChannelInfo;
 import com.netease.nimlib.sdk.avchat.model.AVChatData;
 import com.netease.nimlib.sdk.avchat.model.AVChatParameters;
 import com.netease.nimlib.sdk.avchat.model.AVChatVideoCapturerFactory;
+import com.netease.nimlib.sdk.chatroom.ChatRoomService;
+import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
+import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
+
+import java.util.logging.Logger;
 
 import static com.netease.nimlib.sdk.avchat.constant.AVChatChannelProfile.CHANNEL_PROFILE_DEFAULT;
 
@@ -61,38 +66,28 @@ public class RoomBusiness extends BaseBusiness{
         });
     }
     private void joinRoom(final JoinRoomEvent event){
-        //开启音视频引擎
-        AVChatManager.getInstance().enableRtc();
-        //设置场景, 如果需要高清音乐场景，设置 AVChatChannelProfile#CHANNEL_PROFILE_HIGH_QUALITY_MUSIC
-        AVChatManager.getInstance().setChannelProfile(CHANNEL_PROFILE_DEFAULT);
-        //设置通话可选参数
-        AVChatParameters parameters = new AVChatParameters();
-        AVChatManager.getInstance().setParameters(parameters);
-        //视频通话设置
-        AVChatManager.getInstance().enableVideo();
-//        AVChatManager.getInstance().setupLocalVideoRender(IVideoRender render, false, AVChatVideoScalingType.SCALE_ASPECT_FILL);
-        //设置视频采集模块
-        AVChatCameraCapturer videoCapturer = AVChatVideoCapturerFactory.createCameraCapturer();
-        AVChatManager.getInstance().setupVideoCapturer(videoCapturer);
-        //设置视频质量调整策略
-//        AVChatManager.getInstance().setVideoQualityStrategy(boolean preferImageQuality);
-        //开启视频预览
-        AVChatManager.getInstance().startVideoPreview();
-        AVChatManager.getInstance().joinRoom2(event.request().getRoomName(), event.request().getType(), new AVChatCallback<AVChatData>() {
+        // roomId 表示聊天室ID
+        EnterChatRoomData data = new EnterChatRoomData(event.request().getRommId());
+        // 以登录一次不重试为例
+        NIMClient.getService(ChatRoomService.class).enterChatRoomEx(data, 1).setCallback(new RequestCallback<EnterChatRoomResultData>() {
             @Override
-            public void onSuccess(AVChatData avChatData) {
-                event.setResponse(avChatData);
+            public void onSuccess(EnterChatRoomResultData result) {
+                // 登录成功
+                event.setResponse(result);
                 responseSuccess();
             }
 
             @Override
-            public void onFailed(int i) {
-                responseError(ResultCode.NETEASE_ERR,"加入房间失败"+i);
+            public void onFailed(int code) {
+                com.orhanobut.logger.Logger.i("加入房间失败"+code);
+                // 登录失败
+                responseError(ResultCode.NETEASE_ERR,"加入房间失败");
             }
 
             @Override
-            public void onException(Throwable throwable) {
-                responseError(throwable);
+            public void onException(Throwable exception) {
+                // 错误
+                responseError(exception);
             }
         });
     }

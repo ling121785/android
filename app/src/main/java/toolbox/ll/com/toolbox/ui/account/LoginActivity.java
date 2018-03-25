@@ -11,7 +11,7 @@ import com.example.businessmodule.utils.EventId;
 import com.orhanobut.logger.Logger;
 import com.squareup.otto.Subscribe;
 
-import org.apache.lucene.util.ToStringUtils;
+
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -29,7 +29,6 @@ public class LoginActivity  extends BaseActivity {
 
     @Override
     public void beforeInit(Bundle savedInstanceState) {
-        BusinessInterface.getInstance().registerResponse(this);
     }
 
     @Override

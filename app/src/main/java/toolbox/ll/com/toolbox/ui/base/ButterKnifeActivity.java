@@ -10,7 +10,7 @@ import butterknife.ButterKnife;
  * Created by Administrator on 2018/3/21.
  */
 
-public  abstract class ButterKnifeActivity extends AppCompatActivity implements baseInit {
+public  abstract class ButterKnifeActivity extends SubscribeActivity implements BaseInit {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

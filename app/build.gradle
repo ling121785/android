@@ -3,16 +3,25 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion rootProject.ext.compileSdkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
+
     defaultConfig {
         applicationId "toolbox.ll.com.toolbox"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构
-            abiFilters "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
+            abiFilters  "armeabi-v7a"
+        }
+    }
+    sourceSets {
+        main {
+            jni.srcDirs = []
+            jniLibs.srcDirs = ['libs']
+            assets.srcDirs = ['assets']
         }
     }
     buildTypes {
@@ -44,7 +53,8 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile project(':businessmodule')
-
+//    //noinspection GradleCompatible,GradleDependency
+//    compile 'com.android.support:MultiDex:1.0.0'
     compile rootProject.ext.appcompatV7
 
 }

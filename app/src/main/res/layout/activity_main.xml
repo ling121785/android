@@ -1,34 +1,231 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
     android:orientation="vertical"
     tools:context="toolbox.ll.com.toolbox.ui.MainActivity">
-    <TextView
-        android:id="@+id/main_tv_userName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="未登录"/>
-    <com.netease.nimlib.sdk.avchat.model.AVChatSurfaceViewRenderer
-        android:id="@+id/main_sf_view"
-        android:layout_width="300dp"
-        android:layout_height="200dp">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/main_top_bg_height"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:background="@color/colorPrimary"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/base_padding_horizontal">
+        <toolbox.ll.com.common.widget.CircleImageView
+            android:id="@+id/main_iv_avatar"
+            android:layout_width="@dimen/main_avatar_size"
+            android:layout_height="@dimen/main_avatar_size"
+            android:src="@mipmap/ic_launcher"
+            android:layout_margin="@dimen/margin_smallest"
+            android:layout_centerHorizontal="true"
+           />
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_edit"
+                android:layout_alignParentRight="true"/>
+        </RelativeLayout>
+        <TextView
+            android:id="@+id/main_tv_userName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="wild worid"
+            android:textColor="@color/colorPrimarySub"
+            android:textSize="@dimen/font_size_large"
+            android:layout_margin="@dimen/margin_smallest"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ID:3589642"
+            android:textColor="@color/fontGray"
+            android:textSize="@dimen/font_size"
+            android:layout_margin="@dimen/margin_smallest"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="铸件一生赠送知音，逍遥一身而忘龄。"
+            android:textColor="@color/fontGray"
+            android:textSize="@dimen/font_size"
+            android:layout_margin="@dimen/margin_smallest"/>
 
-    </com.netease.nimlib.sdk.avchat.model.AVChatSurfaceViewRenderer>
-    <Button
-    android:id="@+id/main_btn_login"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:text="点我点我" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/general_item_height_large"
+        android:background="@color/colorPrimary"
+        android:padding="@dimen/padding_smallest"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5000000.00"
+                android:textColor="@android:color/white"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="金币"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+        <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/white"
+            android:layout_marginTop="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="5000"
+                android:textColor="@android:color/white"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="粉丝"
+                android:textColor="@android:color/white"/>
+        </LinearLayout>
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_item_height"
+            android:minHeight="@dimen/general_item_height"
+            android:background="@android:color/white"
+            style="@style/base_padding_horizontal"
+            android:gravity="center">
+            <ImageView
+                android:id="@+id/item_iv_icon"
+                android:layout_width="@dimen/main_menu_icon_size"
+                android:layout_height="@dimen/main_menu_icon_size"
+                android:layout_marginRight="@dimen/margin_small"
+                android:src="@drawable/ic_main_menu_grade"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size"
+                android:text="我的等级"
+                />
+
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_item_height"
+            android:minHeight="@dimen/general_item_height"
+            android:background="@android:color/white"
+            style="@style/base_padding_horizontal"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="@dimen/main_menu_icon_size"
+                android:layout_height="@dimen/main_menu_icon_size"
+                android:layout_marginRight="@dimen/margin_small"
+                android:src="@drawable/ic_main_menu_fan_"/>
+            <TextView
+                android:id="@+id/item_tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size"
+                android:text="粉丝贡献榜"
+                />
+            <ImageView
+                android:layout_width="@dimen/ic_more_width"
+                android:layout_height="@dimen/ic_more_height"
+                android:src="@drawable/ic_more"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_item_height"
+            android:minHeight="@dimen/general_item_height"
+            android:background="@android:color/white"
+            style="@style/base_padding_horizontal"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="@dimen/main_menu_icon_size"
+                android:layout_height="@dimen/main_menu_icon_size"
+                android:layout_marginRight="@dimen/margin_small"
+                android:src="@drawable/ic_main_menu_live"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size"
+                android:text="我的直播"
+                />
+            <ImageView
+                android:layout_width="@dimen/ic_more_width"
+                android:layout_height="@dimen/ic_more_height"
+                android:src="@drawable/ic_more"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_item_height"
+            android:minHeight="@dimen/general_item_height"
+            android:background="@android:color/white"
+            style="@style/base_padding_horizontal"
+            android:layout_marginTop="@dimen/general_item_margin"
+            android:gravity="center">
+            <ImageView
+                android:layout_width="@dimen/main_menu_icon_size"
+                android:layout_height="@dimen/main_menu_icon_size"
+                android:layout_marginRight="@dimen/margin_small"
+                android:src="@drawable/ic_main_menu_setting"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size"
+                android:text="设置"
+                />
+            <ImageView
+                android:layout_width="@dimen/ic_more_width"
+                android:layout_height="@dimen/ic_more_height"
+                android:src="@drawable/ic_more"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
     <Button
         android:id="@+id/main_btn_joinRoom"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="加入房间啦" />
+        style="@style/login_button"
+        android:text="开启直播"
+        android:layout_marginBottom="@dimen/general_item_margin"/>
+
 </LinearLayout>

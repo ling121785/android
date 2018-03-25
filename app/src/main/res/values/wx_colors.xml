@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 全局使用的颜色 -->
+    <color name="titlebar_bg_color">#3C3C3C</color>
+    <!-- 这是Login相关界面中的颜色 -->
+    <color name="login_txt_hint_color">#555555</color>
+    <color name="register_split_line_color">#c2d4ec</color>
+    <color name="login_split_line_color">#c1d3cc</color>
+    <color name="login_btn_def_color">#98FB98</color>
+    <color name="re_login_btn_def_color">#6fd66b</color>
+    <color name="login_btn_sel_color">#006400</color>
+    <color name="relogin_txt_color">#555555</color>
+    <color name="swich_user_sel_color">#3F80DC</color>
+    <color name="circular_progressbar_color">#3F80DD</color>
+    <color name="circular_progressbar_bg_color">#D0D4D8</color>
+    <!-- 注册头像设置页面 -->
+    <color name="regist_photo_focus_color">#3F80DD</color>
+    <!-- 主页面 -->
+    <color name="action_bar_txt_color">#969696</color>
+    <color name="actionbar_sel_color">#1c1c1c</color>
+    <color name="me_info_edit_color">#2d2d2d</color>
+    <color name="me_info_hint_color">#cfcdce</color>
+    <color name="actionbar_pres_color">#3f80dc</color>
+    <color name="menu_item_back_pres_color">#3773cb</color>
+    <color name="actionbar_def_color">#3C3C3C</color>
+    <color name="jpush_blue">#3f80dc</color>
+    <color name="main_view_split_line_color">#C8C8C8</color>
+    <color name="conv_list_split_line_color">#d6d6d6</color>
+    <color name="contacts_pinner_bg">#F2F8F8F8</color>
+    <color name="contacts_pinner_txt">#858585</color>
+    <color name="contacts_txt_color">#0479FB</color>
+    <color name="me_split_line_color">#d0d0d0</color>
+    <color name="msg_list_item_sel_color">#A3C2EF</color>
+    <color name="item_click_bg_color">#dddddd</color>
+    <color name="friend_request_acept">#808080</color>
+    <color name="friend_content_text_color">#7f7f7f</color>
+    <color name="chat_text_color">#373334</color>
+    <color name="chat_detail_hit_color">#3C3C3C</color>
+    <color name="chat_detail_item_hit_color">#555555</color>
+    <color name="chat_detail_item_content_color">#808080</color>
+    <color name="chat_detail_split_line_color">#d3d3d3</color>
+    <color name="dialog_select_color">#d4d4d4</color>
+    <color name="finish_btn_unclickable_color">#b9ebb8</color>
+    <color name="finish_btn_clickable_color">#6fd66b</color>
+    <color name="default_cursor_color">#8db4eb</color>
+    <color name="menu_item_click_color">#346fc3</color>
+    <color name="me_no_picture_color">#e1e1e1</color>
+    <color name="reset_password_title_color">#4e4e4e</color>
+    <color name="translucent_background">#60000000</color>
+    <!-- 黑色 -->
+    <color name="black">#000000</color>
+    <color name="gray">#808080</color>
+
+    <!-- 灰色 -->
+
+    <color name="grey">#808080</color>
+
+    <!-- 灰色 -->
+
+
+    <color name="green">#008000</color>
+
+    <!-- 绿色 -->
+
+    <color name="darkgreen">#006400</color>
+
+    <!-- 暗绿色 -->
+
+    <color name="blue">#0000FF</color>
+
+    <!-- 蓝色 -->
+
+	<color name="white">#FFFFFF</color>
+
+    <color name="title_grey">#CED9E7</color>
+    
+    <color name="light_blue">#8CA4FF</color>
+    <color name="text_color_count">#F6BB42</color>
+    <color name="text_label_color">#595976</color>
+    <color name="text_context_color">#4D4D4D</color>
+    <color name="text_time_color">#9393AA</color>
+    <color name="text_yellow_color">#FFC024</color>
+    <color name="devide_line_color">#CCCCCC</color>
+    <color name="dada_background_color">#363546</color>
+    <color name="group_small_text_color">#ABAABF</color>
+    <color name="devider_view_color">#EDEDF3</color>
+    <color name="gonglue_detail_color">#FFCE54</color>
+    
+    <color name="equipment_text_color">#5D9CEC</color>
+    <color name="diet_text_color">#F6BB42</color>
+    <color name="skill_text_color">#AC92EC</color>
+    <color name="nickname_color">#FDBF2E</color>
+    <color name="live_text_color">#FFFFFE</color>
+    <color name="dialog_click_color">#0084FF</color>
+    <color name="dialog_black">#272636</color>
+    <color name="edit_text_color">#ABAABF</color>
+    <color name="release_layout_bgcolor">#EDEDF3</color>
+    <color name="live_chat">#F6BB42</color>
+
+
+
+    <color name="bd_c_grey_1">#272636</color>
+    <color name="bd_c_grey_2">#545454</color>
+    <color name="bd_c_grey_3">#878787</color>
+    <color name="bd_c_grey_324973">#324973</color>
+    <color name="bd_c_grey_time_a6a6a6">#a6a6a6</color>
+    <color name="bd_line_login">#d6d6d6</color>
+    <color name="bd_line">#eeeeee</color>
+    <color name="bd_bg_eeeeee">#eeeeee</color>
+    <color name="btn_default">#272636</color>
+    <color name="btn_click">#ffffff</color>
+    <color name="btn_unclick">#878787</color>
+    <color name="bd_hand_bg">#71272636</color>
+    <color name="bd_yellow">#ffc107</color>
+
+    <color name="kr_color_main_b_bg">#33323a</color>
+    <color name="kr_color_main_bg">#ffffff</color>
+    <color name="kr_color_line_bg">#979797</color>
+    <color name="kr_color_yellow_bg">#f5a623</color>
+    <color name="kr_color_yellow_s_bg">#facc8e</color>
+    <color name="kr_color_grey_bg">#444444</color>
+    <color name="kr_color_grey">#a0a0a0</color>
+    <color name="kr_color_blue_bg">#4a64e2</color>
+    <color name="kr_color_st_bg">#f3f3f3</color>
+    <color name="kr_color_red_bg">#ff0000</color>
+    <color name="kr_color_grey_titlebar">#4d4d4d</color>
+    <color name="kr_color_red_titlebar">#e74c3c</color>
+
+    <color name="color_level_s">#4dc8d5</color>
+    <color name="color_level_u">#4d4d4d</color>
+
+    <color name="home_list_item_bg_0">#ffffff</color>
+    <color name="home_list_item_bg_1">#f5f5f5</color>
+
+    <color name="home_item_money_0">#f89f1c</color>
+    <color name="home_item_money_1">#cccccc</color>
+
+
+    <color name="money_red">#ff0000</color>
+    <color name="money_gree"> #00c55f</color>
+    <color name="xieyi_color"> #4dc8d5</color>
+
+    <!-- plan -->
+    <color name="plan_list_time">#1b1d1e</color>
+
+    <color name="actionbar_title">@color/white</color>
+
+    <color name="tab_color_s">@color/white</color>
+    <color name="tab_color_u">#909090</color>
+
+    <color name="hand_bg_black">#83000000</color>
+
+    <color name="ba_line_color">#bebebe</color>
+
+</resources>
