@@ -69,7 +69,7 @@ public class RoomBusiness extends BaseBusiness{
         // roomId 表示聊天室ID
         EnterChatRoomData data = new EnterChatRoomData(event.request().getRommId());
         // 以登录一次不重试为例
-        NIMClient.getService(ChatRoomService.class).enterChatRoomEx(data, 1).setCallback(new RequestCallback<EnterChatRoomResultData>() {
+        NIMClient.getService(ChatRoomService.class).enterChatRoomEx(data, 2).setCallback(new RequestCallback<EnterChatRoomResultData>() {
             @Override
             public void onSuccess(EnterChatRoomResultData result) {
                 // 登录成功

@@ -14,7 +14,9 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.businessmodule.bean.UserInfo;
 import com.example.businessmodule.core.BusinessInterface;
+import com.example.businessmodule.core.BusinessPrefences;
 import com.example.businessmodule.event.account.LoginEvent;
 import com.example.businessmodule.event.roomBusiness.CreateRoomEvent;
 import com.example.businessmodule.event.roomBusiness.JoinRoomEvent;
@@ -81,6 +83,11 @@ public class MainActivity extends BaseActivity {
     @Override
     public void afterInit(Bundle savedInstanceState) {
         mBPermission = checkPublishPermission();
+        UserInfo accountInfo= BusinessPrefences.getInstance().getUserInfo();
+        if(accountInfo!=null){
+            //自动登录
+            BusinessInterface.getInstance().request(new LoginEvent(EventId.ACCOUNT_LOGIN,accountInfo.getAccount(),accountInfo.getPwd()));
+        }
     }
     private boolean checkPublishPermission() {
         if (Build.VERSION.SDK_INT >= 23) {
@@ -136,6 +143,10 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.main_btn_joinRoom)
     public void joinRoom(){
+        if(mUserInfo==null){
+            this.startActivity(new Intent(this, LoginActivity.class));
+            return;
+        }
         startActivity(new Intent(this,LiveStreamingActivity.class));
     }
 

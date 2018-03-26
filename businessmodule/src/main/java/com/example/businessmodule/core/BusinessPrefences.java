@@ -4,8 +4,11 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
+import com.example.businessmodule.bean.UserInfo;
 import com.example.businessmodule.exception.PrefenceException;
 import com.orhanobut.logger.Logger;
+
+import toolbox.ll.com.common.utility.JsonUtils;
 
 public class BusinessPrefences {
 
@@ -61,6 +64,21 @@ public class BusinessPrefences {
 		if (preferences == null) throw new PrefenceException("prefrence is not inited.");
 		return preferences.getString(key, defaultValue);
 	}
+
+	public void setUserInfo(UserInfo userInfo){
+		String infoStr= JsonUtils.objToJson(userInfo);
+		try {
+			saveSettings("userInfo",infoStr);
+		} catch (PrefenceException e) {
+			e.printStackTrace();
+		}
+	}
+	public UserInfo getUserInfo(){
+		if (preferences == null)
+			return null;
+		return JsonUtils.jsonToObj(preferences.getString("userInfo", null),UserInfo.class);
+	}
+
 
 
 

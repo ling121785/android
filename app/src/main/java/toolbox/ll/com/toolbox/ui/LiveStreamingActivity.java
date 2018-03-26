@@ -17,18 +17,21 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.IdRes;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.businessmodule.core.BusinessInterface;
+import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.roomBusiness.JoinRoomEvent;
 import com.example.businessmodule.utils.EventId;
 import com.netease.LSMediaCapture.Statistics;
@@ -37,8 +40,17 @@ import com.netease.LSMediaCapture.lsLogUtil;
 import com.netease.LSMediaCapture.lsMediaCapture;
 import com.netease.LSMediaCapture.lsMessageHandler;
 import com.netease.LSMediaCapture.video.VideoCallback;
+import com.netease.nimlib.sdk.NIMClient;
+import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.chatroom.ChatRoomService;
+import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
+import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.netease.vcloud.video.effect.VideoEffect;
 import com.netease.vcloud.video.render.NeteaseView;
+import com.orhanobut.logger.Logger;
 import com.squareup.otto.Subscribe;
 
 import java.io.File;
@@ -47,13 +59,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.AUDIO;
 import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.AV;
 import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.VIDEO;
 
 
+import butterknife.BindView;
 import toolbox.ll.com.common.utility.ToastUtils;
+import toolbox.ll.com.common.widget.CircleImageView;
 import toolbox.ll.com.toolbox.R;
 import toolbox.ll.com.toolbox.bean.LiveStreamingBean;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
@@ -137,23 +152,7 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
         }
     }
 
-    @Override
-    public void beforeInit(Bundle savedInstanceState) {
 
-    }
-
-    @Override
-    public int getLayoutResId() {
-        return R.layout.activity_live_streaming;
-    }
-
-    @Override
-    public void afterInit(Bundle savedInstanceState) {
-
-        mLSBean=new LiveStreamingBean();
-        initLiveSream(savedInstanceState);
-        BusinessInterface.getInstance().request(new JoinRoomEvent(EventId.ROOM_JOIN,mLSBean.getRoomId()));
-    }
 
      private  void initLiveSream(Bundle savedInstanceState) {
         //应用运行时，保持屏幕高亮，不锁屏
@@ -381,7 +380,8 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void onDestroy() {
         Log.i(TAG,"activity onDestroy");
-
+        super.onDestroy();
+        onMyDestory();
         disMissNetworkInfoDialog();
         if(mHandler != null) {
             mHandler.removeCallbacksAndMessages(null);
@@ -1508,14 +1508,81 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
         }
     }
 
+    @BindView(R.id.live_iv_avatar)
+    CircleImageView mIVAvatar;
+    @BindView(R.id.live_tv_nick)
+    TextView mTVNick;
+    @BindView(R.id.live_tv_roomCount)
+    TextView mTVRoomCount;
+    @BindView(R.id.live_tv_roomId)
+    TextView mTVRoomId;
+    @BindView(R.id.live_ls_member)
+    RecyclerView mRVMember;
+    @BindView(R.id.live_lv_msg)
+    ListView mLVMsg;
+    @BindView(R.id.live_lv_gift)
+    ListView mLVGift;
+
+
+    private LoginInfo mUserInfo;
+    private ChatRoomInfo mChartRoomInfo=null;
+
+    @Override
+    public void beforeInit(Bundle savedInstanceState) {
+        mUserInfo= BusinessSession.getInstance().getUserInfo();
+    }
+
+    @Override
+    public int getLayoutResId() {
+        return R.layout.activity_live_streaming;
+    }
+
+    @Override
+    public void afterInit(Bundle savedInstanceState) {
+        if(mUserInfo!=null){
+            mTVNick.setText(mUserInfo.getAccount());
+        }
+        mLSBean=new LiveStreamingBean();
+        initLiveSream(savedInstanceState);
+        BusinessInterface.getInstance().request(new JoinRoomEvent(EventId.ROOM_JOIN,mLSBean.getRoomId()));
+    }
+    private void onMyDestory(){
+        initRoomService(false);
+        NIMClient.getService(ChatRoomService.class).exitChatRoom(mLSBean.getRoomId());
+    }
+
+    private void showChatRoomInfo(ChatRoomInfo chatRoomInfo){
+        this.mChartRoomInfo=chatRoomInfo;
+        mTVRoomId.setText("房间ID:"+mChartRoomInfo.getRoomId());
+        mTVRoomCount.setText(mChartRoomInfo.getOnlineUserCount()+"人");
+    }
     @Subscribe
     public void joinRoomResponse(JoinRoomEvent event){
         if(event.isSuccess()){
+            EnterChatRoomResultData result=event.response();
+            showChatRoomInfo(result.getRoomInfo());
             ToastUtils.showToast(this,"加入房间成功");
+            initRoomService(true);
             return;
 
         }
         ToastUtils.showToast(this,"加入房间失败");
     }
+    private void initRoomService(boolean registe){
+        Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
+            @Override
+            public void onEvent(List<ChatRoomMessage> messages) {
+                for( ChatRoomMessage msg:messages){
+                    // 处理新收到的消息
+                    Logger.i("收到消息来自"+msg.getFromAccount()+"的消息:"
+                    +msg.getContent()+msg.getMsgType()+msg.getFromNick()+msg.getPushContent()+msg.getDirect());
+                }
+
+            }
+        };
+        NIMClient.getService(ChatRoomServiceObserver.class)
+                .observeReceiveMessage(incomingChatRoomMsg, registe);
+    }
+
 
 }

@@ -1,5 +1,7 @@
 package com.example.businessmodule.business;
 
+import com.example.businessmodule.bean.UserInfo;
+import com.example.businessmodule.core.BusinessPrefences;
 import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.BaseEvent;
 import com.example.businessmodule.event.account.LoginEvent;
@@ -35,6 +37,7 @@ public class AccountBusiness extends BaseBusiness{
                     public void onSuccess(LoginInfo loginInfo) {
                         event.setResponse(loginInfo);
                         BusinessSession.getInstance().setUserInfo(loginInfo);
+                        BusinessPrefences.getInstance().setUserInfo(new UserInfo(event.request().getAccount(),event.request().getPassword()));
                         responseSuccess();
                     }
                     @Override
