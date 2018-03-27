@@ -5,13 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.businessmodule.bean.UserInfo;
@@ -19,19 +13,12 @@ import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessPrefences;
 import com.example.businessmodule.event.account.LoginEvent;
 import com.example.businessmodule.event.roomBusiness.CreateRoomEvent;
-import com.example.businessmodule.event.roomBusiness.JoinRoomEvent;
 import com.example.businessmodule.utils.EventId;
 import com.netease.nimlib.sdk.auth.LoginInfo;
-import com.netease.nimlib.sdk.avchat.constant.AVChatType;
-import com.netease.nimlib.sdk.avchat.model.AVChatSurfaceViewRenderer;
 import com.squareup.otto.Subscribe;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -41,7 +28,7 @@ import toolbox.ll.com.toolbox.R;
 import toolbox.ll.com.toolbox.bean.MainMenu;
 import toolbox.ll.com.toolbox.ui.account.LoginActivity;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
-import toolbox.ll.com.toolbox.ui.base.adapters.BaseListAdapter;
+import toolbox.ll.com.toolbox.ui.live.LiveStreamingActivity;
 
 public class MainActivity extends BaseActivity {
 

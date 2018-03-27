@@ -63,6 +63,7 @@ public abstract  class BaseListAdapter<K,V extends BaseListAdapter.ViewHolder> e
         notifyDataSetChanged();
     }
 
-
-
+    public List<K> getmDatas() {
+        return mDatas;
+    }
 }

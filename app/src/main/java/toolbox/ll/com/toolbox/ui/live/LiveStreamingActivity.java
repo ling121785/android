@@ -1,6 +1,5 @@
-package toolbox.ll.com.toolbox.ui;
+package toolbox.ll.com.toolbox.ui.live;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +29,8 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.roomBusiness.JoinRoomEvent;
@@ -42,12 +43,22 @@ import com.netease.LSMediaCapture.lsMessageHandler;
 import com.netease.LSMediaCapture.video.VideoCallback;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.Observer;
+import com.netease.nimlib.sdk.RequestCallback;
+import com.netease.nimlib.sdk.StatusCode;
+import com.netease.nimlib.sdk.auth.AuthServiceObserver;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomKickOutEvent;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
+import com.netease.nimlib.sdk.msg.MsgServiceObserve;
+import com.netease.nimlib.sdk.msg.constant.NotificationType;
+import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.vcloud.video.effect.VideoEffect;
 import com.netease.vcloud.video.render.NeteaseView;
 import com.orhanobut.logger.Logger;
@@ -58,7 +69,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.AUDIO;
@@ -67,18 +77,16 @@ import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.VIDEO;
 
 
 import butterknife.BindView;
+import butterknife.OnClick;
 import toolbox.ll.com.common.utility.ToastUtils;
 import toolbox.ll.com.common.widget.CircleImageView;
 import toolbox.ll.com.toolbox.R;
 import toolbox.ll.com.toolbox.bean.LiveStreamingBean;
+import toolbox.ll.com.toolbox.core.inject.BarrageAttachment;
+import toolbox.ll.com.toolbox.core.inject.GiftAttachment;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
-import toolbox.ll.com.toolbox.ui.base.ButterKnifeActivity;
 import toolbox.ll.com.toolbox.ui.widget.MixAudioDialog;
 import toolbox.ll.com.toolbox.ui.widget.NetWorkInfoDialog;
-
-import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.AUDIO;
-import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.AV;
-import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.VIDEO;
 
 
 //由于直播推流的URL地址较长，可以直接在代码中的mliveStreamingURL设置直播推流的URL
@@ -380,7 +388,6 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
     @Override
     protected void onDestroy() {
         Log.i(TAG,"activity onDestroy");
-        super.onDestroy();
         onMyDestory();
         disMissNetworkInfoDialog();
         if(mHandler != null) {
@@ -1526,6 +1533,8 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
 
     private LoginInfo mUserInfo;
     private ChatRoomInfo mChartRoomInfo=null;
+    private BarrageListAdapter mBarrageAdapter=new BarrageListAdapter(this,null);
+    private GiftListAdapter mGiftAdapter=new GiftListAdapter(this,null);
 
     @Override
     public void beforeInit(Bundle savedInstanceState) {
@@ -1535,6 +1544,13 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
     @Override
     public int getLayoutResId() {
         return R.layout.activity_live_streaming;
+    }
+
+    @Override
+    public void initView() {
+        super.initView();
+        mLVMsg.setAdapter(mBarrageAdapter);
+        mLVGift.setAdapter(mGiftAdapter);
     }
 
     @Override
@@ -1556,6 +1572,7 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
         mTVRoomId.setText("房间ID:"+mChartRoomInfo.getRoomId());
         mTVRoomCount.setText(mChartRoomInfo.getOnlineUserCount()+"人");
     }
+
     @Subscribe
     public void joinRoomResponse(JoinRoomEvent event){
         if(event.isSuccess()){
@@ -1568,21 +1585,167 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
         }
         ToastUtils.showToast(this,"加入房间失败");
     }
-    private void initRoomService(boolean registe){
-        Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
+
+    @OnClick(R.id.live_iv_gift)
+    public void sendMesg(){
+        String text = "这是聊天室文本消息";
+// 创建聊天室文本消息
+        ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(mLSBean.getRoomId(), text);
+// 将文本消息发送出去
+        NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
+                .setCallback(new RequestCallback<Void>() {
+                    @Override
+                    public void onSuccess(Void param) {
+                        // 成功
+                        ToastUtils.showToast(LiveStreamingActivity.this,"发送成功");
+                    }
+
+                    @Override
+                    public void onFailed(int code) {
+                        // 失败
+                    }
+
+                    @Override
+                    public void onException(Throwable exception) {
+                        // 错误
+                    }
+                });
+    }
+
+    public void showBrrage(ChatRoomMessage msg){
+        mBarrageAdapter.add(msg);
+        mLVMsg.post(new Runnable() {
             @Override
-            public void onEvent(List<ChatRoomMessage> messages) {
-                for( ChatRoomMessage msg:messages){
-                    // 处理新收到的消息
-                    Logger.i("收到消息来自"+msg.getFromAccount()+"的消息:"
-                    +msg.getContent()+msg.getMsgType()+msg.getFromNick()+msg.getPushContent()+msg.getDirect());
+            public void run() {
+                // Select the last row so it will scroll into view...
+                mLVMsg.smoothScrollToPosition(mBarrageAdapter.getCount() - 1);
+            }
+        });
+    }
+    public void showGift(ChatRoomMessage msg){
+        mGiftAdapter.add(msg);
+        mLVGift.post(new Runnable() {
+            @Override
+            public void run() {
+                // Select the last row so it will scroll into view...
+                mLVGift.smoothScrollToPosition(mGiftAdapter.getCount() - 1);
+            }
+        });
+    }
+
+    private void initRoomService(boolean register){
+        NIMClient.getService(ChatRoomServiceObserver.class).observeReceiveMessage(incomingChatRoomMsg, register);
+        NIMClient.getService(ChatRoomServiceObserver.class).observeOnlineStatus(onlineStatus, register);
+        NIMClient.getService(ChatRoomServiceObserver.class).observeKickOutEvent(kickOutObserver, register);
+        NIMClient.getService(MsgServiceObserve.class).observeCustomNotification(customNotification, register);
+        NIMClient.getService(AuthServiceObserver.class).observeOnlineStatus(userStatusObserver, register);
+    }
+    private Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
+        @Override
+        public void onEvent(List<ChatRoomMessage> messages) {
+            for( ChatRoomMessage msg:messages){
+                // 处理新收到的消息
+                Logger.i("收到消息来自"+msg.getFromAccount()+"的消息:"
+                        +msg.getAttachment()+msg.getMsgType()+msg.getContent()+msg.getDirect());
+                if (msg != null && msg.getAttachment() instanceof ChatRoomNotificationAttachment) {
+                    // 通知类消息
+                    ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) msg.getAttachment();
+                    if (attachment.getType() == NotificationType.ChatRoomMemberIn) {
+                        showBrrage(msg);
+                    } else if (attachment.getType() == NotificationType.ChatRoomInfoUpdated) {
+                        Logger.i("房间信息更新"+attachment.getExtension());
+                        ToastUtils.showToast(LiveStreamingActivity.this,"房间信息更新");
+                    }
+                }else if(msg != null && msg.getAttachment() instanceof GiftAttachment){
+                    showGift(msg);
+                }else if(msg != null && msg.getAttachment() instanceof BarrageAttachment){
+                    showBrrage(msg);
                 }
+            }
+
+        }
+    };
+
+    Observer<CustomNotification> customNotification = new Observer<CustomNotification>() {
+        @Override
+        public void onEvent(CustomNotification customNotification) {
+            if (customNotification == null) {
+                return;
+            }
+
+            String content = customNotification.getContent();
+            try {
+                JSONObject json = JSON.parseObject(content);
+//                String fromRoomId = json.getString(PushLinkConstant.roomid);
+//                if (!mLSBean.getRoomId().equals(fromRoomId)) {
+//                    return;
+//                }
+//                int id = json.getIntValue(PushLinkConstant.command);
+//                LogUtil.i(TAG, "receive command type:" + id);
+//                if (id == PushMicNotificationType.JOIN_QUEUE.getValue()) {
+//                    // 加入连麦队列
+//                    joinQueue(customNotification, json);
+//                } else if (id == PushMicNotificationType.EXIT_QUEUE.getValue()) {
+//                    // 退出连麦队列
+//                    exitQueue(customNotification);
+//                } else if (id == PushMicNotificationType.CONNECTING_MIC.getValue()) {
+//                    // 主播选中某人连麦
+//                    onMicLinking(json);
+//                } else if (id == PushMicNotificationType.DISCONNECT_MIC.getValue()) {
+//                    // 被主播断开连麦
+//                    onMicCanceling();
+//                } else if (id == PushMicNotificationType.REJECT_CONNECTING.getValue()) {
+//                    // 观众由于重新进入了房间而拒绝连麦
+//                    rejectConnecting();
+//                }
+
+            } catch (Exception e) {
+                Logger.e(e.toString());
+            }
+        }
+    };
+
+    Observer<ChatRoomStatusChangeData> onlineStatus = new Observer<ChatRoomStatusChangeData>() {
+        @Override
+        public void onEvent(ChatRoomStatusChangeData chatRoomStatusChangeData) {
+            if (chatRoomStatusChangeData.status == StatusCode.CONNECTING) {
+                ToastUtils.showToast(LiveStreamingActivity.this,"连接中...");
+            } else if (chatRoomStatusChangeData.status == StatusCode.UNLOGIN) {
+                ToastUtils.showToast(LiveStreamingActivity.this,"退出...");
+            } else if (chatRoomStatusChangeData.status == StatusCode.LOGINING) {
+                ToastUtils.showToast(LiveStreamingActivity.this,"登录中...");
+            } else if (chatRoomStatusChangeData.status == StatusCode.LOGINED) {
+                ToastUtils.showToast(LiveStreamingActivity.this,"登录成功...");
+            } else if (chatRoomStatusChangeData.status.wontAutoLogin()) {
+            } else if (chatRoomStatusChangeData.status == StatusCode.NET_BROKEN) {
+                ToastUtils.showToast(LiveStreamingActivity.this,"网络异常...");
+            }
+            ToastUtils.showToast(LiveStreamingActivity.this,"Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
+            Logger.i( "Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
+        }
+    };
+
+    /**
+     * 用户状态变化
+     */
+    Observer<StatusCode> userStatusObserver = new Observer<StatusCode>() {
+
+        @Override
+        public void onEvent(StatusCode code) {
+            if (code.wontAutoLogin()) {
 
             }
-        };
-        NIMClient.getService(ChatRoomServiceObserver.class)
-                .observeReceiveMessage(incomingChatRoomMsg, registe);
-    }
+        }
+    };
+
+    Observer<ChatRoomKickOutEvent> kickOutObserver = new Observer<ChatRoomKickOutEvent>() {
+        @Override
+        public void onEvent(ChatRoomKickOutEvent chatRoomKickOutEvent) {
+            ToastUtils.showToast(LiveStreamingActivity.this, "被踢出聊天室，原因:" + chatRoomKickOutEvent.getReason());
+            finish();
+        }
+    };
+
 
 
 }

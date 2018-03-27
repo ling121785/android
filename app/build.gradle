@@ -44,17 +44,15 @@ android {
 
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     testCompile 'junit:junit:4.12'
-
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile project(':businessmodule')
-//    //noinspection GradleCompatible,GradleDependency
-//    compile 'com.android.support:MultiDex:1.0.0'
+    //    //noinspection GradleCompatible,GradleDependency
+    //    compile 'com.android.support:MultiDex:1.0.0'
     compile rootProject.ext.appcompatV7
-
 }

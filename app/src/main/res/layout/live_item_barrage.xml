@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_light_gray_default"
+    style="@style/base_padding_horizontal"
+    android:paddingTop="1dp"
+    android:paddingBottom="1dp"
+    android:gravity="center">
+
+    <TextView
+        android:id="@+id/item_tv_content"
+        android:layout_width="wrap_content"
+        android:layout_height="20dp"
+        android:layout_weight="1"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/font_size_smaller"
+        android:textColor="@color/white"
+        android:text="来消息啦"
+        />
+</LinearLayout>

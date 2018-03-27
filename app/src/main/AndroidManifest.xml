@@ -131,7 +131,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.account.LoginActivity" />
-        <activity android:name=".ui.LiveStreamingActivity"></activity>
+        <activity android:name=".ui.live.LiveStreamingActivity"></activity>
     </application>
 
 </manifest>
