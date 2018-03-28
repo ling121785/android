@@ -11,10 +11,13 @@ import android.widget.TextView;
 import com.example.businessmodule.bean.UserInfo;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessPrefences;
+import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.account.LoginEvent;
+import com.example.businessmodule.event.account.LogoutEvent;
 import com.example.businessmodule.event.roomBusiness.CreateRoomEvent;
 import com.example.businessmodule.utils.EventId;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -25,6 +28,7 @@ import butterknife.OnClick;
 import toolbox.ll.com.common.utility.ToastUtils;
 import toolbox.ll.com.common.widget.CircleImageView;
 import toolbox.ll.com.toolbox.R;
+import toolbox.ll.com.toolbox.bean.LiveStreamingBean;
 import toolbox.ll.com.toolbox.bean.MainMenu;
 import toolbox.ll.com.toolbox.ui.account.LoginActivity;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
@@ -44,7 +48,7 @@ public class MainActivity extends BaseActivity {
     private List<MainMenu> mMenu;
     private  boolean mBPermission=false;
     private final int WRITE_PERMISSION_REQ_CODE = 100;
-    private LoginInfo mUserInfo=null;
+    private NimUserInfo mUserInfo=null;
     @Override
     public void beforeInit(Bundle savedInstanceState) {
 
@@ -128,13 +132,22 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    @OnClick(R.id.main_tv_logout)
+    public void logout(){
+        BusinessInterface.getInstance().request(new LogoutEvent(EventId.ACCOUNT_LOGOT));
+    }
+
+
+
     @OnClick(R.id.main_btn_joinRoom)
     public void joinRoom(){
         if(mUserInfo==null){
             this.startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-        startActivity(new Intent(this,LiveStreamingActivity.class));
+        Intent intent=new Intent(this,LiveStreamingActivity.class);
+        intent.putExtra("data",new LiveStreamingBean());
+        startActivity(intent);
     }
 
     @Subscribe
@@ -153,10 +166,19 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void loginResponse(LoginEvent event){
         if(event.isSuccess()){
-            this.mUserInfo=event.response();
-            mTVUserName.setText(event.response().getAccount());
+            this.mUserInfo= BusinessSession.getInstance().getUserInfo();
+            mTVUserName.setText(mUserInfo.getName());
             return;
 
+        }
+    }
+
+    @Subscribe
+    public void logoutResponse(LogoutEvent event){
+        if(event.isSuccess()){
+            this.mUserInfo= BusinessSession.getInstance().getUserInfo();
+            mTVUserName.setText("未登录");
+            return;
         }
     }
 }

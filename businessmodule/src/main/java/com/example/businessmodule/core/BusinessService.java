@@ -10,6 +10,7 @@ import com.example.businessmodule.business.BaseBusiness;
 import com.example.businessmodule.business.RoomBusiness;
 import com.example.businessmodule.event.BaseEvent;
 import com.example.businessmodule.event.account.LoginEvent;
+import com.example.businessmodule.event.account.LogoutEvent;
 import com.example.businessmodule.event.roomBusiness.CreateRoomEvent;
 import com.example.businessmodule.event.roomBusiness.JoinRoomEvent;
 import com.orhanobut.logger.Logger;
@@ -86,5 +87,10 @@ public class BusinessService extends Service {
     @Subscribe
     public void processEvent(JoinRoomEvent event) {
         executeBusiness(new RoomBusiness(event));
+    }
+
+    @Subscribe
+    public void processEvent(LogoutEvent event){
+        executeBusiness(new AccountBusiness(event));
     }
 }

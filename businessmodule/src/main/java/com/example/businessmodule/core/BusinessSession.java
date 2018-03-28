@@ -3,6 +3,7 @@ package com.example.businessmodule.core;
 import android.content.Context;
 
 import com.netease.nimlib.sdk.auth.LoginInfo;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
 /**
  * 当前会话信息保存
@@ -20,7 +21,8 @@ public class BusinessSession {
 
     private Context context = null;
     private String token = "";
-    private LoginInfo userInfo=null;
+    private LoginInfo loginInfo=null;
+    private NimUserInfo userInfo=null;
 
 
     private BusinessSession() {
@@ -40,12 +42,20 @@ public class BusinessSession {
     public String getToken() {
         return token;
     }
-    public void setUserInfo(LoginInfo info){
+    public void setUserInfo(NimUserInfo info){
         this.userInfo=info;
     }
 
-    public LoginInfo getUserInfo() {
+    public NimUserInfo getUserInfo() {
         return userInfo;
+    }
+
+    public LoginInfo getLoginInfo() {
+        return loginInfo;
+    }
+
+    public void setLoginInfo(LoginInfo loginInfo) {
+        this.loginInfo = loginInfo;
     }
 
     public void clearActiveSession(){

@@ -27,10 +27,18 @@
             android:layout_centerHorizontal="true"
            />
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:src="@drawable/ic_edit"
                 android:layout_alignParentRight="true"/>
+            <TextView
+                android:id="@+id/main_tv_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_gray_default"
+                android:text="退出"
+                android:textColor="@color/gray"
+                android:layout_alignParentLeft="true"/>
         </RelativeLayout>
         <TextView
             android:id="@+id/main_tv_userName"

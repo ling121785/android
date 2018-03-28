@@ -28,8 +28,8 @@
     <dimen name="margin_smallest">3dp</dimen>
 
 
-    <dimen name="ic_more_width">15dp</dimen>
-    <dimen name="ic_more_height">25dp</dimen>
+    <dimen name="ic_more_width">7dp</dimen>
+    <dimen name="ic_more_height">12dp</dimen>
 
     <!-- main activity -->
     <dimen name="main_top_bg_height">180dp</dimen>
