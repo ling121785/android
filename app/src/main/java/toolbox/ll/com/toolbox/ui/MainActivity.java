@@ -33,6 +33,7 @@ import toolbox.ll.com.toolbox.bean.MainMenu;
 import toolbox.ll.com.toolbox.ui.account.LoginActivity;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
 import toolbox.ll.com.toolbox.ui.live.LiveStreamingActivity;
+import toolbox.ll.com.toolbox.utils.ImageUtility;
 
 public class MainActivity extends BaseActivity {
 
@@ -168,6 +169,7 @@ public class MainActivity extends BaseActivity {
         if(event.isSuccess()){
             this.mUserInfo= BusinessSession.getInstance().getUserInfo();
             mTVUserName.setText(mUserInfo.getName());
+            ImageUtility.displayImage(mIVAvatar,mUserInfo.getAvatar(),ImageUtility.TYPE_PHOTO_AVATAR);
             return;
 
         }

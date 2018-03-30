@@ -16,6 +16,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.IdRes;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -52,8 +53,10 @@ import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
+import com.netease.nimlib.sdk.chatroom.constant.MemberQueryType;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomKickOutEvent;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
@@ -84,6 +87,7 @@ import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
+import butterknife.OnTextChanged;
 import toolbox.ll.com.common.utility.ToastUtils;
 import toolbox.ll.com.common.widget.CircleImageView;
 import toolbox.ll.com.toolbox.R;
@@ -94,6 +98,7 @@ import toolbox.ll.com.toolbox.core.inject.GiftAttachment;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
 import toolbox.ll.com.toolbox.ui.widget.MixAudioDialog;
 import toolbox.ll.com.toolbox.ui.widget.NetWorkInfoDialog;
+import toolbox.ll.com.toolbox.utils.ImageUtility;
 
 
 //由于直播推流的URL地址较长，可以直接在代码中的mliveStreamingURL设置直播推流的URL
@@ -1379,6 +1384,8 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     private BarrageListAdapter mBarrageAdapter=new BarrageListAdapter(this,null);
     private GiftListAdapter mGiftAdapter=new GiftListAdapter(this,null);
     private LiveMenuAdapter mLiveMenuAdapter=new LiveMenuAdapter(this,null);
+    private RoomMemberAdapter mRoomMemberAdapter=new RoomMemberAdapter(this,null);
+
 
     @Override
     public void beforeInit(Bundle savedInstanceState) {
@@ -1397,10 +1404,10 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         mLVMsg.setAdapter(mBarrageAdapter);
         mLVGift.setAdapter(mGiftAdapter);
         List<LiveMenuBean> mMenuList=new ArrayList<>();
-        mMenuList.add(new LiveMenuBean("cinemaTurn","翻转镜头",R.drawable.ic_overturn));
-        mMenuList.add(new LiveMenuBean("mirror","开启镜像",R.drawable.ic_open_mirror));
+        mMenuList.add(new LiveMenuBean("cinemaTurn","翻转镜头",R.drawable.live_menu_overturn,null,true));
+        mMenuList.add(new LiveMenuBean("mirror","开启镜像",R.drawable.live_menu_mirror,null,true));
         mMenuList.add(new LiveMenuBean("screenshot","截图",R.drawable.ic_special_effect));
-        mMenuList.add(new LiveMenuBean("beauty","美顔",R.drawable.ic_beauty));
+        mMenuList.add(new LiveMenuBean("beauty","美顔",R.drawable.live_menu_beauty,null,true));
         List<LiveMenuBean> mEffectList=new ArrayList<>();
         mEffectList.add(new LiveMenuBean("effect","怀旧",R.drawable.ic_special_effect,null,VideoEffect.FilterType.brooklyn));
         mEffectList.add(new LiveMenuBean("effect","干净",R.drawable.ic_special_effect,null,VideoEffect.FilterType.calm));
@@ -1410,15 +1417,18 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         mEffectList.add(new LiveMenuBean("effect","温柔",R.drawable.ic_special_effect,null,VideoEffect.FilterType.tender));
         mEffectList.add(new LiveMenuBean("effect","美白",R.drawable.ic_special_effect,null,VideoEffect.FilterType.whiten));
         mEffectList.add(new LiveMenuBean("effect","无",R.drawable.ic_special_effect,null,VideoEffect.FilterType.none));
-        mMenuList.add(new LiveMenuBean("specialEffect","特效",R.drawable.ic_special_effect,mEffectList,null));
+        mMenuList.add(new LiveMenuBean("specialEffect","特效",R.drawable.ic_special_effect,mEffectList,true));
         mLiveMenuAdapter.setDatas(mMenuList);
         mGVMenu.setAdapter(mLiveMenuAdapter);
+        mRVMember.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,true));
+        mRVMember.setAdapter(mRoomMemberAdapter);
     }
 
     @Override
     public void afterInit(Bundle savedInstanceState) {
         if(mUserInfo!=null){
             mTVNick.setText(mUserInfo.getName());
+            ImageUtility.displayImage(mIVAvatar,mUserInfo.getAvatar(),ImageUtility.TYPE_PHOTO_AVATAR);
         }
         initLiveSream(savedInstanceState);
         BusinessInterface.getInstance().request(new JoinRoomEvent(EventId.ROOM_JOIN,mLSBean.getRoomId()));
@@ -1441,24 +1451,47 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
             showChatRoomInfo(result.getRoomInfo());
             ToastUtils.showToast(this,"加入房间成功");
             initRoomService(true);
+            fetchRoomMember();
             return;
 
         }
         ToastUtils.showToast(this,"加入房间失败");
     }
 
+    private void fetchRoomMember(){
+        NIMClient.getService(ChatRoomService.class)
+                .fetchRoomMembers(mLSBean.getRoomId(), MemberQueryType.GUEST,0,5)
+                .setCallback(new RequestCallback<List< ChatRoomMember>>(){
+
+                    @Override
+                    public void onSuccess(List<ChatRoomMember> chatRoomMembers) {
+                        mRoomMemberAdapter.setDatas(chatRoomMembers);
+                        mRoomMemberAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFailed(int i) {
+
+                    }
+
+                    @Override
+                    public void onException(Throwable throwable) {
+
+                    }
+                });
+    }
 
     //闪光灯
     @OnClick(R.id.live_flash)
-    public void toggleFlash(){
+    public void toggleFlash(View view){
         if(mLSMediaCapture != null){
             mFlashOn = !mFlashOn;
             mLSMediaCapture.setCameraFlashPara(mFlashOn);
-//            if(mFlashOn){
-//                flashBtn.setImageResource(R.drawable.flashstop);
-//            }else {
-//                flashBtn.setImageResource(R.drawable.flashstart);
-//            }
+            if(mFlashOn){
+                ((ImageView)view).setImageResource(R.drawable.flashstop);
+            }else {
+                ((ImageView)view).setImageResource(R.drawable.flashstart);
+            }
 
 
         }
@@ -1478,22 +1511,23 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                 mLSMediaCapture.setFilterType((VideoEffect.FilterType)item.getExtension());
                 break;
             case "cinemaTurn":
+                item.setExtension(!(boolean)item.getExtension());
+                mLiveMenuAdapter.notifyDataSetChanged();
                 switchCamera();
                 break;
             case "beauty":
-                toggleMenu();
                 toggleBeautyMenu();
                 break;
             case "mirror":
                 if(mLSMediaCapture != null){
-                    mLSMediaCapture.setPreviewMirror(true);//没有获取当前状态
-                    mLSMediaCapture.setVideoMirror(true);//没有获取当前状态
+                    item.setExtension(!(boolean)item.getExtension());
+                    mLSMediaCapture.setPreviewMirror((boolean)item.getExtension());//没有获取当前状态
+                    mLSMediaCapture.setVideoMirror((boolean)item.getExtension());//没有获取当前状态
+                    mLiveMenuAdapter.notifyDataSetChanged();
                 }
                 break;
             case "screenshot":
                 capture();
-                break;
-            case "specialEffect":
                 break;
             case "showAudio":
                 showMixAudioDialog();
@@ -1506,6 +1540,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                 }
                 break;
         }
+        toggleMenu();
 
     }
 
@@ -1517,10 +1552,16 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         mLayoutMenu.setVisibility(mLayoutMenu.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
     }
 
-    public void sendMesg(){
-        String text = "这是聊天室文本消息";
+    @OnTextChanged(R.id.live_et_input)
+    public void inputChange(){
+
+    }
+
+    public void sendMsg(final String msg){
+        if(msg==null)
+            return;
 // 创建聊天室文本消息
-        ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(mLSBean.getRoomId(), text);
+        ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(mLSBean.getRoomId(), msg);
 // 将文本消息发送出去
         NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
                 .setCallback(new RequestCallback<Void>() {
@@ -1528,6 +1569,10 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                     public void onSuccess(Void param) {
                         // 成功
                         ToastUtils.showToast(LiveStreamingActivity.this,"发送成功");
+                        ChatRoomMessage chatRoomMessage=ChatRoomMessageBuilder.createChatRoomTextMessage(mLSBean.getRoomId(),msg);
+                        chatRoomMessage.setFromAccount(mUserInfo.getAccount());
+                        chatRoomMessage.setAttachment(new BarrageAttachment(msg));
+                        showBrrage(chatRoomMessage);
                     }
 
                     @Override
@@ -1649,9 +1694,9 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
             } else if (chatRoomStatusChangeData.status.wontAutoLogin()) {
             } else if (chatRoomStatusChangeData.status == StatusCode.NET_BROKEN) {
                 ToastUtils.showToast(LiveStreamingActivity.this,"网络异常...");
+            }else{
+                ToastUtils.showToast(LiveStreamingActivity.this, chatRoomStatusChangeData.status.name());
             }
-            ToastUtils.showToast(LiveStreamingActivity.this,"Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
-            Logger.i( "Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
         }
     };
 

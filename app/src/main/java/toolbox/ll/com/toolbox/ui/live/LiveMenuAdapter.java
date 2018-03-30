@@ -39,6 +39,9 @@ public class LiveMenuAdapter extends BaseListAdapter<LiveMenuBean,LiveMenuAdapte
     public void bindDataToViewHolder(LiveMenuAdapter.ViewHolder viewHolder, LiveMenuBean data) {
         viewHolder.mTVTitle.setText(data.getTitle());
         viewHolder.mIVICon.setImageResource(data.getImgId());
+        if(data.getExtension() instanceof Boolean){
+            viewHolder.mIVICon.setSelected((Boolean)data.getExtension());
+        }
     }
 
     public class ViewHolder extends BaseListAdapter.ViewHolder{

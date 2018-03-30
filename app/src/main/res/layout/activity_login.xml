@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    style="@style/page"
+    android:background="@drawable/login_bg"
+    style="@style/base_padding_horizontal"
     tools:context="toolbox.ll.com.toolbox.ui.account.LoginActivity">
         <LinearLayout
             android:layout_width="match_parent"
@@ -15,15 +16,15 @@
             android:gravity="center"
             style="@style/login_input_item">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="110px"
                 android:layout_height="wrap_content"
                 android:text="@string/login_account_txt"
-                android:layout_weight="1"/>
+                />
             <EditText
                 android:id="@+id/login_et_account"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="5"
+                android:layout_weight="1"
                 android:hint="@string/login_account_hint"
                 android:theme="@style/base_edit"
                />
@@ -35,16 +36,16 @@
             android:gravity="center"
             style="@style/login_input_item">
             <TextView
-                android:layout_width="wrap_content"
+                android:layout_width="110px"
                 android:layout_height="wrap_content"
                 android:text="@string/login_pwd_txt"
-                android:layout_weight="1"/>
+                />
             <EditText
                 android:id="@+id/login_et_pwd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/login_pwd_hint"
-                android:layout_weight="5"
+                android:layout_weight="1"
                 android:theme="@style/base_edit"/>
         </LinearLayout>
         <Button

@@ -1,5 +1,6 @@
 package com.example.businessmodule.business;
 
+import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.BaseEvent;
 import com.example.businessmodule.event.account.LoginEvent;
 import com.example.businessmodule.event.roomBusiness.CreateRoomEvent;
@@ -20,8 +21,9 @@ import com.netease.nimlib.sdk.avchat.model.AVChatVideoCapturerFactory;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+import com.orhanobut.logger.Logger;
 
-import java.util.logging.Logger;
 
 import static com.netease.nimlib.sdk.avchat.constant.AVChatChannelProfile.CHANNEL_PROFILE_DEFAULT;
 
@@ -68,6 +70,9 @@ public class RoomBusiness extends BaseBusiness{
     private void joinRoom(final JoinRoomEvent event){
         // roomId 表示聊天室ID
         EnterChatRoomData data = new EnterChatRoomData(event.request().getRommId());
+        NimUserInfo userInfo= BusinessSession.getInstance().getUserInfo();
+        data.setAvatar(userInfo.getAvatar());
+        data.setNick(userInfo.getName());
         // 以登录一次不重试为例
         NIMClient.getService(ChatRoomService.class).enterChatRoomEx(data, 2).setCallback(new RequestCallback<EnterChatRoomResultData>() {
             @Override

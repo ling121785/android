@@ -37,6 +37,9 @@ public class GiftListAdapter extends BaseListAdapter<ChatRoomMessage,GiftListAda
             data=new ArrayList<ChatRoomMessage>();
         }
         data.add(msg);
+        if(data.size()>50){
+            data.remove(0);
+        }
         setDatas(data);
         this.notifyDataSetChanged();
     }

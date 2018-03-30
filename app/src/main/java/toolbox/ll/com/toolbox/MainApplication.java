@@ -8,9 +8,11 @@ import com.example.businessmodule.core.BusinessInterface;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.util.NIMUtil;
+import com.nostra13.universalimageloader.core.ImageLoader;
 
 import toolbox.ll.com.common.utility.CrashUtils;
 import toolbox.ll.com.toolbox.core.inject.FlavorDependent;
+import toolbox.ll.com.toolbox.utils.ImageUtility;
 import toolbox.ll.com.toolbox.utils.NeteaseUtil;
 
 /**
@@ -26,6 +28,7 @@ public class MainApplication extends Application {
         NIMClient.init(this, NeteaseUtil.loginInfo(), NeteaseUtil.options(this));
         //初始化业务
         BusinessInterface.getInstance().init(this,true,true,this.getPackageName(),"");
+        ImageUtility.init(this);
         // ... your codes
         if (NIMUtil.isMainProcess(this)) {
             // 注册自定义消息附件解析器

@@ -52,6 +52,7 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile project(':businessmodule')
+    compile project(':universalimageloader')
     //    //noinspection GradleCompatible,GradleDependency
     //    compile 'com.android.support:MultiDex:1.0.0'
     compile rootProject.ext.appcompatV7
