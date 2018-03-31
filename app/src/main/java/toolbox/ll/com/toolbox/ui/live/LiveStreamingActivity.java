@@ -1669,6 +1669,9 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     private Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
         @Override
         public void onEvent(List<ChatRoomMessage> messages) {
+            if (messages == null || messages.isEmpty()) {
+                return;
+            }
             for( ChatRoomMessage msg:messages){
                 // 处理新收到的消息
                 Logger.i("收到消息来自"+msg.getFromNick()+"的消息:"
@@ -1770,6 +1773,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     Observer<ChatRoomKickOutEvent> kickOutObserver = new Observer<ChatRoomKickOutEvent>() {
         @Override
         public void onEvent(ChatRoomKickOutEvent chatRoomKickOutEvent) {
+            if(chatRoomKickOutEvent.getReason()!=ChatRoomKickOutEvent.ChatRoomKickOutReason.CHAT_ROOM_INVALID)
             ToastUtils.showToast(LiveStreamingActivity.this, "被踢出聊天室，原因:" + chatRoomKickOutEvent.getReason());
             finish();
         }

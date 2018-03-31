@@ -13,6 +13,7 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+import com.orhanobut.logger.Logger;
 
 import rx.Subscriber;
 import rx.schedulers.Schedulers;
@@ -92,6 +93,7 @@ public class AccountBusiness extends BaseBusiness{
         BusinessSession.getInstance().setLoginInfo(null);
         BusinessPrefences.getInstance().setUserInfo(new AccountBean(null,null));
         BusinessSession.getInstance().setUserInfo(null);
+        BusinessSession.getInstance().setAccountInfo(null);
         responseSuccess();
     }
 

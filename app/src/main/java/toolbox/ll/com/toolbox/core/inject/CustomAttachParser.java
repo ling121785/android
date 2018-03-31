@@ -49,13 +49,4 @@ public class CustomAttachParser implements MsgAttachmentParser {
         return attachment;
     }
 
-    public static String packData(int type, JSONObject data) {
-        JSONObject object = new JSONObject();
-        object.put(KEY_TYPE, type);
-        if (data != null) {
-            object.put(KEY_DATA, data);
-        }
-
-        return object.toJSONString();
-    }
 }

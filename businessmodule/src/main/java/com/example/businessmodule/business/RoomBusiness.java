@@ -78,11 +78,10 @@ public class RoomBusiness extends BaseBusiness{
     }
     private void joinRoom(final JoinRoomEvent event){
         // roomId 表示聊天室ID
-        EnterChatRoomData data = new EnterChatRoomData(event.request().getRommId());
-        NimUserInfo userInfo= BusinessSession.getInstance().getUserInfo();
-        data.setAvatar(userInfo.getAvatar());
-        data.setNick(userInfo.getName());
         // 以登录一次不重试为例
+        // roomId 表示聊天室ID
+        EnterChatRoomData data = new EnterChatRoomData(event.request().getRommId());
+// 以登录一次不重试为例
         NIMClient.getService(ChatRoomService.class).enterChatRoomEx(data, 2).setCallback(new RequestCallback<EnterChatRoomResultData>() {
             @Override
             public void onSuccess(EnterChatRoomResultData result) {

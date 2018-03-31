@@ -52,7 +52,7 @@ public class MainActivity extends BaseActivity {
     private List<MainMenu> mMenu;
     private  boolean mBPermission=false;
     private final int WRITE_PERMISSION_REQ_CODE = 100;
-    private NimUserInfo mUserInfo=null;
+    private AccountBean mUserInfo=null;
     @Override
     public void beforeInit(Bundle savedInstanceState) {
 
@@ -145,7 +145,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.main_btn_joinRoom)
     public void joinRoom(){
-        if(mUserInfo==null){
+        if(BusinessSession.getInstance().getAccountInfo()==null){
             this.startActivity(new Intent(this, LoginActivity.class));
             return;
         }
@@ -202,9 +202,12 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void loginResponse(LoginEvent event){
         if(event.isSuccess()){
-            this.mUserInfo= BusinessSession.getInstance().getUserInfo();
-            mTVUserName.setText(mUserInfo.getName());
-            ImageUtility.displayImage(mIVAvatar,mUserInfo.getAvatar(),ImageUtility.TYPE_PHOTO_AVATAR);
+            this.mUserInfo= BusinessSession.getInstance().getAccountInfo();
+            if(mUserInfo!=null){
+                mTVUserName.setText(mUserInfo.getName());
+                ImageUtility.displayImage(mIVAvatar,mUserInfo.getIcon(),ImageUtility.TYPE_PHOTO_AVATAR);
+            }
+
             return;
 
         }
@@ -213,7 +216,7 @@ public class MainActivity extends BaseActivity {
     @Subscribe
     public void logoutResponse(LogoutEvent event){
         if(event.isSuccess()){
-            this.mUserInfo= BusinessSession.getInstance().getUserInfo();
+            this.mUserInfo= BusinessSession.getInstance().getAccountInfo();
             mTVUserName.setText("未登录");
             return;
         }

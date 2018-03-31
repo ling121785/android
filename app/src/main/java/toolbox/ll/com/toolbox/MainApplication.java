@@ -7,11 +7,12 @@ import android.support.multidex.MultiDex;
 import com.example.businessmodule.core.BusinessInterface;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.msg.MsgService;
+import com.netease.nimlib.sdk.msg.attachment.MsgAttachmentParser;
 import com.netease.nimlib.sdk.util.NIMUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
 
 import toolbox.ll.com.common.utility.CrashUtils;
-import toolbox.ll.com.toolbox.core.inject.FlavorDependent;
+import toolbox.ll.com.toolbox.core.inject.CustomAttachParser;
 import toolbox.ll.com.toolbox.utils.ImageUtility;
 import toolbox.ll.com.toolbox.utils.NeteaseUtil;
 
@@ -32,7 +33,7 @@ public class MainApplication extends Application {
         // ... your codes
         if (NIMUtil.isMainProcess(this)) {
             // 注册自定义消息附件解析器
-            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(FlavorDependent.getInstance().getMsgAttachmentParser());
+            NIMClient.getService(MsgService.class).registerCustomAttachmentParser(new CustomAttachParser());
             // 注意：以下操作必须在主进程中进行
             // 1、UI相关初始化操作
             // 2、相关Service调用
