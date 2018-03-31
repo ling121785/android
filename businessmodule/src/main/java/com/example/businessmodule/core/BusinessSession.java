@@ -2,6 +2,7 @@ package com.example.businessmodule.core;
 
 import android.content.Context;
 
+import com.example.businessmodule.bean.AccountBean;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 
@@ -23,6 +24,7 @@ public class BusinessSession {
     private String token = "";
     private LoginInfo loginInfo=null;
     private NimUserInfo userInfo=null;
+    private AccountBean accountInfo=null;
 
 
     private BusinessSession() {
@@ -60,5 +62,13 @@ public class BusinessSession {
 
     public void clearActiveSession(){
 
+    }
+
+    public AccountBean getAccountInfo() {
+        return accountInfo;
+    }
+
+    public void setAccountInfo(AccountBean accountInfo) {
+        this.accountInfo = accountInfo;
     }
 }

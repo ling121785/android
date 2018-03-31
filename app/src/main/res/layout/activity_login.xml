@@ -34,7 +34,8 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
-            style="@style/login_input_item">
+            style="@style/login_input_item"
+            android:visibility="gone">
             <TextView
                 android:layout_width="110px"
                 android:layout_height="wrap_content"

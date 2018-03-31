@@ -16,10 +16,12 @@ public class JsonUtils {
 
     public static <T> T  jsonToObj(String json, Class<T> classOfT) {
         T info = null;
+        if(json==null)
+            return null;
         try {
             info = mGson.fromJson(json, classOfT);
         } catch (Exception e) {
-            Logger.i(e.getMessage());
+            Logger.i(e.getMessage()+json);
         }
         return info;
     }

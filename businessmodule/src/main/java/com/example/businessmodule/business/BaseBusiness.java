@@ -16,11 +16,16 @@ import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.net.ConnectException;
 import java.net.UnknownHostException;
+import java.security.KeyManagementException;
 import java.security.KeyStore;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.Certificate;
+import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -30,9 +35,14 @@ import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+import javax.security.cert.X509Certificate;
 
 import okhttp3.OkHttpClient;
+import okhttp3.ResponseBody;
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -102,6 +112,7 @@ public abstract class BaseBusiness {
             builder.connectTimeout(5, TimeUnit.SECONDS);
             builder.retryOnConnectionFailure(true);
             builder.addNetworkInterceptor(new RestInterceptor());
+            builder.sslSocketFactory(getSSL().getSocketFactory());
             builder.hostnameVerifier(new HostnameVerifier() {
 
                 @Override
@@ -117,11 +128,57 @@ public abstract class BaseBusiness {
             retrofit = new Retrofit.Builder()
                     .baseUrl(RestApiUrl.BASE_URL)
                     .client(client)
+                    .addConverterFactory(new NullOnEmptyConverterFactory())
                     .addConverterFactory(GsonConverterFactory.create())
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
         }
         return retrofit;
+    }
+    public class NullOnEmptyConverterFactory extends Converter.Factory {
+
+        @Override
+        public Converter<ResponseBody, ?> responseBodyConverter(Type type, Annotation[] annotations, Retrofit retrofit) {
+            final Converter<ResponseBody, ?> delegate = retrofit.nextResponseBodyConverter(this, type, annotations);
+            return new Converter<ResponseBody,Object>() {
+                @Override
+                public Object convert(ResponseBody body) throws IOException {
+                    if (body.contentLength() == 0) return null;
+                    return delegate.convert(body);
+                }
+            };
+        }
+    }
+    private SSLContext getSSL(){
+        X509TrustManager xtm = new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(java.security.cert.X509Certificate[] x509Certificates, String s) throws CertificateException {
+
+            }
+
+            @Override
+            public void checkServerTrusted(java.security.cert.X509Certificate[] x509Certificates, String s) throws CertificateException {
+
+            }
+
+            @Override
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return new java.security.cert.X509Certificate[0];
+            }
+        };
+
+        SSLContext sslContext = null;
+        try {
+            sslContext = SSLContext.getInstance("SSL");
+
+            sslContext.init(null, new TrustManager[]{xtm}, new SecureRandom());
+
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        } catch (KeyManagementException e) {
+            e.printStackTrace();
+        }
+        return sslContext;
     }
 
     //实现https的类
@@ -237,15 +294,11 @@ public abstract class BaseBusiness {
                 @Override
                 public void onError(Throwable e) {
                     try {
-                        if (e.getMessage().equals(AuthFailEvent.TOKEN_IS_NULL)) {
-                            BusinessBus.getInstance().postResponse(new AuthFailEvent(AuthFailEvent.TOKEN_IS_NULL));
-                        }
                         if (callback != null)
                             callback.onError();
                         Logger.e(e.getMessage(),event);
                         if (e instanceof UnknownHostException) {
                             responseError(ResultCode.GENERAL_NO_NETWORK, "");
-
                         } else if (e instanceof ConnectException) {
                             responseError(ResultCode.GENERAL_CONNECT_SERVER, "");
 
@@ -264,22 +317,6 @@ public abstract class BaseBusiness {
                 @Override
                 public void onNext(K o) {
                     try {
-                        if (o == null) {
-                            responseError(ResultCode.NONE, "response is null");
-                            return;
-                        }
-                        //判断是否是token过期
-                        if (o instanceof BaseResult) {
-                            BaseResult result = (BaseResult) o;
-                            if (!result.isSuccess() && result.getErrorCode() != null) {
-//                                if (result.getErrorCode().contains(ResultCode.TOKEN_PASE_DUE)
-//                                        || result.getErrorCode().contains(ResultCode.TOKEN_FAILD)
-//                                        || result.getErrorCode().contains(ResultCode.TOKEN_VERIFY)) {
-//                                    BusinessBus.getInstance().postResponse(new AuthFailEvent(AuthFailEvent.TOKEN_IS_NULL));
-//                                }
-                            }
-                        }
-
                         if (callback != null && !callback.onResponse(o)) {
                             responseError(ResultCode.PROCESS_ERROR, "response process error");
                         } else {

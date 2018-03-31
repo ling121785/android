@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
-import android.support.annotation.IdRes;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -27,7 +26,6 @@ import android.view.WindowManager;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -36,7 +34,9 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessSession;
-import com.example.businessmodule.event.roomBusiness.JoinRoomEvent;
+import com.example.businessmodule.event.room.StartLiveEvent;
+import com.example.businessmodule.event.room.StopLiveEvent;
+import com.example.businessmodule.event.room.JoinRoomEvent;
 import com.example.businessmodule.utils.EventId;
 import com.netease.LSMediaCapture.Statistics;
 import com.netease.LSMediaCapture.lsAudioCaptureCallback;
@@ -49,7 +49,6 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
-import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
@@ -83,7 +82,6 @@ import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.AV;
 import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.VIDEO;
 
 
-import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
@@ -98,6 +96,7 @@ import toolbox.ll.com.toolbox.core.inject.GiftAttachment;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
 import toolbox.ll.com.toolbox.ui.widget.MixAudioDialog;
 import toolbox.ll.com.toolbox.ui.widget.NetWorkInfoDialog;
+import toolbox.ll.com.toolbox.utils.DialogUtil;
 import toolbox.ll.com.toolbox.utils.ImageUtility;
 
 
@@ -314,6 +313,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
 
     //开始直播
     private boolean startAV(){
+        BusinessInterface.getInstance().request(new StartLiveEvent(EventId.ROOM_EXIT,mLSBean.getLiveId()));
         //6、初始化直播
         m_liveStreamingInitFinished = mLSMediaCapture.initLiveStream(mLiveStreamingPara,mliveStreamingURL);
         if(mLSMediaCapture != null && m_liveStreamingInitFinished) {
@@ -337,6 +337,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     }
 
     private void stopAV(){
+        BusinessInterface.getInstance().request(new StopLiveEvent(EventId.ROOM_EXIT,mLSBean.getLiveId()));
         mGraffitiOn = false;
         if(mGraffitiThread != null){
             try {
@@ -1294,11 +1295,37 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        m_tryToStopLivestreaming = true;
+        DialogUtil.showComfimDialog(this,null,"是否退出直播？",new DialogUtil.DialogClickListener(){
+            @Override
+            public void comfirm(Object obj) {
+                m_tryToStopLivestreaming = true;
+                finish();
+            }
+
+            @Override
+            public void cancel() {
+
+            }
+        });
     }
 
 
+    @Subscribe
+    public void stopLiveResponse(StopLiveEvent event){
+        if(event.isSuccess()){
+            ToastUtils.showToast(this,"暂停直播~");
+            return;
+
+        }
+    }
+    @Subscribe
+    public void startLiveResponse(StartLiveEvent event){
+        if(event.isSuccess()){
+            ToastUtils.showToast(this,"开始直播~");
+            return;
+
+        }
+    }
 
     //用于接收Service发送的消息，伴音开关
     public class MsgReceiver extends BroadcastReceiver {
@@ -1409,14 +1436,14 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         mMenuList.add(new LiveMenuBean("screenshot","截图",R.drawable.ic_special_effect));
         mMenuList.add(new LiveMenuBean("beauty","美顔",R.drawable.live_menu_beauty,null,true));
         List<LiveMenuBean> mEffectList=new ArrayList<>();
-        mEffectList.add(new LiveMenuBean("effect","怀旧",R.drawable.ic_special_effect,null,VideoEffect.FilterType.brooklyn));
-        mEffectList.add(new LiveMenuBean("effect","干净",R.drawable.ic_special_effect,null,VideoEffect.FilterType.calm));
-        mEffectList.add(new LiveMenuBean("effect","自然",R.drawable.ic_special_effect,null,VideoEffect.FilterType.nature));
-        mEffectList.add(new LiveMenuBean("effect","健康",R.drawable.ic_special_effect,null,VideoEffect.FilterType.healthy));
-        mEffectList.add(new LiveMenuBean("effect","复古",R.drawable.ic_special_effect,null,VideoEffect.FilterType.pixar));
-        mEffectList.add(new LiveMenuBean("effect","温柔",R.drawable.ic_special_effect,null,VideoEffect.FilterType.tender));
-        mEffectList.add(new LiveMenuBean("effect","美白",R.drawable.ic_special_effect,null,VideoEffect.FilterType.whiten));
-        mEffectList.add(new LiveMenuBean("effect","无",R.drawable.ic_special_effect,null,VideoEffect.FilterType.none));
+        mEffectList.add(new LiveMenuBean("effect","怀旧",R.drawable.ic_effect_brooklyn,null,VideoEffect.FilterType.brooklyn));
+        mEffectList.add(new LiveMenuBean("effect","干净",R.drawable.ic_effect_clean,null,VideoEffect.FilterType.calm));
+        mEffectList.add(new LiveMenuBean("effect","自然",R.drawable.ic_effect_nature,null,VideoEffect.FilterType.nature));
+        mEffectList.add(new LiveMenuBean("effect","健康",R.drawable.ic_effect_health,null,VideoEffect.FilterType.healthy));
+        mEffectList.add(new LiveMenuBean("effect","复古",R.drawable.ic_effect_pixar,null,VideoEffect.FilterType.pixar));
+        mEffectList.add(new LiveMenuBean("effect","温柔",R.drawable.ic_effect_tender,null,VideoEffect.FilterType.tender));
+        mEffectList.add(new LiveMenuBean("effect","美白",R.drawable.ic_effect_white,null,VideoEffect.FilterType.whiten));
+        mEffectList.add(new LiveMenuBean("effect","无",R.drawable.ic_effect_none,null,VideoEffect.FilterType.none));
         mMenuList.add(new LiveMenuBean("specialEffect","特效",R.drawable.ic_special_effect,mEffectList,true));
         mLiveMenuAdapter.setDatas(mMenuList);
         mGVMenu.setAdapter(mLiveMenuAdapter);
@@ -1720,6 +1747,9 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
             finish();
         }
     };
+
+
+
 
 
 

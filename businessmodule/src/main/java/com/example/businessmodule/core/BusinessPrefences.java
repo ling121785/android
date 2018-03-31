@@ -4,9 +4,8 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 
-import com.example.businessmodule.bean.UserInfo;
+import com.example.businessmodule.bean.AccountBean;
 import com.example.businessmodule.exception.PrefenceException;
-import com.orhanobut.logger.Logger;
 
 import toolbox.ll.com.common.utility.JsonUtils;
 
@@ -65,7 +64,7 @@ public class BusinessPrefences {
 		return preferences.getString(key, defaultValue);
 	}
 
-	public void setUserInfo(UserInfo userInfo){
+	public void setUserInfo(AccountBean userInfo){
 		String infoStr= JsonUtils.objToJson(userInfo);
 		try {
 			saveSettings("userInfo",infoStr);
@@ -73,10 +72,10 @@ public class BusinessPrefences {
 			e.printStackTrace();
 		}
 	}
-	public UserInfo getUserInfo(){
+	public AccountBean getUserInfo(){
 		if (preferences == null)
 			return null;
-		return JsonUtils.jsonToObj(preferences.getString("userInfo", null),UserInfo.class);
+		return JsonUtils.jsonToObj(preferences.getString("userInfo", null),AccountBean.class);
 	}
 
 

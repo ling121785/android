@@ -8,20 +8,21 @@ import android.support.v4.app.ActivityCompat;
 import android.os.Bundle;
 import android.widget.TextView;
 
-import com.example.businessmodule.bean.UserInfo;
+import com.example.businessmodule.bean.AccountBean;
+import com.example.businessmodule.bean.RoomBean;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessPrefences;
 import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.account.LoginEvent;
 import com.example.businessmodule.event.account.LogoutEvent;
-import com.example.businessmodule.event.roomBusiness.CreateRoomEvent;
+import com.example.businessmodule.event.room.CreateRoomEvent;
 import com.example.businessmodule.utils.EventId;
-import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -33,6 +34,7 @@ import toolbox.ll.com.toolbox.bean.MainMenu;
 import toolbox.ll.com.toolbox.ui.account.LoginActivity;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
 import toolbox.ll.com.toolbox.ui.live.LiveStreamingActivity;
+import toolbox.ll.com.toolbox.utils.DialogUtil;
 import toolbox.ll.com.toolbox.utils.ImageUtility;
 
 public class MainActivity extends BaseActivity {
@@ -75,10 +77,10 @@ public class MainActivity extends BaseActivity {
     @Override
     public void afterInit(Bundle savedInstanceState) {
         mBPermission = checkPublishPermission();
-        UserInfo accountInfo= BusinessPrefences.getInstance().getUserInfo();
+        AccountBean accountInfo= BusinessPrefences.getInstance().getUserInfo();
         if(accountInfo!=null){
             //自动登录
-            BusinessInterface.getInstance().request(new LoginEvent(EventId.ACCOUNT_LOGIN,accountInfo.getAccount(),accountInfo.getPwd()));
+            BusinessInterface.getInstance().request(new LoginEvent(EventId.ACCOUNT_LOGIN,accountInfo.getUuid(),accountInfo.getPwd()));
         }
     }
     private boolean checkPublishPermission() {
@@ -146,8 +148,40 @@ public class MainActivity extends BaseActivity {
             this.startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-        Intent intent=new Intent(this,LiveStreamingActivity.class);
-        intent.putExtra("data",new LiveStreamingBean());
+        DialogUtil.showInputDialog(this, "直播间设置", "请输入直播间名字", new DialogUtil.DialogClickListener() {
+            @Override
+            public void comfirm(Object obj) {
+                String [] posters={"http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg",
+                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/2.jpg",
+                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/3.jpg",
+                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/4.jpg",
+                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/5.jpg",
+                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/6.jpg",
+                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/7.jpg",
+                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/8.jpg",
+                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/9.jpg"};
+                String poster=posters[new Random().nextInt(6)];
+                BusinessInterface.getInstance().request(new CreateRoomEvent(EventId.ROOM_CREATE,(String)obj,"","http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg"));
+            }
+
+            @Override
+            public void cancel() {
+
+            }
+    });
+    }
+
+    /**
+     * 进入房间
+     * @param roomBean
+     */
+    public void gotoChatRoom(RoomBean roomBean){
+        Intent intent=new Intent(MainActivity.this,LiveStreamingActivity.class);
+        LiveStreamingBean liveStreamingBean=new LiveStreamingBean();
+        liveStreamingBean.setRoomId(roomBean.getRoomId());
+        liveStreamingBean.setPushUrl(roomBean.getLiveUrl());
+        liveStreamingBean.setLiveId(roomBean.getLiveId());
+        intent.putExtra("data",liveStreamingBean);
         startActivity(intent);
     }
 
@@ -155,8 +189,8 @@ public class MainActivity extends BaseActivity {
     public void CreateRoomResponse(CreateRoomEvent event){
         if(event.isSuccess()){
             ToastUtils.showToast(this,"房间创建成功");
+            gotoChatRoom(event.response());
             return;
-
         }
         ToastUtils.showToast(this,"房间创建失败");
 //        BusinessInterface.getInstance().request(new JoinRoomEvent(EventId.ROOM_JOIN,"room1", AVChatType.VIDEO));

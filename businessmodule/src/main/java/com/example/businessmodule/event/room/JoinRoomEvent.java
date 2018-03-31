@@ -1,9 +1,6 @@
-package com.example.businessmodule.event.roomBusiness;
+package com.example.businessmodule.event.room;
 
 import com.example.businessmodule.event.BaseEvent;
-import com.netease.nimlib.sdk.avchat.constant.AVChatType;
-import com.netease.nimlib.sdk.avchat.model.AVChatChannelInfo;
-import com.netease.nimlib.sdk.avchat.model.AVChatData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 
 /**

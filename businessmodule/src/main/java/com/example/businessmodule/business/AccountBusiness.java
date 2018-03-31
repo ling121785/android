@@ -1,6 +1,6 @@
 package com.example.businessmodule.business;
 
-import com.example.businessmodule.bean.UserInfo;
+import com.example.businessmodule.bean.AccountBean;
 import com.example.businessmodule.core.BusinessPrefences;
 import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.BaseEvent;
@@ -13,9 +13,9 @@ import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
-import com.orhanobut.logger.Logger;
 
-import toolbox.ll.com.common.utility.JsonUtils;
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 /**
  * Created by Administrator on 2018/3/22.
@@ -39,7 +39,31 @@ public class AccountBusiness extends BaseBusiness{
     }
 
     private void login(final LoginEvent event){
-        LoginInfo info = new LoginInfo(event.request().getAccount(),event.request().getPassword()); // config...
+        LoginEvent.Rest request= getRetrofit().create(LoginEvent.Rest.class);
+        request.request(event.request().getAccount())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<AccountBean>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        responseError(e);
+                    }
+
+                    @Override
+                    public void onNext(AccountBean userInfo) {
+                        BusinessPrefences.getInstance().setUserInfo(userInfo);
+                        BusinessSession.getInstance().setAccountInfo(userInfo);
+                        nimLogin(userInfo.getAccount(),userInfo.getPwd(),event);
+                    }
+                });
+
+    }
+    private void nimLogin(final String account,final String token,final LoginEvent event){
+        LoginInfo info = new LoginInfo(account,token); // config...
         NIMClient.getService(AuthService.class).login(info)
                 .setCallback( new RequestCallback<LoginInfo>() {
                     @Override
@@ -47,7 +71,6 @@ public class AccountBusiness extends BaseBusiness{
 
                         event.setResponse(loginInfo);
                         BusinessSession.getInstance().setLoginInfo(loginInfo);
-                        BusinessPrefences.getInstance().setUserInfo(new UserInfo(event.request().getAccount(),event.request().getPassword()));
                         NimUserInfo user = NIMClient.getService(UserService.class).getUserInfo(loginInfo.getAccount());
                         BusinessSession.getInstance().setUserInfo(user);
                         responseSuccess();
@@ -67,7 +90,7 @@ public class AccountBusiness extends BaseBusiness{
     private void logout(final LogoutEvent event){
         NIMClient.getService(AuthService.class).logout();
         BusinessSession.getInstance().setLoginInfo(null);
-        BusinessPrefences.getInstance().setUserInfo(new UserInfo(null,null));
+        BusinessPrefences.getInstance().setUserInfo(new AccountBean(null,null));
         BusinessSession.getInstance().setUserInfo(null);
         responseSuccess();
     }
