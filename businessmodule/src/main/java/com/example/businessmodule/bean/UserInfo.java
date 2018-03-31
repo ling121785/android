@@ -1,5 +1,7 @@
 package com.example.businessmodule.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.io.Serializable;
 
 /**
@@ -7,7 +9,9 @@ import java.io.Serializable;
  */
 
 public class UserInfo implements Serializable{
+    @SerializedName("account")
     private String account;
+    @SerializedName("token")
     private String pwd;
 
     public UserInfo(String account, String pwd) {

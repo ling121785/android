@@ -11,11 +11,16 @@ import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.auth.AuthService;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 
+import rx.Subscriber;
+import rx.Subscription;
+import rx.schedulers.Schedulers;
+
 /**
  * Created by Administrator on 2018/3/22.
  */
 
 public class AccountBusiness extends BaseBusiness{
+    private Subscription subscription = null;
     public AccountBusiness(BaseEvent event) {
         super(event);
     }
@@ -28,9 +33,8 @@ public class AccountBusiness extends BaseBusiness{
 
         }
     }
-
-    private void login(final LoginEvent event){
-        LoginInfo info = new LoginInfo(event.request().getAccount(),event.request().getPassword()); // config...
+    private void neteaseLogin(String account,String token,final LoginEvent event){
+        LoginInfo info = new LoginInfo(account,token); // config...
         NIMClient.getService(AuthService.class).login(info)
                 .setCallback( new RequestCallback<LoginInfo>() {
                     @Override
@@ -51,6 +55,28 @@ public class AccountBusiness extends BaseBusiness{
                     }
                     // 可以在此保存LoginInfo到本地，下次启动APP做自动登录用
                 });
+    }
+    private void login(final LoginEvent event){
+        LoginEvent.Rest request = getRetrofit().create(LoginEvent.Rest.class);
+        request.createRequest(event.request().getAccount())
+                .subscribeOn(Schedulers.io())
+                .subscribe(new Subscriber<UserInfo>() {
+                    @Override
+                    public void onCompleted() {
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        responseError(e);
+                    }
+
+                    @Override
+                    public void onNext(UserInfo restResponse) {
+                      neteaseLogin(restResponse.getAccount(),restResponse.getPwd(),event);
+                    }
+                });
+
     }
 
     @Override

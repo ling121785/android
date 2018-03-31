@@ -1,7 +1,12 @@
 package com.example.businessmodule.event.account;
 
+import com.example.businessmodule.bean.UserInfo;
 import com.example.businessmodule.event.BaseEvent;
 import com.netease.nimlib.sdk.auth.LoginInfo;
+
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+import rx.Observable;
 
 /**
  * Created by Administrator on 2018/3/22.
@@ -37,5 +42,10 @@ public class LoginEvent extends BaseEvent<LoginEvent.Request,LoginInfo> {
     public LoginEvent(long eventId,String account,String password) {
         super(eventId);
         setRequest(new Request(account,password));
+    }
+
+    public interface  Rest{
+        @GET("account")
+        Observable<UserInfo> createRequest(@Query("access_token") String token);
     }
 }
