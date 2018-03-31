@@ -60,7 +60,9 @@ public class GiftListAdapter extends BaseListAdapter<ChatRoomMessage,GiftListAda
         if(data.getAttachment()instanceof GiftAttachment){
             GiftAttachment attachment=(GiftAttachment)data.getAttachment();
             GiftBean gift=getGiftBean(attachment.getData().getId());
-            String nick= StringUtils.getString(data.getFromNick());
+
+            String nick=StringUtils.getString(data.getFromNick(), data.getChatRoomMessageExtension()!=null?data.getChatRoomMessageExtension().getSenderNick():null,data.getFromAccount());
+
             String desc="送出玫瑰";
             if(gift!=null){
                 desc="送出"+gift.getName();
@@ -70,6 +72,7 @@ public class GiftListAdapter extends BaseListAdapter<ChatRoomMessage,GiftListAda
             viewHolder.mTVDesc.setText(desc);
             viewHolder.mTVCount.setText(num);
             ImageUtility.displayImage(viewHolder.mIVGift,gift==null?"":gift.getIcon(),ImageUtility.TYPE_GIFT);
+            ImageUtility.displayImage(viewHolder.mIVAvatar,data.getChatRoomMessageExtension()==null?"":data.getChatRoomMessageExtension().getSenderAvatar(),ImageUtility.TYPE_PHOTO_AVATAR);
         }
     }
     private GiftBean getGiftBean(int id){

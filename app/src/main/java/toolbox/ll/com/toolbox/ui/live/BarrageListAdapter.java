@@ -54,7 +54,7 @@ public class BarrageListAdapter extends BaseListAdapter<ChatRoomMessage,BarrageL
     public void bindDataToViewHolder(BarrageListAdapter.ViewHolder viewHolder, ChatRoomMessage data) {
         String msg="";
         if(data.getAttachment()instanceof BarrageAttachment){
-            msg=StringUtils.getString(data.getFromNick(),data.getFromAccount());
+            msg=StringUtils.getString(data.getFromNick(), data.getChatRoomMessageExtension()!=null?data.getChatRoomMessageExtension().getSenderNick():null,data.getFromAccount());
             msg=msg+":";
             BarrageAttachment attachment=(BarrageAttachment)data.getAttachment();
             msg+=attachment.getData().getText();
