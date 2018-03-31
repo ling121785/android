@@ -34,6 +34,7 @@ public class ImageUtility {
 
     public static final int TYPE_PHOTO_AVATAR = 3;//头像
     public static final int TYPE_ALBUM = 7;//相册
+    public static final int TYPE_GIFT = 8;//相册
 
 
 
@@ -70,6 +71,15 @@ public class ImageUtility {
             .showImageOnLoading(R.mipmap.ic_launcher)          // 设置图片下载期间显示的图片
             .showImageForEmptyUri(R.mipmap.ic_launcher)  // 设置图片Uri为空或是错误的时候显示的图片
             .showImageOnFail(R.mipmap.ic_launcher)       // 设置图片加载或解码过程中发生错误显示的图片
+            .cacheInMemory(true)// 设置下载的图片是否缓存在内存中
+            .considerExifParams(true)
+            .cacheOnDisk(true)                          // 设置下载的图片是否缓存在SD卡中
+            .build();                                   // 创建配置过得DisplayImageOption对象
+
+    public static DisplayImageOptions GiftOptions = new DisplayImageOptions.Builder()
+            .showImageOnLoading(R.drawable.ic_rose)          // 设置图片下载期间显示的图片
+            .showImageForEmptyUri(R.drawable.ic_rose)  // 设置图片Uri为空或是错误的时候显示的图片
+            .showImageOnFail(R.drawable.ic_rose)       // 设置图片加载或解码过程中发生错误显示的图片
             .cacheInMemory(true)// 设置下载的图片是否缓存在内存中
             .considerExifParams(true)
             .cacheOnDisk(true)                          // 设置下载的图片是否缓存在SD卡中
@@ -229,6 +239,9 @@ public class ImageUtility {
 
             case TYPE_PHOTO_AVATAR:
                 ImageLoader.getInstance().displayImage(getThumbUrl(url), view, optionsAvatar, mLoadingListener);
+                break;
+            case TYPE_GIFT:
+                ImageLoader.getInstance().displayImage(getThumbUrl(url), view, GiftOptions, mLoadingListener);
                 break;
             default:
                 displayImage(view, url);

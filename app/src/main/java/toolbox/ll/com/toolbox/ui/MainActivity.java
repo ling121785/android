@@ -16,6 +16,7 @@ import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.account.LoginEvent;
 import com.example.businessmodule.event.account.LogoutEvent;
 import com.example.businessmodule.event.room.CreateRoomEvent;
+import com.example.businessmodule.event.room.GiftListEvent;
 import com.example.businessmodule.utils.EventId;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.squareup.otto.Subscribe;

@@ -11,6 +11,7 @@ import com.example.businessmodule.event.BaseEvent;
 import com.example.businessmodule.event.account.LoginEvent;
 import com.example.businessmodule.event.account.LogoutEvent;
 import com.example.businessmodule.event.room.CreateRoomEvent;
+import com.example.businessmodule.event.room.GiftListEvent;
 import com.example.businessmodule.event.room.StartLiveEvent;
 import com.example.businessmodule.event.room.StopLiveEvent;
 import com.example.businessmodule.event.room.JoinRoomEvent;
@@ -91,6 +92,10 @@ public class BusinessService extends Service {
         executeBusiness(new RoomBusiness(event));
     }
 
+    @Subscribe
+    public void processEvent(GiftListEvent event) {
+        executeBusiness(new RoomBusiness(event));
+    }
     @Subscribe
     public void processEvent(JoinRoomEvent event) {
         executeBusiness(new RoomBusiness(event));

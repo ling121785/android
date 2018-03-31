@@ -10,4 +10,5 @@ public class EventId {
     public static long ROOM_CREATE=0000021L;
     public static long ROOM_JOIN=00000031L;
     public static long ROOM_EXIT=00000041L;
+    public static long ROOM_GIFT=00000042L;
 }

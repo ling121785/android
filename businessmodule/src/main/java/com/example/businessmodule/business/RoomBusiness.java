@@ -1,13 +1,18 @@
 package com.example.businessmodule.business;
 
 import com.example.businessmodule.bean.AccountBean;
+import com.example.businessmodule.bean.GiftBean;
 import com.example.businessmodule.bean.RoomBean;
+import com.example.businessmodule.core.BusinessInterface;
+import com.example.businessmodule.core.BusinessPrefences;
 import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.BaseEvent;
 import com.example.businessmodule.event.room.CreateRoomEvent;
+import com.example.businessmodule.event.room.GiftListEvent;
 import com.example.businessmodule.event.room.StartLiveEvent;
 import com.example.businessmodule.event.room.StopLiveEvent;
 import com.example.businessmodule.event.room.JoinRoomEvent;
+import com.example.businessmodule.rest.BaseListResponse;
 import com.example.businessmodule.utils.ResultCode;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -15,6 +20,7 @@ import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+import com.orhanobut.logger.Logger;
 
 
 /**
@@ -42,6 +48,10 @@ public class RoomBusiness extends BaseBusiness{
         }
         if(this.getEvent() instanceof StartLiveEvent){
             this.startLive((StartLiveEvent)this.getEvent());
+            return;
+        }
+        if(this.getEvent() instanceof GiftListEvent){
+            this.getGiftList((GiftListEvent)this.getEvent());
             return;
         }
     }
@@ -124,6 +134,29 @@ public class RoomBusiness extends BaseBusiness{
         startRest(rest.request("live/"+event.request().getLiveId(),accountBean.getUuid()),new RestCallback<String>(){
             @Override
             public boolean onResponse(String response) {
+                return true;
+            }
+
+            @Override
+            public boolean onError() {
+                return false;
+            }
+        });
+    }
+    private void getGiftList(final GiftListEvent event){
+        GiftListEvent.Rest rest=getRetrofit().create(GiftListEvent.Rest.class);
+        AccountBean accountBean=BusinessSession.getInstance().getAccountInfo();
+        if(accountBean==null||accountBean.getUuid()==null){
+            responseError(ResultCode.AUTH_FAIL,"未登录");
+            return;
+        }
+        startRest(rest.request(accountBean.getUuid(),event.request().getRoomId()),new RestCallback<BaseListResponse<GiftBean>>(){
+            @Override
+            public boolean onResponse(BaseListResponse<GiftBean> response) {
+                if(response!=null){
+                    BusinessSession.getInstance().setmGiftList(response.getDataList());
+                    BusinessPrefences.getInstance().saveGiftList(response.getDataList());
+                }
                 return true;
             }
 

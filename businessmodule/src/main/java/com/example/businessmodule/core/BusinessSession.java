@@ -3,8 +3,11 @@ package com.example.businessmodule.core;
 import android.content.Context;
 
 import com.example.businessmodule.bean.AccountBean;
+import com.example.businessmodule.bean.GiftBean;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
+
+import java.util.List;
 
 /**
  * 当前会话信息保存
@@ -25,6 +28,7 @@ public class BusinessSession {
     private LoginInfo loginInfo=null;
     private NimUserInfo userInfo=null;
     private AccountBean accountInfo=null;
+    private List<GiftBean> mGiftList=null;
 
 
     private BusinessSession() {
@@ -70,5 +74,21 @@ public class BusinessSession {
 
     public void setAccountInfo(AccountBean accountInfo) {
         this.accountInfo = accountInfo;
+    }
+
+    public static void setInstance(BusinessSession instance) {
+        BusinessSession.instance = instance;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public List<GiftBean> getmGiftList() {
+        return mGiftList;
+    }
+
+    public void setmGiftList(List<GiftBean> mGiftList) {
+        this.mGiftList = mGiftList;
     }
 }

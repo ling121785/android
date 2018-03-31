@@ -23,6 +23,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -34,6 +35,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessSession;
+import com.example.businessmodule.event.room.GiftListEvent;
 import com.example.businessmodule.event.room.StartLiveEvent;
 import com.example.businessmodule.event.room.StopLiveEvent;
 import com.example.businessmodule.event.room.JoinRoomEvent;
@@ -69,6 +71,8 @@ import com.netease.vcloud.video.render.NeteaseView;
 import com.orhanobut.logger.Logger;
 import com.squareup.otto.Subscribe;
 
+import org.w3c.dom.Text;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -82,16 +86,19 @@ import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.AV;
 import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.VIDEO;
 
 
+import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
+import toolbox.ll.com.common.utility.StringUtils;
 import toolbox.ll.com.common.utility.ToastUtils;
 import toolbox.ll.com.common.widget.CircleImageView;
 import toolbox.ll.com.toolbox.R;
 import toolbox.ll.com.toolbox.bean.LiveMenuBean;
 import toolbox.ll.com.toolbox.bean.LiveStreamingBean;
 import toolbox.ll.com.toolbox.core.inject.BarrageAttachment;
+import toolbox.ll.com.toolbox.core.inject.CoinChangeAttachment;
 import toolbox.ll.com.toolbox.core.inject.GiftAttachment;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
 import toolbox.ll.com.toolbox.ui.widget.MixAudioDialog;
@@ -337,7 +344,6 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     }
 
     private void stopAV(){
-        BusinessInterface.getInstance().request(new StopLiveEvent(EventId.ROOM_EXIT,mLSBean.getLiveId()));
         mGraffitiOn = false;
         if(mGraffitiThread != null){
             try {
@@ -1075,7 +1081,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
             case MSG_STOP_LIVESTREAMING_FINISHED://停止直播完成
             {
                 Log.i(TAG, "test: MSG_STOP_LIVESTREAMING_FINISHED");
-                showToast("停止直播已完成");
+                showToast("直播已暂停");
                 m_liveStreamingOn = false;
                 startPauseResumeBtn.setClickable(true);
                 {
@@ -1299,7 +1305,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
             @Override
             public void comfirm(Object obj) {
                 m_tryToStopLivestreaming = true;
-                finish();
+                BusinessInterface.getInstance().request(new StopLiveEvent(EventId.ROOM_EXIT,mLSBean.getLiveId()));
             }
 
             @Override
@@ -1313,7 +1319,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     @Subscribe
     public void stopLiveResponse(StopLiveEvent event){
         if(event.isSuccess()){
-            ToastUtils.showToast(this,"暂停直播~");
+            finish();
             return;
 
         }
@@ -1405,6 +1411,11 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     @BindView(R.id.live_gv_menu)
     GridView mGVMenu;
 
+    @BindView(R.id.live_tv_coin)
+    TextView mTVCoin;
+    @BindView(R.id.live_et_input)
+    EditText mETInput;
+
 
     private NimUserInfo mUserInfo;
     private ChatRoomInfo mChartRoomInfo=null;
@@ -1459,6 +1470,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         }
         initLiveSream(savedInstanceState);
         BusinessInterface.getInstance().request(new JoinRoomEvent(EventId.ROOM_JOIN,mLSBean.getRoomId()));
+        BusinessInterface.getInstance().request(new GiftListEvent(EventId.ROOM_GIFT,mLSBean.getRoomId()));
     }
     private void onMyDestory(){
         initRoomService(false);
@@ -1484,6 +1496,16 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         }
         ToastUtils.showToast(this,"加入房间失败");
     }
+    @Subscribe
+    public void giftListResponse(GiftListEvent event){
+        ToastUtils.showToast(this,"获取礼物成功");
+        if(event.isSuccess()){
+            mGiftAdapter.notifyDataSetChanged();
+            return;
+
+        }
+
+    }
 
     private void fetchRoomMember(){
         NIMClient.getService(ChatRoomService.class)
@@ -1494,6 +1516,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                     public void onSuccess(List<ChatRoomMember> chatRoomMembers) {
                         mRoomMemberAdapter.setDatas(chatRoomMembers);
                         mRoomMemberAdapter.notifyDataSetChanged();
+                        showChatRoomInfo(mChartRoomInfo);
                     }
 
                     @Override
@@ -1579,32 +1602,29 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         mLayoutMenu.setVisibility(mLayoutMenu.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
     }
 
-    @OnTextChanged(R.id.live_et_input)
-    public void inputChange(){
-
-    }
-
-    public void sendMsg(final String msg){
-        if(msg==null)
+    @OnClick(R.id.live_tv_send)
+    public void sendMsg(){
+        final String msg=mETInput.getText().toString();
+        if(StringUtils.isEmpty(msg))
             return;
+        mETInput.setText("");
 // 创建聊天室文本消息
-        ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(mLSBean.getRoomId(), msg);
+        final ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomCustomMessage(mLSBean.getRoomId(),
+                new BarrageAttachment(msg));
 // 将文本消息发送出去
         NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
                 .setCallback(new RequestCallback<Void>() {
                     @Override
                     public void onSuccess(Void param) {
                         // 成功
-                        ToastUtils.showToast(LiveStreamingActivity.this,"发送成功");
-                        ChatRoomMessage chatRoomMessage=ChatRoomMessageBuilder.createChatRoomTextMessage(mLSBean.getRoomId(),msg);
-                        chatRoomMessage.setFromAccount(mUserInfo.getAccount());
-                        chatRoomMessage.setAttachment(new BarrageAttachment(msg));
-                        showBrrage(chatRoomMessage);
+                        message.setFromAccount(mUserInfo.getName());
+                        showBrrage(message);
                     }
 
                     @Override
                     public void onFailed(int code) {
                         // 失败
+                        ToastUtils.showToast(LiveStreamingActivity.this,"发送失敗");
                     }
 
                     @Override
@@ -1612,6 +1632,10 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                         // 错误
                     }
                 });
+    }
+
+    public void updateCoin(CoinChangeAttachment msg){
+        mTVCoin.setText("贡献："+msg.getData().getRoom_coin());
     }
 
     public void showBrrage(ChatRoomMessage msg){
@@ -1647,13 +1671,14 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         public void onEvent(List<ChatRoomMessage> messages) {
             for( ChatRoomMessage msg:messages){
                 // 处理新收到的消息
-                Logger.i("收到消息来自"+msg.getFromAccount()+"的消息:"
+                Logger.i("收到消息来自"+msg.getFromNick()+"的消息:"
                         +msg.getAttachment()+msg.getMsgType()+msg.getContent()+msg.getDirect());
                 if (msg != null && msg.getAttachment() instanceof ChatRoomNotificationAttachment) {
                     // 通知类消息
                     ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) msg.getAttachment();
                     if (attachment.getType() == NotificationType.ChatRoomMemberIn) {
                         showBrrage(msg);
+                        fetchRoomMember();
                     } else if (attachment.getType() == NotificationType.ChatRoomInfoUpdated) {
                         Logger.i("房间信息更新"+attachment.getExtension());
                         ToastUtils.showToast(LiveStreamingActivity.this,"房间信息更新");
@@ -1662,6 +1687,8 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                     showGift(msg);
                 }else if(msg != null && msg.getAttachment() instanceof BarrageAttachment){
                     showBrrage(msg);
+                }else if(msg!=null&&msg.getAttachment() instanceof CoinChangeAttachment){
+                    updateCoin((CoinChangeAttachment)msg.getAttachment());
                 }
             }
 

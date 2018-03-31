@@ -39,7 +39,6 @@ public class RoomMemberAdapter extends BaseRListAdapter<ChatRoomMember,RoomMembe
 
     @Override
     public void bindDataToViewHolder(RoomMemberAdapter.ViewHolder viewHolder, ChatRoomMember data) {
-        Logger.i(".............ChatRoomMember"+data.getNick()+data.getAvatar());
         ImageUtility.displayImage(viewHolder.mIVAvatar,data.getAvatar(),ImageUtility.TYPE_PHOTO_AVATAR);
     }
 

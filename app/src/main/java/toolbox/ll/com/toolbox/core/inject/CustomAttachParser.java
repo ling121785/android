@@ -35,6 +35,8 @@ public class CustomAttachParser implements MsgAttachmentParser {
                 case CustomAttachmentType.BARRAGE:
                     attachment =  JsonUtils.jsonToObj(json,BarrageAttachment.class);
                     break;
+                case CustomAttachmentType.COIN_CHANGE:
+                    attachment=JsonUtils.jsonToObj(json,CoinChangeAttachment.class);
 
 //                default:
 //                    attachment = new DefaultCustomAttachment();

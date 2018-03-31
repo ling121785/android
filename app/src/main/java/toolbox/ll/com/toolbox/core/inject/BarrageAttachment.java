@@ -11,6 +11,7 @@ public class BarrageAttachment extends CustomAttachment<BarrageAttachment.Barrag
 
     public BarrageAttachment(String text) {
         super();
+        setType(CustomAttachmentType.BARRAGE);
         setData(new Barrage(text));
     }
 
