@@ -16,7 +16,7 @@ public class BaseResult {
     @SerializedName("code")
     private String errorCode;
 
-    @SerializedName("desc")
+    @SerializedName("error")
     private String errorMsg;
 
 

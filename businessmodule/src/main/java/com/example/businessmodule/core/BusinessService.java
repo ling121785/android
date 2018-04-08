@@ -3,19 +3,19 @@ package com.example.businessmodule.core;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 import com.example.businessmodule.business.AccountBusiness;
 import com.example.businessmodule.business.BaseBusiness;
 import com.example.businessmodule.business.RoomBusiness;
 import com.example.businessmodule.event.BaseEvent;
 import com.example.businessmodule.event.account.LoginEvent;
-import com.example.businessmodule.event.roomBusiness.CreateRoomEvent;
-import com.example.businessmodule.event.roomBusiness.JoinRoomEvent;
-import com.orhanobut.logger.Logger;
+import com.example.businessmodule.event.account.LogoutEvent;
+import com.example.businessmodule.event.room.CreateRoomEvent;
+import com.example.businessmodule.event.room.GiftListEvent;
+import com.example.businessmodule.event.room.StartLiveEvent;
+import com.example.businessmodule.event.room.StopLiveEvent;
+import com.example.businessmodule.event.room.JoinRoomEvent;
 import com.squareup.otto.Subscribe;
-
-import toolbox.ll.com.common.utility.StringUtils;
 
 /**
  * 业务处理服务 <br/>
@@ -84,7 +84,25 @@ public class BusinessService extends Service {
         executeBusiness(new RoomBusiness(event));
     }
     @Subscribe
+    public void processEvent(StopLiveEvent event) {
+        executeBusiness(new RoomBusiness(event));
+    }
+    @Subscribe
+    public void processEvent(StartLiveEvent event) {
+        executeBusiness(new RoomBusiness(event));
+    }
+
+    @Subscribe
+    public void processEvent(GiftListEvent event) {
+        executeBusiness(new RoomBusiness(event));
+    }
+    @Subscribe
     public void processEvent(JoinRoomEvent event) {
         executeBusiness(new RoomBusiness(event));
+    }
+
+    @Subscribe
+    public void processEvent(LogoutEvent event){
+        executeBusiness(new AccountBusiness(event));
     }
 }

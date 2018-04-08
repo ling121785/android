@@ -13,6 +13,7 @@ import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import java.util.ArrayList;
 import java.util.List;
 
+import toolbox.ll.com.common.utility.StringUtils;
 import toolbox.ll.com.toolbox.R;
 import toolbox.ll.com.toolbox.bean.MainMenu;
 import toolbox.ll.com.toolbox.core.inject.BarrageAttachment;
@@ -36,6 +37,9 @@ public class BarrageListAdapter extends BaseListAdapter<ChatRoomMessage,BarrageL
             data=new ArrayList<ChatRoomMessage>();
         }
         data.add(msg);
+        if(data.size()>50){
+            data.remove(0);
+        }
         setDatas(data);
         this.notifyDataSetChanged();
     }
@@ -50,7 +54,8 @@ public class BarrageListAdapter extends BaseListAdapter<ChatRoomMessage,BarrageL
     public void bindDataToViewHolder(BarrageListAdapter.ViewHolder viewHolder, ChatRoomMessage data) {
         String msg="";
         if(data.getAttachment()instanceof BarrageAttachment){
-            msg=data.getFromAccount()+":";
+            msg=StringUtils.getString(data.getFromNick(), data.getChatRoomMessageExtension()!=null?data.getChatRoomMessageExtension().getSenderNick():null,data.getFromAccount());
+            msg=msg+":";
             BarrageAttachment attachment=(BarrageAttachment)data.getAttachment();
             msg+=attachment.getData().getText();
         }else if(data.getAttachment() instanceof ChatRoomNotificationAttachment){

@@ -15,16 +15,18 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
-import android.support.annotation.IdRes;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,7 +35,10 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessSession;
-import com.example.businessmodule.event.roomBusiness.JoinRoomEvent;
+import com.example.businessmodule.event.room.GiftListEvent;
+import com.example.businessmodule.event.room.StartLiveEvent;
+import com.example.businessmodule.event.room.StopLiveEvent;
+import com.example.businessmodule.event.room.JoinRoomEvent;
 import com.example.businessmodule.utils.EventId;
 import com.netease.LSMediaCapture.Statistics;
 import com.netease.LSMediaCapture.lsAudioCaptureCallback;
@@ -46,12 +51,13 @@ import com.netease.nimlib.sdk.Observer;
 import com.netease.nimlib.sdk.RequestCallback;
 import com.netease.nimlib.sdk.StatusCode;
 import com.netease.nimlib.sdk.auth.AuthServiceObserver;
-import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.chatroom.ChatRoomMessageBuilder;
 import com.netease.nimlib.sdk.chatroom.ChatRoomService;
 import com.netease.nimlib.sdk.chatroom.ChatRoomServiceObserver;
+import com.netease.nimlib.sdk.chatroom.constant.MemberQueryType;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomInfo;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomKickOutEvent;
+import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMessage;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomNotificationAttachment;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomStatusChangeData;
@@ -59,16 +65,20 @@ import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.netease.nimlib.sdk.msg.MsgServiceObserve;
 import com.netease.nimlib.sdk.msg.constant.NotificationType;
 import com.netease.nimlib.sdk.msg.model.CustomNotification;
+import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.netease.vcloud.video.effect.VideoEffect;
 import com.netease.vcloud.video.render.NeteaseView;
 import com.orhanobut.logger.Logger;
 import com.squareup.otto.Subscribe;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.AUDIO;
@@ -76,26 +86,33 @@ import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.AV;
 import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.VIDEO;
 
 
+import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.OnClick;
+import butterknife.OnItemClick;
+import butterknife.OnTextChanged;
+import toolbox.ll.com.common.utility.StringUtils;
 import toolbox.ll.com.common.utility.ToastUtils;
 import toolbox.ll.com.common.widget.CircleImageView;
 import toolbox.ll.com.toolbox.R;
+import toolbox.ll.com.toolbox.bean.LiveMenuBean;
 import toolbox.ll.com.toolbox.bean.LiveStreamingBean;
 import toolbox.ll.com.toolbox.core.inject.BarrageAttachment;
+import toolbox.ll.com.toolbox.core.inject.CoinChangeAttachment;
 import toolbox.ll.com.toolbox.core.inject.GiftAttachment;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
 import toolbox.ll.com.toolbox.ui.widget.MixAudioDialog;
 import toolbox.ll.com.toolbox.ui.widget.NetWorkInfoDialog;
+import toolbox.ll.com.toolbox.utils.DialogUtil;
+import toolbox.ll.com.toolbox.utils.ImageUtility;
 
 
 //由于直播推流的URL地址较长，可以直接在代码中的mliveStreamingURL设置直播推流的URL
-public class LiveStreamingActivity extends BaseActivity implements View.OnClickListener, lsMessageHandler {
+public class LiveStreamingActivity extends BaseActivity implements  lsMessageHandler {
 
     private static final String TAG = "LiveStreamingActivity";
     //Demo控件
     private View filterLayout;
-    private View configLayout;
     private ImageView startPauseResumeBtn;
     private TextView mFpsView;
     private final int MSG_FPS = 1000;
@@ -279,8 +296,7 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
             mHandler.sendEmptyMessageDelayed(MSG_FPS,1000);
         }
 
-        //5、Demo控件的初始化（Demo层实现，用户不需要添加该操作）
-        buttonInit();
+
 
         //伴音相关操作，获取设备音频播放service
         mAudioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
@@ -297,11 +313,14 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
         IntentFilter audioMixVolumeIntentFilter = new IntentFilter();
         audioMixVolumeIntentFilter.addAction("AudioMixVolume");
         registerReceiver(audioMixVolumeMsgReceiver, audioMixVolumeIntentFilter);
+         //5、Demo控件的初始化（Demo层实现，用户不需要添加该操作）
+         buttonInit();
 
     }
 
     //开始直播
     private boolean startAV(){
+        BusinessInterface.getInstance().request(new StartLiveEvent(EventId.ROOM_EXIT,mLSBean.getLiveId()));
         //6、初始化直播
         m_liveStreamingInitFinished = mLSMediaCapture.initLiveStream(mLiveStreamingPara,mliveStreamingURL);
         if(mLSMediaCapture != null && m_liveStreamingInitFinished) {
@@ -570,25 +589,6 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-        //闪光灯
-        final ImageView flashBtn = (ImageView) findViewById(R.id.live_flash);
-        flashBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(mLSMediaCapture != null){
-                    mFlashOn = !mFlashOn;
-                    mLSMediaCapture.setCameraFlashPara(mFlashOn);
-                    if(mFlashOn){
-                        flashBtn.setImageResource(R.drawable.flashstop);
-                    }else {
-                        flashBtn.setImageResource(R.drawable.flashstart);
-                    }
-
-
-                }
-            }
-        });
-
         //测速
         mSpeedResultTxt = (TextView) findViewById(R.id.speedResult);
         findViewById(R.id.live_speed_test).setOnClickListener(new View.OnClickListener() {
@@ -653,38 +653,6 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
             }
         });
 
-
-        //切换前后摄像头按钮初始化
-        View switchBtn = findViewById(R.id.live_camera_btn);
-        switchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switchCamera();
-            }
-        });
-
-        View captureBtn = findViewById(R.id.live_capture_btn);
-        captureBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                capture();
-            }
-        });
-
-
-        //伴音按钮初始化
-        View mix_audio_button = findViewById(R.id.live_music_btn);
-        mix_audio_button.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
-                showMixAudioDialog();
-            }
-
-        });
-
-        View filterBtn = findViewById(R.id.live_filter_btn);
-        filterBtn.setVisibility(View.GONE);
-
         if(mLiveStreamingPara.getStreamType() != AUDIO){
             View change = findViewById(R.id.live_camera_change);
             change.setOnClickListener(new View.OnClickListener() {
@@ -694,39 +662,8 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
                 }
             });
         }
-
         //滤镜
         if(mUseFilter && (mLiveStreamingPara.getStreamType() == AV || mLiveStreamingPara.getStreamType() == VIDEO)) {
-            filterBtn.setVisibility(View.VISIBLE);
-            filterLayout = findViewById(R.id.filter_layout);
-            filterBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    filterLayout.setVisibility(View.VISIBLE);
-                }
-            });
-
-            View brooklyn = findViewById(R.id.brooklyn);
-            brooklyn.setOnClickListener(this);
-
-            View calm = findViewById(R.id.clean);
-            calm.setOnClickListener(this);
-
-            View nature = findViewById(R.id.nature);
-            nature.setOnClickListener(this);
-
-            View healthy = findViewById(R.id.healthy);
-            healthy.setOnClickListener(this);
-
-            View pixar = findViewById(R.id.pixar);
-            pixar.setOnClickListener(this);
-
-            View tender = findViewById(R.id.tender);
-            tender.setOnClickListener(this);
-
-            View whiten = findViewById(R.id.whiten);
-            whiten.setOnClickListener(this);
-
             SeekBar filterSeekBar = ((SeekBar) findViewById(R.id.live_filter_seekbar));
             filterSeekBar.setVisibility(View.VISIBLE);
             filterSeekBar.setProgress(50);
@@ -779,98 +716,11 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
             });
         }
 
-        configLayout = findViewById(R.id.live_config_layout);
-        View configBtn = findViewById(R.id.live_config_btn);
-        configBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                configLayout.setVisibility(View.VISIBLE);
-            }
-        });
-        RadioGroup preMirror = (RadioGroup) findViewById(R.id.live_config_preview_mirror);
-        preMirror.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                if(mLSMediaCapture != null){
-                    mLSMediaCapture.setPreviewMirror(R.id.live_config_preview_mirror_on == checkedId);
-                }
-            }
-        });
-
-        RadioGroup pushMirror = (RadioGroup) findViewById(R.id.live_config_push_mirror);
-        pushMirror.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                if(mLSMediaCapture != null){
-                    mLSMediaCapture.setVideoMirror(R.id.live_config_push_mirror_on == checkedId);
-                }
-            }
-        });
-
-        RadioGroup preWater = (RadioGroup) findViewById(R.id.live_config_water);
-        preWater.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                if(mLSMediaCapture != null){
-                    mLSMediaCapture.setWaterPreview(R.id.live_config_water_on == checkedId);
-                }
-            }
-        });
-
-        RadioGroup preGraffiti = (RadioGroup) findViewById(R.id.live_config_graffiti);
-        preGraffiti.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                if(mLSMediaCapture != null){
-                    mLSMediaCapture.setGraffitiPreview(R.id.live_config_graffiti_on == checkedId);
-                }
-            }
-        });
-
-        RadioGroup preDynamicWater = (RadioGroup) findViewById(R.id.live_config_dynamicWater);
-        preDynamicWater.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
-                if(mLSMediaCapture != null){
-                    mLSMediaCapture.setDynamicWaterPreview(R.id.live_config_dynamicWater_on == checkedId);
-                }
-            }
-        });
-
-
         mFpsView = (TextView) findViewById(R.id.text_fps);
 
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.brooklyn:
-                mLSMediaCapture.setFilterType(VideoEffect.FilterType.brooklyn);
-                break;
-            case R.id.clean:
-                mLSMediaCapture.setFilterType(VideoEffect.FilterType.clean);
-                break;
-            case R.id.nature:
-                mLSMediaCapture.setFilterType(VideoEffect.FilterType.nature);
-                break;
-            case R.id.healthy:
-                mLSMediaCapture.setFilterType(VideoEffect.FilterType.healthy);
-                break;
-            case R.id.pixar:
-                mLSMediaCapture.setFilterType(VideoEffect.FilterType.pixar);
-                break;
-            case R.id.tender:
-                mLSMediaCapture.setFilterType(VideoEffect.FilterType.tender);
-                break;
-            case R.id.whiten:
-                mLSMediaCapture.setFilterType(VideoEffect.FilterType.whiten);
-                break;
-            default:
-                break;
 
-        }
-    }
 
     private NetWorkInfoDialog netWorkInfoDialog;
     private void showNetworkInfoDialog(View view) {
@@ -1231,7 +1081,7 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
             case MSG_STOP_LIVESTREAMING_FINISHED://停止直播完成
             {
                 Log.i(TAG, "test: MSG_STOP_LIVESTREAMING_FINISHED");
-                showToast("停止直播已完成");
+                showToast("直播已暂停");
                 m_liveStreamingOn = false;
                 startPauseResumeBtn.setClickable(true);
                 {
@@ -1435,12 +1285,11 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
                 break;
             case MotionEvent.ACTION_UP:
                 //Log.i(TAG, "test: up!!!");
-                if(filterLayout != null){
-                    filterLayout.setVisibility(View.GONE);
+                if(mLayoutMenu!=null){
+                    mLayoutMenu.setVisibility(View.GONE);
                 }
-
-                if(configLayout != null){
-                    configLayout.setVisibility(View.GONE);
+                if(mLayoutBeauty!=null){
+                    mLayoutBeauty.setVisibility(View.GONE);
                 }
 
                 break;
@@ -1452,11 +1301,37 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        m_tryToStopLivestreaming = true;
+        DialogUtil.showComfimDialog(this,null,"是否退出直播？",new DialogUtil.DialogClickListener(){
+            @Override
+            public void comfirm(Object obj) {
+                m_tryToStopLivestreaming = true;
+                BusinessInterface.getInstance().request(new StopLiveEvent(EventId.ROOM_EXIT,mLSBean.getLiveId()));
+            }
+
+            @Override
+            public void cancel() {
+
+            }
+        });
     }
 
 
+    @Subscribe
+    public void stopLiveResponse(StopLiveEvent event){
+        if(event.isSuccess()){
+            finish();
+            return;
+
+        }
+    }
+    @Subscribe
+    public void startLiveResponse(StartLiveEvent event){
+        if(event.isSuccess()){
+            ToastUtils.showToast(this,"开始直播~");
+            return;
+
+        }
+    }
 
     //用于接收Service发送的消息，伴音开关
     public class MsgReceiver extends BroadcastReceiver {
@@ -1529,16 +1404,31 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
     ListView mLVMsg;
     @BindView(R.id.live_lv_gift)
     ListView mLVGift;
+    @BindView(R.id.live_layout_menu)
+    ViewGroup mLayoutMenu;
+    @BindView(R.id.live_layout_menu_beauty)
+    ViewGroup mLayoutBeauty;
+    @BindView(R.id.live_gv_menu)
+    GridView mGVMenu;
+
+    @BindView(R.id.live_tv_coin)
+    TextView mTVCoin;
+    @BindView(R.id.live_et_input)
+    EditText mETInput;
 
 
-    private LoginInfo mUserInfo;
+    private NimUserInfo mUserInfo;
     private ChatRoomInfo mChartRoomInfo=null;
     private BarrageListAdapter mBarrageAdapter=new BarrageListAdapter(this,null);
     private GiftListAdapter mGiftAdapter=new GiftListAdapter(this,null);
+    private LiveMenuAdapter mLiveMenuAdapter=new LiveMenuAdapter(this,null);
+    private RoomMemberAdapter mRoomMemberAdapter=new RoomMemberAdapter(this,null);
+
 
     @Override
     public void beforeInit(Bundle savedInstanceState) {
         mUserInfo= BusinessSession.getInstance().getUserInfo();
+        mLSBean=(LiveStreamingBean)getIntent().getSerializableExtra("data");
     }
 
     @Override
@@ -1547,20 +1437,35 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
     }
 
     @Override
-    public void initView() {
-        super.initView();
+    public void afterInit(Bundle savedInstanceState) {
         mLVMsg.setAdapter(mBarrageAdapter);
         mLVGift.setAdapter(mGiftAdapter);
-    }
-
-    @Override
-    public void afterInit(Bundle savedInstanceState) {
+        List<LiveMenuBean> mMenuList=new ArrayList<>();
+        mMenuList.add(new LiveMenuBean("cinemaTurn","翻转镜头",R.drawable.live_menu_overturn,null,true));
+        mMenuList.add(new LiveMenuBean("mirror","开启镜像",R.drawable.live_menu_mirror,null,true));
+        mMenuList.add(new LiveMenuBean("screenshot","截图",R.drawable.ic_special_effect));
+        mMenuList.add(new LiveMenuBean("beauty","美顔",R.drawable.live_menu_beauty,null,true));
+        List<LiveMenuBean> mEffectList=new ArrayList<>();
+        mEffectList.add(new LiveMenuBean("effect","怀旧",R.drawable.ic_effect_brooklyn,null,VideoEffect.FilterType.brooklyn));
+        mEffectList.add(new LiveMenuBean("effect","干净",R.drawable.ic_effect_clean,null,VideoEffect.FilterType.calm));
+        mEffectList.add(new LiveMenuBean("effect","自然",R.drawable.ic_effect_nature,null,VideoEffect.FilterType.nature));
+        mEffectList.add(new LiveMenuBean("effect","健康",R.drawable.ic_effect_health,null,VideoEffect.FilterType.healthy));
+        mEffectList.add(new LiveMenuBean("effect","复古",R.drawable.ic_effect_pixar,null,VideoEffect.FilterType.pixar));
+        mEffectList.add(new LiveMenuBean("effect","温柔",R.drawable.ic_effect_tender,null,VideoEffect.FilterType.tender));
+        mEffectList.add(new LiveMenuBean("effect","美白",R.drawable.ic_effect_white,null,VideoEffect.FilterType.whiten));
+        mEffectList.add(new LiveMenuBean("effect","无",R.drawable.ic_effect_none,null,VideoEffect.FilterType.none));
+        mMenuList.add(new LiveMenuBean("specialEffect","特效",R.drawable.ic_special_effect,mEffectList,true));
+        mLiveMenuAdapter.setDatas(mMenuList);
+        mGVMenu.setAdapter(mLiveMenuAdapter);
+        mRVMember.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.HORIZONTAL,true));
+        mRVMember.setAdapter(mRoomMemberAdapter);
         if(mUserInfo!=null){
-            mTVNick.setText(mUserInfo.getAccount());
+            mTVNick.setText(mUserInfo.getName());
+            ImageUtility.displayImage(mIVAvatar,mUserInfo.getAvatar(),ImageUtility.TYPE_PHOTO_AVATAR);
         }
-        mLSBean=new LiveStreamingBean();
         initLiveSream(savedInstanceState);
         BusinessInterface.getInstance().request(new JoinRoomEvent(EventId.ROOM_JOIN,mLSBean.getRoomId()));
+        BusinessInterface.getInstance().request(new GiftListEvent(EventId.ROOM_GIFT,mLSBean.getRoomId()));
     }
     private void onMyDestory(){
         initRoomService(false);
@@ -1580,29 +1485,141 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
             showChatRoomInfo(result.getRoomInfo());
             ToastUtils.showToast(this,"加入房间成功");
             initRoomService(true);
+            fetchRoomMember();
             return;
 
         }
         ToastUtils.showToast(this,"加入房间失败");
     }
+    @Subscribe
+    public void giftListResponse(GiftListEvent event){
+        ToastUtils.showToast(this,"获取礼物成功");
+        if(event.isSuccess()){
+            mGiftAdapter.notifyDataSetChanged();
+            return;
 
+        }
+
+    }
+
+    private void fetchRoomMember(){
+        NIMClient.getService(ChatRoomService.class)
+                .fetchRoomMembers(mLSBean.getRoomId(), MemberQueryType.GUEST,0,5)
+                .setCallback(new RequestCallback<List< ChatRoomMember>>(){
+
+                    @Override
+                    public void onSuccess(List<ChatRoomMember> chatRoomMembers) {
+                        mRoomMemberAdapter.setDatas(chatRoomMembers);
+                        mRoomMemberAdapter.notifyDataSetChanged();
+                        showChatRoomInfo(mChartRoomInfo);
+                    }
+
+                    @Override
+                    public void onFailed(int i) {
+
+                    }
+
+                    @Override
+                    public void onException(Throwable throwable) {
+
+                    }
+                });
+    }
+
+    //闪光灯
+    @OnClick(R.id.live_flash)
+    public void toggleFlash(View view){
+        if(mLSMediaCapture != null){
+            mFlashOn = !mFlashOn;
+            mLSMediaCapture.setCameraFlashPara(mFlashOn);
+            if(mFlashOn){
+                ((ImageView)view).setImageResource(R.drawable.flashstop);
+            }else {
+                ((ImageView)view).setImageResource(R.drawable.flashstart);
+            }
+
+
+        }
+    }
+
+
+    @OnItemClick(R.id.live_gv_menu)
+    public void menuItemClick(int index){
+        LiveMenuBean item=mLiveMenuAdapter.getItem(index);
+        if(item.hasChildren()){
+            mLiveMenuAdapter.setDatas(item.getChildren());
+            mLiveMenuAdapter.notifyDataSetChanged();
+            return;
+        }
+        switch (item.getId()){
+            case "effect":
+                mLSMediaCapture.setFilterType((VideoEffect.FilterType)item.getExtension());
+                break;
+            case "cinemaTurn":
+                item.setExtension(!(boolean)item.getExtension());
+                mLiveMenuAdapter.notifyDataSetChanged();
+                switchCamera();
+                break;
+            case "beauty":
+                toggleBeautyMenu();
+                break;
+            case "mirror":
+                if(mLSMediaCapture != null){
+                    item.setExtension(!(boolean)item.getExtension());
+                    mLSMediaCapture.setPreviewMirror((boolean)item.getExtension());//没有获取当前状态
+                    mLSMediaCapture.setVideoMirror((boolean)item.getExtension());//没有获取当前状态
+                    mLiveMenuAdapter.notifyDataSetChanged();
+                }
+                break;
+            case "screenshot":
+                capture();
+                break;
+            case "showAudio":
+                showMixAudioDialog();
+                break;
+            case "water":
+                if(mLSMediaCapture != null) {
+                    mLSMediaCapture.setWaterPreview(false);
+                    mLSMediaCapture.setGraffitiPreview(false);
+                    mLSMediaCapture.setDynamicWaterPreview(false);
+                }
+                break;
+        }
+        toggleMenu();
+
+    }
+
+    public void toggleBeautyMenu(){
+        mLayoutBeauty.setVisibility(mLayoutBeauty.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
+    }
     @OnClick(R.id.live_iv_gift)
-    public void sendMesg(){
-        String text = "这是聊天室文本消息";
+    public void toggleMenu(){
+        mLayoutMenu.setVisibility(mLayoutMenu.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
+    }
+
+    @OnClick(R.id.live_tv_send)
+    public void sendMsg(){
+        final String msg=mETInput.getText().toString();
+        if(StringUtils.isEmpty(msg))
+            return;
+        mETInput.setText("");
 // 创建聊天室文本消息
-        ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomTextMessage(mLSBean.getRoomId(), text);
+        final ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomCustomMessage(mLSBean.getRoomId(),
+                new BarrageAttachment(msg));
 // 将文本消息发送出去
         NIMClient.getService(ChatRoomService.class).sendMessage(message, false)
                 .setCallback(new RequestCallback<Void>() {
                     @Override
                     public void onSuccess(Void param) {
                         // 成功
-                        ToastUtils.showToast(LiveStreamingActivity.this,"发送成功");
+                        message.setFromAccount(mUserInfo.getName());
+                        showBrrage(message);
                     }
 
                     @Override
                     public void onFailed(int code) {
                         // 失败
+                        ToastUtils.showToast(LiveStreamingActivity.this,"发送失敗");
                     }
 
                     @Override
@@ -1610,6 +1627,10 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
                         // 错误
                     }
                 });
+    }
+
+    public void updateCoin(CoinChangeAttachment msg){
+        mTVCoin.setText("贡献："+msg.getData().getRoom_coin());
     }
 
     public void showBrrage(ChatRoomMessage msg){
@@ -1643,15 +1664,19 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
     private Observer<List<ChatRoomMessage>> incomingChatRoomMsg = new Observer<List<ChatRoomMessage>>() {
         @Override
         public void onEvent(List<ChatRoomMessage> messages) {
+            if (messages == null || messages.isEmpty()) {
+                return;
+            }
             for( ChatRoomMessage msg:messages){
                 // 处理新收到的消息
-                Logger.i("收到消息来自"+msg.getFromAccount()+"的消息:"
+                Logger.i("收到消息来自"+msg.getFromNick()+"的消息:"
                         +msg.getAttachment()+msg.getMsgType()+msg.getContent()+msg.getDirect());
                 if (msg != null && msg.getAttachment() instanceof ChatRoomNotificationAttachment) {
                     // 通知类消息
                     ChatRoomNotificationAttachment attachment = (ChatRoomNotificationAttachment) msg.getAttachment();
                     if (attachment.getType() == NotificationType.ChatRoomMemberIn) {
                         showBrrage(msg);
+                        fetchRoomMember();
                     } else if (attachment.getType() == NotificationType.ChatRoomInfoUpdated) {
                         Logger.i("房间信息更新"+attachment.getExtension());
                         ToastUtils.showToast(LiveStreamingActivity.this,"房间信息更新");
@@ -1660,6 +1685,8 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
                     showGift(msg);
                 }else if(msg != null && msg.getAttachment() instanceof BarrageAttachment){
                     showBrrage(msg);
+                }else if(msg!=null&&msg.getAttachment() instanceof CoinChangeAttachment){
+                    updateCoin((CoinChangeAttachment)msg.getAttachment());
                 }
             }
 
@@ -1719,9 +1746,9 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
             } else if (chatRoomStatusChangeData.status.wontAutoLogin()) {
             } else if (chatRoomStatusChangeData.status == StatusCode.NET_BROKEN) {
                 ToastUtils.showToast(LiveStreamingActivity.this,"网络异常...");
+            }else{
+                ToastUtils.showToast(LiveStreamingActivity.this, chatRoomStatusChangeData.status.name());
             }
-            ToastUtils.showToast(LiveStreamingActivity.this,"Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
-            Logger.i( "Chat Room Online Status:" + chatRoomStatusChangeData.status.name());
         }
     };
 
@@ -1741,10 +1768,14 @@ public class LiveStreamingActivity extends BaseActivity implements View.OnClickL
     Observer<ChatRoomKickOutEvent> kickOutObserver = new Observer<ChatRoomKickOutEvent>() {
         @Override
         public void onEvent(ChatRoomKickOutEvent chatRoomKickOutEvent) {
+            if(chatRoomKickOutEvent.getReason()!=ChatRoomKickOutEvent.ChatRoomKickOutReason.CHAT_ROOM_INVALID)
             ToastUtils.showToast(LiveStreamingActivity.this, "被踢出聊天室，原因:" + chatRoomKickOutEvent.getReason());
             finish();
         }
     };
+
+
+
 
 
 

@@ -23,7 +23,7 @@ public class RestApiUrl {
     public static final int DEFAULT_LIST_START_TIME = -1;
     public static final int DEFAULT_LIST_END_TIME = -1;
 
-    public static final String BASE_URL_TEST="https://api.cqhodc.com/api/";
+    public static final String BASE_URL_TEST="https://112.47.5.19/V1.0/";
     public static  String BASE_URL=BASE_URL_TEST;
     public static final String PARAM_PAGE_NUM="page";
     public static final String PARAM_PAGE_SIZE="size";

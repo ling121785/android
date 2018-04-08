@@ -1,0 +1,58 @@
+[
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_top.xml",
+        "source": "C:\\Users\\ll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\0723119516741e24da03e3f82acfb812\\res\\anim\\abc_slide_in_top.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_enter.xml",
+        "source": "C:\\Users\\ll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\0723119516741e24da03e3f82acfb812\\res\\anim\\abc_popup_enter.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_in_bottom.xml",
+        "source": "C:\\Users\\ll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\0723119516741e24da03e3f82acfb812\\res\\anim\\abc_slide_in_bottom.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\slide_in_from_bottom.xml",
+        "source": "F:\\git\\android\\libs\\pulltorefresh\\build\\intermediates\\bundles\\debug\\res\\anim\\slide_in_from_bottom.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_shrink_fade_out_from_bottom.xml",
+        "source": "C:\\Users\\ll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\0723119516741e24da03e3f82acfb812\\res\\anim\\abc_shrink_fade_out_from_bottom.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_top.xml",
+        "source": "C:\\Users\\ll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\0723119516741e24da03e3f82acfb812\\res\\anim\\abc_slide_out_top.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\slide_in_from_top.xml",
+        "source": "F:\\git\\android\\libs\\pulltorefresh\\build\\intermediates\\bundles\\debug\\res\\anim\\slide_in_from_top.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_popup_exit.xml",
+        "source": "C:\\Users\\ll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\0723119516741e24da03e3f82acfb812\\res\\anim\\abc_popup_exit.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\slide_out_to_top.xml",
+        "source": "F:\\git\\android\\libs\\pulltorefresh\\build\\intermediates\\bundles\\debug\\res\\anim\\slide_out_to_top.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_grow_fade_in_from_bottom.xml",
+        "source": "C:\\Users\\ll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\0723119516741e24da03e3f82acfb812\\res\\anim\\abc_grow_fade_in_from_bottom.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_in.xml",
+        "source": "C:\\Users\\ll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\0723119516741e24da03e3f82acfb812\\res\\anim\\abc_fade_in.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_fade_out.xml",
+        "source": "C:\\Users\\ll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\0723119516741e24da03e3f82acfb812\\res\\anim\\abc_fade_out.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\slide_out_to_bottom.xml",
+        "source": "F:\\git\\android\\libs\\pulltorefresh\\build\\intermediates\\bundles\\debug\\res\\anim\\slide_out_to_bottom.xml"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\anim\\abc_slide_out_bottom.xml",
+        "source": "C:\\Users\\ll\\.gradle\\caches\\transforms-1\\files-1.1\\appcompat-v7-25.1.0.aar\\0723119516741e24da03e3f82acfb812\\res\\anim\\abc_slide_out_bottom.xml"
+    }
+]

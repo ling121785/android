@@ -14,7 +14,7 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         ndk {
             //设置支持的SO库架构
-            abiFilters  "armeabi-v7a"
+            abiFilters "armeabi-v7a"
         }
     }
     sourceSets {
@@ -43,6 +43,11 @@ android {
 
 
 
+
+
+
+
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
@@ -52,7 +57,11 @@ dependencies {
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
     compile project(':businessmodule')
+    compile project(':pulltorefresh')
+    compile project(':universalimageloader')
     //    //noinspection GradleCompatible,GradleDependency
     //    compile 'com.android.support:MultiDex:1.0.0'
     compile rootProject.ext.appcompatV7
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.android.support:design:25.3.1'
 }

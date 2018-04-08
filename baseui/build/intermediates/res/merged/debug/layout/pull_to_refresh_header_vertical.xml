@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <FrameLayout
+        android:id="@+id/fl_inner"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/pullToRefresh_bg_color" >
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/pull_to_refresh_header_height" >
+
+            <ImageView
+                android:id="@+id/pull_to_refresh_image"
+                android:layout_width="@dimen/pull_to_refresh_arrow_width"
+                android:layout_height="@dimen/pull_to_refresh_arrow_height"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/pull_to_refresh_arrow_margin_right"
+                android:layout_toLeftOf="@+id/contentContainer"
+                android:visibility="gone"/>
+
+            <RelativeLayout
+                android:id="@+id/contentContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="center"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/pull_to_refresh_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:singleLine="true"
+                    android:text="123"
+                    android:textAppearance="?android:attr/textAppearance"
+                    android:textColor="@color/pullToRefresh_text_color"
+                    android:textSize="@dimen/pull_to_refresh_text_size"
+                    android:textStyle="normal" />
+
+                <TextView
+                    android:id="@+id/pull_to_refresh_sub_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/pull_to_refresh_text"
+                    android:singleLine="true"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/pullToRefresh_text_color"
+                    android:textSize="@dimen/pull_to_refresh_text_size"
+                    android:visibility="gone" />
+            </RelativeLayout>
+
+            <toolbox.ll.com.pulltorefresh.smoothprogressbar.SmoothProgressBar
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/pull_to_refresh_progress"
+                android:layout_width="match_parent"
+                android:layout_height="2.5dp"
+                android:layout_alignParentBottom="true"
+                android:indeterminate="true"
+                app:spb_color="#4DB4D5"
+                app:spb_mirror_mode="false"
+                app:spb_progressiveStart_activated="false"
+                app:spb_progressiveStart_speed="1.5"
+                app:spb_progressiveStop_speed="3.4"
+                app:spb_reversed="false"
+                app:spb_sections_count="5"
+                app:spb_speed="1.0"
+                app:spb_stroke_separator_length="4dp"
+                app:spb_stroke_width="4dp"
+                android:layout_marginBottom="1dp"
+                android:visibility="gone"/>
+        </RelativeLayout>
+    </FrameLayout>
+
+</merge>

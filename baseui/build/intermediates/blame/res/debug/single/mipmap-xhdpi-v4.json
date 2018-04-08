@@ -1,0 +1,10 @@
+[
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\ic_launcher.png",
+        "source": "F:\\git\\android\\baseui\\src\\main\\res\\mipmap-xhdpi\\ic_launcher.png"
+    },
+    {
+        "merged": "F:\\git\\android\\baseui\\build\\intermediates\\res\\merged\\debug\\mipmap-xhdpi-v4\\default_ptr_flip.png",
+        "source": "F:\\git\\android\\libs\\pulltorefresh\\build\\intermediates\\bundles\\debug\\res\\mipmap-xhdpi-v4\\default_ptr_flip.png"
+    }
+]

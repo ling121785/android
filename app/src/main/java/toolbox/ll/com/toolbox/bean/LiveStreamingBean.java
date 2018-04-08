@@ -13,6 +13,7 @@ import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.AV;
  */
 
 public class LiveStreamingBean implements Serializable {
+    private String liveId=null;
     private String  roomId="22409361";
     private String pushUrl = "rtmp://p6420c350.live.126.net/live/269cb7fda1604664ad8b795abc701e7c?wsSecret=15e53c0f9162e0c2b9be6f7db4c060fb&wsTime=1521864586"; //推流地址
     private lsMediaCapture.StreamType streamType = AV;  // 推流类型
@@ -147,5 +148,13 @@ public class LiveStreamingBean implements Serializable {
 
     public void setRoomId(String roomId) {
         this.roomId = roomId;
+    }
+
+    public String getLiveId() {
+        return liveId;
+    }
+
+    public void setLiveId(String liveId) {
+        this.liveId = liveId;
     }
 }

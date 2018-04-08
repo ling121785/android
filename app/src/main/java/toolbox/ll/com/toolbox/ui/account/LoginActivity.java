@@ -49,10 +49,10 @@ public class LoginActivity  extends BaseActivity {
             ToastUtils.showInForeground(this,"请输入手机号");
             return;
         }
-        if(StringUtils.isEmpty(pwd)){
-            ToastUtils.showInForeground(this,"请输入密码");
-            return;
-        }
+//        if(StringUtils.isEmpty(pwd)){
+//            ToastUtils.showInForeground(this,"请输入密码");
+//            return;
+//        }
         BusinessInterface.getInstance().request(new LoginEvent(EventId.ACCOUNT_LOGIN,account,pwd));
     }
 

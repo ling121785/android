@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/general_item_height_small"
+    android:orientation="horizontal"
+    style="@style/base_padding_horizontal"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+     >
+   <TextView
+       android:id="@+id/income_tv_date"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textColor="@color/fontGray"
+       android:textSize="@dimen/font_size_small"
+       android:layout_weight="1"
+       android:text="2017-08-23"/>
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textColor="@color/fontBlack"
+       android:textSize="@dimen/font_size_small"
+       android:text="@string/income_item_coin"/>
+   <TextView
+       android:id="@+id/income_tv_coin"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textColor="@color/fontBlack"
+       android:textSize="@dimen/font_size_small"/>
+
+</LinearLayout>

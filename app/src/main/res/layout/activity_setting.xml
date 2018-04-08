@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+   >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/setting_layout_updatePwd"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_item_height"
+            android:minHeight="@dimen/general_item_height"
+            android:background="@android:color/white"
+            style="@style/base_padding_horizontal"
+            android:layout_marginTop="@dimen/general_item_margin"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size"
+                android:text="修改密码"
+                android:textColor="@color/fontBlack"
+                />
+            <ImageView
+                android:layout_width="@dimen/ic_more_width"
+                android:layout_height="@dimen/ic_more_height"
+                android:src="@drawable/ic_more"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/setting_layout_msgSetting"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_item_height"
+            android:minHeight="@dimen/general_item_height"
+            android:background="@android:color/white"
+            style="@style/base_padding_horizontal"
+
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size"
+                android:text="消息设置"
+                android:textColor="@color/fontBlack"
+                />
+            <ImageView
+                android:layout_width="@dimen/ic_more_width"
+                android:layout_height="@dimen/ic_more_height"
+                android:src="@drawable/ic_more"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_item_height"
+            android:minHeight="@dimen/general_item_height"
+            android:background="@android:color/white"
+            style="@style/base_padding_horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size"
+                android:text="允许连麦"
+                android:textColor="@color/fontBlack"
+                />
+
+            <Switch
+                android:id="@+id/setting_sw_connect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                 />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/setting_layout_cache"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_item_height"
+            android:minHeight="@dimen/general_item_height"
+            android:background="@android:color/white"
+            style="@style/base_padding_horizontal"
+            android:layout_marginTop="@dimen/general_item_margin_large"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size"
+                android:text="清除缓存"
+                android:textColor="@color/fontBlack"
+                />
+            <TextView
+                android:id="@+id/setting_tv_cache"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size_small"
+                android:textColor="@color/fontGray"
+                android:text="35M"
+                />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/setting_layout_version"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_item_height"
+            android:minHeight="@dimen/general_item_height"
+            android:background="@android:color/white"
+            style="@style/base_padding_horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size"
+                android:text="当前版本"
+                android:textColor="@color/fontBlack"
+                />
+            <TextView
+                android:id="@+id/setting_tv_version"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size_small"
+                android:textColor="@color/fontGray"
+                android:text="检查更新"
+                />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/setting_layout_feedback"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_item_height"
+            android:minHeight="@dimen/general_item_height"
+            android:background="@android:color/white"
+            style="@style/base_padding_horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size"
+                android:text="意见反馈"
+                android:textColor="@color/fontBlack"
+                />
+            <ImageView
+                android:layout_width="@dimen/ic_more_width"
+                android:layout_height="@dimen/ic_more_height"
+                android:src="@drawable/ic_more"/>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/setting_layout_about"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/general_item_height"
+            android:minHeight="@dimen/general_item_height"
+            android:background="@android:color/white"
+            style="@style/base_padding_horizontal"
+            android:gravity="center">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/general_item_height"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:textSize="@dimen/font_size"
+                android:text="关于我们"
+                android:textColor="@color/fontBlack"
+                />
+            <ImageView
+                android:layout_width="@dimen/ic_more_width"
+                android:layout_height="@dimen/ic_more_height"
+                android:src="@drawable/ic_more"/>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+    <Button
+        android:id="@+id/setting_btn_logout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/fontRed"
+        android:textColor="@color/white"
+        android:text="退出登录"
+        android:layout_marginTop="@dimen/general_item_margin_large"/>
+
+</LinearLayout>

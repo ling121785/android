@@ -54,11 +54,12 @@
     <!-- 允许程序获得设备信息 -->
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+
+    <uses-feature android:name="android.hardware.camera.autofocus" />
 
     <!-- 声明程序使用camera和自动对焦功能 -->
-    <uses-feature android:name="android.hardware.camera"/>
-    <uses-feature android:name="android.hardware.camera.autofocus"/>
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
     <!-- SDK 权限申明, 第三方 APP 接入时，请将 com.netease.nim.demo 替换为自己的包名 -->
     <!-- 和下面的 uses-permission 一起加入到你的 AndroidManifest 文件中。 -->
     <permission
@@ -131,7 +132,21 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.account.LoginActivity" />
-        <activity android:name=".ui.live.LiveStreamingActivity"></activity>
+        <activity android:name=".ui.live.LiveStreamingActivity" />
+        <activity android:name=".ui.user.MyIncomeActivity" />
+        <activity
+            android:name=".ui.base.BaseTitleActivity"
+            android:label="@string/title_activity_base_titled"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".ui.user.MyFansActivity"
+            android:label="@string/title_activity_my_fans"
+            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.user.MyLiveActivity" />
+        <activity
+            android:name=".ui.setting.SettingActivity"
+            android:label="@string/title_activity_setting"
+            android:theme="@style/AppTheme"></activity>
     </application>
 
 </manifest>

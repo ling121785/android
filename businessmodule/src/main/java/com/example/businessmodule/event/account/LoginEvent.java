@@ -1,6 +1,8 @@
 package com.example.businessmodule.event.account;
 
-import com.example.businessmodule.bean.UserInfo;
+
+
+import com.example.businessmodule.bean.AccountBean;
 import com.example.businessmodule.event.BaseEvent;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 
@@ -44,8 +46,9 @@ public class LoginEvent extends BaseEvent<LoginEvent.Request,LoginInfo> {
         setRequest(new Request(account,password));
     }
 
-    public interface  Rest{
+
+    public interface Rest {
         @GET("account")
-        Observable<UserInfo> createRequest(@Query("access_token") String token);
+        Observable<AccountBean> request(@Query("access_token") String token);
     }
 }

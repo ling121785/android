@@ -35,6 +35,8 @@ public class CustomAttachParser implements MsgAttachmentParser {
                 case CustomAttachmentType.BARRAGE:
                     attachment =  JsonUtils.jsonToObj(json,BarrageAttachment.class);
                     break;
+                case CustomAttachmentType.COIN_CHANGE:
+                    attachment=JsonUtils.jsonToObj(json,CoinChangeAttachment.class);
 
 //                default:
 //                    attachment = new DefaultCustomAttachment();
@@ -47,13 +49,4 @@ public class CustomAttachParser implements MsgAttachmentParser {
         return attachment;
     }
 
-    public static String packData(int type, JSONObject data) {
-        JSONObject object = new JSONObject();
-        object.put(KEY_TYPE, type);
-        if (data != null) {
-            object.put(KEY_DATA, data);
-        }
-
-        return object.toJSONString();
-    }
 }

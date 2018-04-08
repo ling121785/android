@@ -6,3 +6,4 @@ package toolbox.ll.com.toolbox.ui.base;
 
 public abstract class BaseActivity extends ButterKnifeActivity{
 }
+

@@ -8,12 +8,15 @@ import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
+import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.SDKOptions;
 import com.netease.nimlib.sdk.StatusBarNotificationConfig;
 import com.netease.nimlib.sdk.auth.LoginInfo;
 import com.netease.nimlib.sdk.msg.constant.SessionTypeEnum;
 import com.netease.nimlib.sdk.uinfo.UserInfoProvider;
+import com.netease.nimlib.sdk.uinfo.UserService;
 import com.netease.nimlib.sdk.uinfo.model.UserInfo;
+import com.orhanobut.logger.Logger;
 
 import java.io.IOException;
 
@@ -58,25 +61,25 @@ public class NeteaseUtil {
             mWindowManager.getDefaultDisplay().getMetrics(metric);
             int width = metric.widthPixels; // 屏幕宽度（像素）
             options.thumbnailSize =width / 2;
-
+            options.userInfoProvider=null;
             // 用户资料提供者, 目前主要用于提供用户资料，用于新消息通知栏中显示消息来源的头像和昵称
-            options.userInfoProvider = new UserInfoProvider() {
-                @Override
-                public UserInfo getUserInfo(String account) {
-                    return null;
-                }
-
-                @Override
-                public String getDisplayNameForMessageNotifier(String account, String sessionId,
-                                                               SessionTypeEnum sessionType) {
-                    return null;
-                }
-
-                @Override
-                public Bitmap getAvatarForMessageNotifier(SessionTypeEnum sessionTypeEnum, String s) {
-                    return null;
-                }
-            };
+//            options.userInfoProvider = new UserInfoProvider() {
+//                @Override
+//                public UserInfo getUserInfo(String account) {
+//                    return  NIMClient.getService(UserService.class).getUserInfo(account);
+//                }
+//
+//                @Override
+//                public String getDisplayNameForMessageNotifier(String account, String sessionId,
+//                                                               SessionTypeEnum sessionType) {
+//                    return null;
+//                }
+//
+//                @Override
+//                public Bitmap getAvatarForMessageNotifier(SessionTypeEnum sessionTypeEnum, String s) {
+//                    return null;
+//                }
+//            };
             return options;
         }
 

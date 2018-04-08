@@ -8,11 +8,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_centerInParent="true"/>
-    <include
-        layout="@layout/live_room_operation"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+
 
     <include
         layout="@layout/live_streaming_room"
@@ -21,5 +17,18 @@
         style="@style/page"
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_marginTop="@dimen/activity_vertical_margin"
+        />
+    <include
+        layout="@layout/live_room_operation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <include layout="@layout/live_menu"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <include layout="@layout/live_menu_beauty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         />
 </RelativeLayout>

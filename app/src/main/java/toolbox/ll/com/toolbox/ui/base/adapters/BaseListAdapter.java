@@ -23,7 +23,7 @@ public abstract  class BaseListAdapter<K,V extends BaseListAdapter.ViewHolder> e
     }
 
     @Override
-    public Object getItem(int position) {
+    public K getItem(int position) {
         return mDatas.get(position);
     }
 

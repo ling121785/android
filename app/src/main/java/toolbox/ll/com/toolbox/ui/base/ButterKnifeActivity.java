@@ -16,11 +16,10 @@ public  abstract class ButterKnifeActivity extends SubscribeActivity implements 
         super.onCreate(savedInstanceState);
         beforeInit(savedInstanceState);
         setContentView(getLayoutResId());
-        ButterKnife.bind(this);
         initView();
+        ButterKnife.bind(this);
         afterInit(savedInstanceState);
     }
-
     @Override
     public void initView() {
 

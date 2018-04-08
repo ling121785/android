@@ -1,8 +1,13 @@
 <resources>
-    <string name="app_name">ToolBox</string>
+    <string name="app_name">新葡京</string>
     <string name="login_account_txt">账号</string>
     <string name="login_pwd_txt">密码</string>
     <string name="login_account_hint">请输入手机号码</string>
     <string name="login_pwd_hint">请输入密码</string>
     <string name="login_btn">登录</string>
+    <string name="title_activity_base_titled">BaseTitledActivity</string>
+    <string name="income_item_coin">金币：</string>
+    <string name="title_activity_my_fans">MyFansActivity</string>
+    <string name="live_item_during">时长：</string>
+    <string name="title_activity_setting">SettingActivity</string>
 </resources>
