@@ -51,4 +51,10 @@
     <!-- fans Activity-->
     <dimen name="fans_avatar">43dp</dimen>
 
+    <!-- startLive Activity-->
+    <dimen name="startLive_covor_size">140dp</dimen>
+    <dimen name="startLive_input_height">28dp</dimen>
+
+    <!-- liveend activity -->
+    <dimen name="liveEnd_avatar_size">80dp</dimen>
 </resources>

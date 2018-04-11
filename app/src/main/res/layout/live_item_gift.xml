@@ -35,6 +35,8 @@
                 android:text="直播LIVE"
                 android:textSize="@dimen/font_size_smaller"
                 android:textColor="@color/white"
+                android:maxLength="@integer/name_max"
+                android:maxEms="@integer/name_max"
                 android:gravity="center_vertical"/>
             <TextView
                 android:id="@+id/item_tv_desc"
