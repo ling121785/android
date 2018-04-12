@@ -6,6 +6,7 @@
     <color name="general_border">#474747</color>
     <color name="general_time_bg">#FDFAF4</color>
     <color name="fontGray">#bebebe</color>
+    <color name="fontGrayLight">#CCCCCC</color>
     <color name="fontBlack">#080d11</color>
     <color name="fontRed">#FF635B</color>
     <color name="fontYellow">@color/colorPrimarySub</color>
