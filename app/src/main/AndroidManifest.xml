@@ -148,7 +148,8 @@
             android:label="@string/title_activity_setting"
             android:theme="@style/AppTheme" />
         <activity android:name=".ui.live.StartLiveActivity" />
-        <activity android:name=".ui.live.LiveEndActivity"></activity>
+        <activity android:name=".ui.live.LiveEndActivity" />
+        <activity android:name=".ui.user.MyFanContributionsActivity"></activity>
     </application>
 
 </manifest>

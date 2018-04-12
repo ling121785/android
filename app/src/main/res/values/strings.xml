@@ -10,6 +10,7 @@
     <string name="title_activity_my_fans">MyFansActivity</string>
     <string name="live_item_during">时长：</string>
     <string name="title_activity_setting">SettingActivity</string>
+    <string name="title_activity_my_fan_contributions">粉丝贡献榜</string>
 
 
     <!--startlive -->
@@ -32,4 +33,7 @@
     <string name="liveEnd_tv_coin">新增金币</string>
     <string name="liveEnd_tv_fans">新增粉丝</string>
     <string name="liveEnd_tv_like">喜欢</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

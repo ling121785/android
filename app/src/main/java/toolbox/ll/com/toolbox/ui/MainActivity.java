@@ -81,10 +81,10 @@ public class MainActivity extends BaseActivity {
 //        mLVMenu.setAdapter(new MainMenuAdapter(this,mMenu));
     }
 
-    @OnClick({R.id.main_layout_myIncome,R.id.main_layout_fans,R.id.main_layout_live,R.id.main_layout_setting})
+    @OnClick({R.id.main_layout_fanContributions,R.id.main_layout_fans,R.id.main_layout_live,R.id.main_layout_setting,R.id.main_layout_coin})
     public void menuClick(View v){
         switch (v.getId()){
-            case R.id.main_layout_myIncome:
+            case R.id.main_layout_coin:
                 startActivity(new Intent(this, MyIncomeActivity.class));
                 break;
             case R.id.main_layout_fans:
@@ -95,6 +95,8 @@ public class MainActivity extends BaseActivity {
                 break;
             case R.id.main_layout_setting:
                 startActivity(new Intent(this, SettingActivity.class));
+                break;
+            case R.id.main_layout_fanContributions:
                 break;
         }
     }
