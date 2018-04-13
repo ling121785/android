@@ -9,25 +9,5 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import toolbox.ll.com.toolbox.R;
-public class BaseFragment extends ButterKnifeFragment {
-
-    @Override
-    public void beforeInit(Bundle savedInstanceState) {
-
-    }
-
-    @Override
-    public int getLayoutResId() {
-        return 0;
-    }
-
-    @Override
-    public void initView() {
-
-    }
-
-    @Override
-    public void afterInit(Bundle savedInstanceState) {
-
-    }
+public abstract  class BaseFragment extends ButterKnifeFragment {
 }

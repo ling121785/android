@@ -10,6 +10,7 @@
     <color name="fontBlack">#080d11</color>
     <color name="fontRed">#FF635B</color>
     <color name="fontYellow">@color/colorPrimarySub</color>
+    <color name="tabFontColor">#666666</color>
 
     <color name="white">@android:color/white</color>
 

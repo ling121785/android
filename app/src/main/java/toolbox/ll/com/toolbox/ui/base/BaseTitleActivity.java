@@ -38,7 +38,7 @@ public abstract  class BaseTitleActivity extends BaseActivity {
     }
 
     public void addContent(int resId){
-        View view= LayoutInflater.from(getApplicationContext()).inflate(resId,null);
+        View view= LayoutInflater.from(this).inflate(resId,null);
         addContent(view);
     }
     @Override

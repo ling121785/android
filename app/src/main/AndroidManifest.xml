@@ -134,22 +134,12 @@
         <activity android:name=".ui.account.LoginActivity" />
         <activity android:name=".ui.live.LiveStreamingActivity" />
         <activity android:name=".ui.user.MyIncomeActivity" />
-        <activity
-            android:name=".ui.base.BaseTitleActivity"
-            android:label="@string/title_activity_base_titled"
-            android:theme="@style/AppTheme" />
-        <activity
-            android:name=".ui.user.MyFansActivity"
-            android:label="@string/title_activity_my_fans"
-            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.user.MyFansActivity" />
         <activity android:name=".ui.user.MyLiveActivity" />
-        <activity
-            android:name=".ui.setting.SettingActivity"
-            android:label="@string/title_activity_setting"
-            android:theme="@style/AppTheme" />
+        <activity android:name=".ui.setting.SettingActivity" />
         <activity android:name=".ui.live.StartLiveActivity" />
         <activity android:name=".ui.live.LiveEndActivity" />
-        <activity android:name=".ui.user.MyFanContributionsActivity"></activity>
+        <activity android:name=".ui.user.MyFanContributionsActivity"/>
     </application>
 
 </manifest>

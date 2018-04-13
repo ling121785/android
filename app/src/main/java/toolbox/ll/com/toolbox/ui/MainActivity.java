@@ -37,6 +37,7 @@ import toolbox.ll.com.toolbox.ui.account.LoginActivity;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
 import toolbox.ll.com.toolbox.ui.live.LiveStreamingActivity;
 import toolbox.ll.com.toolbox.ui.setting.SettingActivity;
+import toolbox.ll.com.toolbox.ui.user.MyFanContributionsActivity;
 import toolbox.ll.com.toolbox.ui.user.MyFansActivity;
 import toolbox.ll.com.toolbox.ui.user.MyFansAdapter;
 import toolbox.ll.com.toolbox.ui.user.MyIncomeActivity;
@@ -97,6 +98,7 @@ public class MainActivity extends BaseActivity {
                 startActivity(new Intent(this, SettingActivity.class));
                 break;
             case R.id.main_layout_fanContributions:
+                startActivity(new Intent(this, MyFanContributionsActivity.class));
                 break;
         }
     }
