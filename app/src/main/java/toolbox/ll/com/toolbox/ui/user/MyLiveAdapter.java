@@ -25,7 +25,7 @@ public class MyLiveAdapter extends BaseRListAdapter<InComeBean,MyLiveAdapter.Vie
     }
 
     @Override
-    public MyLiveAdapter.ViewHolder createViewHolder(ViewGroup parent) {
+    public MyLiveAdapter.ViewHolder createCustomViewHolder(ViewGroup parent,int viewType) {
         View view= LayoutInflater.from(mContext).inflate(R.layout.live_item,parent,false);
         return new MyLiveAdapter.ViewHolder(view);
     }

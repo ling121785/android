@@ -2,33 +2,41 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/base_padding_horizontal">
+    style="@style/base_padding_horizontal"
+    android:background="@color/white"
+    >
     <TextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/general_item_height"
         android:text="统计日期"
-        android:gravity="center_vertical"/>
+        android:gravity="center_vertical"
+       />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/general_item_height"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+       >
         <Button
+            android:id="@+id/dialog_btn_none"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="不限"
            />
         <Button
+            android:id="@+id/dialog_btn_curMonth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="本月"/>
         <Button
+            android:id="@+id/dialog_btn_lastMonth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="上月"/>
         <Button
+            android:id="@+id/dialog_btn_curYear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -42,26 +50,47 @@
         android:layout_marginTop="@dimen/general_item_height"
         style="@style/base_padding_horizontal">
         <EditText
+            android:id="@+id/dialog_et_startTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:enabled="false"
+            android:focusable="false"
             android:inputType="date"
-            android:hint="选择起始日期"/>
+            android:hint="选择起始日期"
+            android:clickable="true"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@color/fontBlack"
             android:text="至"/>
         <EditText
+            android:id="@+id/dialog_et_endTime"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:hint="选择截止日期"
             android:inputType="date"
             android:gravity="center"
-            android:enabled="false"/>
+            android:focusable="false"
+            android:clickable="true"/>
 
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="bottom">
+    <DatePicker
+        android:id="@+id/dialog_dataPicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:calendarViewShown="false"
+        android:datePickerMode="spinner"
+        android:layout_gravity="bottom"
+        android:visibility="invisible"
+        android:theme="@android:style/Theme.Holo.Light.NoActionBar"
+
+        />
     </LinearLayout>
 </LinearLayout>

@@ -32,7 +32,7 @@ public class RoomMemberAdapter extends BaseRListAdapter<ChatRoomMember,RoomMembe
         this.setDatas(data);
     }
     @Override
-    public RoomMemberAdapter.ViewHolder createViewHolder(ViewGroup parent) {
+    public RoomMemberAdapter.ViewHolder createCustomViewHolder(ViewGroup parent,int viewType) {
         View view= LayoutInflater.from(mContext).inflate(R.layout.live_item_member,null);
         return new RoomMemberAdapter.ViewHolder(view);
     }

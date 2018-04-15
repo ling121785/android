@@ -27,7 +27,7 @@ public class MyFansAdapter extends BaseRListAdapter<AccountBean,MyFansAdapter.Vi
     }
 
     @Override
-    public MyFansAdapter.ViewHolder createViewHolder(ViewGroup parent) {
+    public MyFansAdapter.ViewHolder  createCustomViewHolder(ViewGroup parent,int viewType) {
         View view= LayoutInflater.from(mContext).inflate(R.layout.fans_item,parent,false);
         return new MyFansAdapter.ViewHolder(view);
     }

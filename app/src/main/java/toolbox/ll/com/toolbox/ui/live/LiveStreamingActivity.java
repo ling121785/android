@@ -1303,7 +1303,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     public void onBackPressed() {
         DialogUtil.showComfimDialog(this,null,"是否退出直播？",new DialogUtil.DialogClickListener(){
             @Override
-            public void comfirm(Object obj) {
+            public void comfirm(Object ... obj) {
                 m_tryToStopLivestreaming = true;
                 BusinessInterface.getInstance().request(new StopLiveEvent(EventId.ROOM_EXIT,mLSBean.getLiveId()));
             }

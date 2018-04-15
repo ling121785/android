@@ -64,6 +64,7 @@ dependencies {
     compile project(':businessmodule')
     compile project(':pulltorefresh')
     compile project(':universalimageloader')
+    compile 'com.contrarywind:Android-PickerView:4.1.3'
     //    //noinspection GradleCompatible,GradleDependency
     //    compile 'com.android.support:MultiDex:1.0.0'
     compile rootProject.ext.appcompatV7

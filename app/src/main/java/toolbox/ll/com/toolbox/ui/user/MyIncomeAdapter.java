@@ -29,7 +29,7 @@ public class MyIncomeAdapter extends BaseRListAdapter<InComeBean,MyIncomeAdapter
     }
 
     @Override
-    public MyIncomeAdapter.ViewHolder createViewHolder(ViewGroup parent) {
+    public MyIncomeAdapter.ViewHolder createCustomViewHolder(ViewGroup parent,int viewType) {
         View view= LayoutInflater.from(mContext).inflate(R.layout.income_item,parent,false);
         return new MyIncomeAdapter.ViewHolder(view);
     }

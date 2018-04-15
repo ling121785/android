@@ -31,8 +31,8 @@ public abstract  class BaseRListAdapter<K,V extends BaseRListAdapter.ViewHolder>
     }
 
     @Override
-    public V onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return createViewHolder(viewGroup);
+    public V onCreateViewHolder(ViewGroup viewGroup, int viewType) {
+        return createCustomViewHolder(viewGroup,viewType);
     }
 
     @Override
@@ -41,7 +41,7 @@ public abstract  class BaseRListAdapter<K,V extends BaseRListAdapter.ViewHolder>
     }
 
 
-    public abstract V createViewHolder(ViewGroup parent);
+    public abstract V createCustomViewHolder(ViewGroup parent,int viewType);
     public abstract void bindDataToViewHolder(V viewHolder,K data);
 
     public static class ViewHolder extends RecyclerView.ViewHolder{

@@ -22,7 +22,7 @@
                 android:text="2018-02-03至2018-03-03"
                 android:textColor="@color/fontGray"
                 android:textSize="@dimen/font_size_small"/>
-            <ImageButton
+            <ImageView
                 android:id="@+id/income_ib_timeFiler"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

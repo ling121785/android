@@ -4,8 +4,9 @@
     android:layout_height="@dimen/base_title_height"
     style="@style/base_padding_horizontal"
     android:background="@color/white"
-    android:gravity="center_vertical">
-    <ImageButton
+    android:gravity="center_vertical"
+    android:layout_marginBottom="@dimen/general_border_height">
+    <ImageView
         android:id="@+id/base_ib_back"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -19,6 +20,15 @@
         android:text="title"
         android:textColor="@color/fontBlack"
         android:textSize="@dimen/font_size"
+        />
+    <TextView
+        android:id="@+id/base_tv_right"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:textColor="@color/fontBlack"
+        android:textSize="@dimen/font_size"
+        android:layout_centerVertical="true"
         />
 
 </RelativeLayout>

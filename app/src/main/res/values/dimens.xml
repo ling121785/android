@@ -13,6 +13,8 @@
     <dimen name="general_item_height_large">60dp</dimen>
     <dimen name="general_item_height_larger">80dp</dimen>
 
+    <dimen name="general_border_height">1dp</dimen>
+
     <dimen name="general_top_time_height">33dp</dimen>
 
     <dimen name="general_tab_height">37dp</dimen>
@@ -62,4 +64,5 @@
 
     <!-- myFan contributions -->
     <dimen name="myFanCon_item_top_height">159dp</dimen>
+    <dimen name="myFanCon_item_height">75dp</dimen>
 </resources>

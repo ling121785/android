@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import toolbox.ll.com.toolbox.ui.dialog.ChooseTimeDialog;
+
 /**
  * Created by Administrator on 2018/3/31.
  */
@@ -41,7 +43,7 @@ public class DialogUtil {
                     public void onClick(DialogInterface dialog, int which) {
                         if(clickListener==null)
                             return;
-                        clickListener.comfirm(null);
+                        clickListener.comfirm();
                     }
                 });
         normalDialog.setNegativeButton("关闭",
@@ -57,8 +59,13 @@ public class DialogUtil {
         normalDialog.show();
     }
 
+    public static ChooseTimeDialog chooseTimeDialog(Context context,final DialogClickListener clickListener){
+        ChooseTimeDialog dialog =  ChooseTimeDialog.chooseTimeDialog(context,clickListener);
+        return dialog;
+    }
+
     public interface DialogClickListener{
-        public void comfirm(Object obj);
+        public void comfirm(Object ... obj);
         public void cancel();
     }
 }

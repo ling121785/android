@@ -179,7 +179,7 @@ public class MainActivity extends BaseActivity {
         }
         DialogUtil.showInputDialog(this, "直播间设置", "请输入直播间名字", new DialogUtil.DialogClickListener() {
             @Override
-            public void comfirm(Object obj) {
+            public void comfirm(Object ... obj) {
                 String [] posters={"http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg",
                         "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/2.jpg",
                         "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/3.jpg",
@@ -190,7 +190,7 @@ public class MainActivity extends BaseActivity {
                         "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/8.jpg",
                         "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/9.jpg"};
                 String poster=posters[new Random().nextInt(6)];
-                BusinessInterface.getInstance().request(new CreateRoomEvent(EventId.ROOM_CREATE,(String)obj,"","http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg"));
+                BusinessInterface.getInstance().request(new CreateRoomEvent(EventId.ROOM_CREATE,(String)obj[0],"","http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg"));
             }
 
             @Override

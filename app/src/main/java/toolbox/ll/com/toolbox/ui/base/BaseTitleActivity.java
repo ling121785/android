@@ -46,7 +46,7 @@ public abstract  class BaseTitleActivity extends BaseActivity {
         super.initView();
     }
 
-    public void setTitled(int resId){
+    public void setTitle(int resId){
         mTVTitle.setText(resId);
     }
     public void setTitle(String title){

@@ -16,6 +16,7 @@ import com.example.businessmodule.bean.InComeBean;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -26,6 +27,7 @@ import toolbox.ll.com.pulltorefresh.pulltorefresh.PullToRefreshRecyclerView;
 import toolbox.ll.com.toolbox.R;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
 import toolbox.ll.com.toolbox.ui.base.BaseTitleActivity;
+import toolbox.ll.com.toolbox.utils.DialogUtil;
 
 public class MyIncomeActivity extends BaseTitleActivity implements  PullToRefreshBase.OnRefreshListener2<RecyclerView>{
     @BindView(R.id.income_tv_time)
@@ -68,13 +70,25 @@ public class MyIncomeActivity extends BaseTitleActivity implements  PullToRefres
 
     @OnClick(R.id.income_ib_timeFiler)
     public void timeFilerClick(){
-        ToastUtils.showToast(this,"点击");
-        List<InComeBean> mlist=mAdapter.getmDatas();
-        for(int i=0;i<10;i++){
-            mlist.add(new InComeBean());
-        }
-        mAdapter.setDatas(mlist);
-        mAdapter.notifyDataSetChanged();
+
+        DialogUtil.chooseTimeDialog(this, new DialogUtil.DialogClickListener() {
+            @Override
+            public void comfirm(Object... obj) {
+                com.orhanobut.logger.Logger.i("startTime",obj[0]);
+                com.orhanobut.logger.Logger.i("startTime",obj[1]);
+            }
+
+            @Override
+            public void cancel() {
+
+            }
+        }).show();
+//        List<InComeBean> mlist=mAdapter.getmDatas();
+//        for(int i=0;i<10;i++){
+//            mlist.add(new InComeBean());
+//        }
+//        mAdapter.setDatas(mlist);
+//        mAdapter.notifyDataSetChanged();
 
     }
 
