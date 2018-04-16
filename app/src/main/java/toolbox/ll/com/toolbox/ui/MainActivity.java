@@ -49,6 +49,8 @@ public class MainActivity extends BaseActivity {
 
     @BindView(R.id.main_tv_userName)
     TextView mTVUserName;
+    @BindView(R.id.main_tv_coin)
+    TextView mTVCoin;
 
 //    @BindView(R.id.main_lv_menu)
 //    ListView mLVMenu;
@@ -84,6 +86,10 @@ public class MainActivity extends BaseActivity {
 
     @OnClick({R.id.main_layout_fanContributions,R.id.main_layout_fans,R.id.main_layout_live,R.id.main_layout_setting,R.id.main_layout_coin})
     public void menuClick(View v){
+        if(BusinessSession.getInstance().getAccountInfo()==null){
+            this.startActivity(new Intent(this, LoginActivity.class));
+            return;
+        }
         switch (v.getId()){
             case R.id.main_layout_coin:
                 startActivity(new Intent(this, MyIncomeActivity.class));
@@ -234,6 +240,7 @@ public class MainActivity extends BaseActivity {
             if(mUserInfo!=null){
                 mTVUserName.setText(mUserInfo.getName());
                 ImageUtility.displayImage(mIVAvatar,mUserInfo.getIcon(),ImageUtility.TYPE_PHOTO_AVATAR);
+                mTVCoin.setText(mUserInfo.getCoin()+"");
             }
 
             return;

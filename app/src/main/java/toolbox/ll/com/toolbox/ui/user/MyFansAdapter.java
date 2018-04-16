@@ -8,20 +8,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.businessmodule.bean.AccountBean;
+import com.example.businessmodule.bean.FansBean;
 import com.example.businessmodule.bean.InComeBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import toolbox.ll.com.toolbox.R;
 import toolbox.ll.com.toolbox.ui.base.adapters.BaseRListAdapter;
+import toolbox.ll.com.toolbox.utils.ImageUtility;
 
 /**
  * Created by ll on 2018/3/27.
  */
 
-public class MyFansAdapter extends BaseRListAdapter<AccountBean,MyFansAdapter.ViewHolder> {
+public class MyFansAdapter extends BaseRListAdapter<FansBean,MyFansAdapter.ViewHolder> {
     private Context mContext;
-    public MyFansAdapter(Context context, List<AccountBean> data) {
+    public MyFansAdapter(Context context, List<FansBean> data) {
         this.mContext=context;
         this.setDatas(data);
     }
@@ -33,8 +36,21 @@ public class MyFansAdapter extends BaseRListAdapter<AccountBean,MyFansAdapter.Vi
     }
 
     @Override
-    public void bindDataToViewHolder(MyFansAdapter.ViewHolder viewHolder, AccountBean data) {
+    public void bindDataToViewHolder(MyFansAdapter.ViewHolder viewHolder, FansBean data) {
+        ImageUtility.displayImage(viewHolder.mIVAvatar,data.getIcon(),ImageUtility.TYPE_PHOTO_AVATAR);
+        viewHolder.mTVNick.setText(data.getNick());
+    }
 
+    public void addData(List<FansBean> list){
+        if(list==null)
+            return;
+        List<FansBean> data=getmDatas();
+        if(data==null){
+            data=new ArrayList<>();
+        }
+        data.addAll(list);
+        setDatas(data);
+        this.notifyDataSetChanged();
     }
 
     public class ViewHolder extends BaseRListAdapter.ViewHolder{

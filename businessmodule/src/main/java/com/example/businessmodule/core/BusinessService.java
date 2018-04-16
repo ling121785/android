@@ -7,6 +7,7 @@ import android.os.IBinder;
 import com.example.businessmodule.business.AccountBusiness;
 import com.example.businessmodule.business.BaseBusiness;
 import com.example.businessmodule.business.RoomBusiness;
+import com.example.businessmodule.business.UserBusiness;
 import com.example.businessmodule.event.BaseEvent;
 import com.example.businessmodule.event.account.LoginEvent;
 import com.example.businessmodule.event.account.LogoutEvent;
@@ -15,6 +16,9 @@ import com.example.businessmodule.event.room.GiftListEvent;
 import com.example.businessmodule.event.room.StartLiveEvent;
 import com.example.businessmodule.event.room.StopLiveEvent;
 import com.example.businessmodule.event.room.JoinRoomEvent;
+import com.example.businessmodule.event.user.FansListEvent;
+import com.example.businessmodule.event.user.IncomeListEvent;
+import com.example.businessmodule.event.user.LiveRecordListEvent;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -104,5 +108,18 @@ public class BusinessService extends Service {
     @Subscribe
     public void processEvent(LogoutEvent event){
         executeBusiness(new AccountBusiness(event));
+    }
+
+    @Subscribe
+    public void processEvent(FansListEvent event){
+        executeBusiness(new UserBusiness(event));
+    }
+    @Subscribe
+    public void processEvent(IncomeListEvent event){
+        executeBusiness(new UserBusiness(event));
+    }
+    @Subscribe
+    public void processEvent(LiveRecordListEvent event){
+        executeBusiness(new UserBusiness(event));
     }
 }

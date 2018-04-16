@@ -11,4 +11,8 @@ public class EventId {
     public static long ROOM_JOIN=00000031L;
     public static long ROOM_EXIT=00000041L;
     public static long ROOM_GIFT=00000042L;
+
+    public static long MY_FNAS_LIST=00000051l;
+    public static long MY_INCOME_LIST=00000052l;
+    public static long MY_LIVE_LIST=00000053l;
 }

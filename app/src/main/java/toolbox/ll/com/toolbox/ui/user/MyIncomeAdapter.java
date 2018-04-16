@@ -7,11 +7,14 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.businessmodule.bean.FansBean;
 import com.example.businessmodule.bean.InComeBean;
 import com.netease.nimlib.sdk.chatroom.model.ChatRoomMember;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import toolbox.ll.com.common.utility.DateUtils;
 import toolbox.ll.com.toolbox.R;
 import toolbox.ll.com.toolbox.ui.base.adapters.BaseListAdapter;
 import toolbox.ll.com.toolbox.ui.base.adapters.BaseRListAdapter;
@@ -36,7 +39,20 @@ public class MyIncomeAdapter extends BaseRListAdapter<InComeBean,MyIncomeAdapter
 
     @Override
     public void bindDataToViewHolder(MyIncomeAdapter.ViewHolder viewHolder, InComeBean data) {
+        viewHolder.mTVdate.setText(DateUtils.cutYearAndMonthAndDay(data.getTime()*1000));
+        viewHolder.mTVcoin.setText(data.getCoin()+"");
+    }
 
+    public void addData(List<InComeBean> list){
+        if(list==null)
+            return;
+        List<InComeBean> data=getmDatas();
+        if(data==null){
+            data=new ArrayList<>();
+        }
+        data.addAll(list);
+        setDatas(data);
+        this.notifyDataSetChanged();
     }
 
     public class ViewHolder extends BaseRListAdapter.ViewHolder{

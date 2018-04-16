@@ -9,6 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.example.businessmodule.bean.InComeBean;
+import com.example.businessmodule.core.BusinessInterface;
+import com.example.businessmodule.event.user.IncomeListEvent;
+import com.example.businessmodule.event.user.LiveRecordListEvent;
+import com.example.businessmodule.utils.EventId;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +35,8 @@ public class MyLiveActivity extends BaseTitleActivity implements  PullToRefreshB
 
     MyLiveAdapter mAdapter;
 
+    private int page=0;
+
 
     @Override
     public void beforeInit(Bundle savedInstanceState) {
@@ -44,44 +51,56 @@ public class MyLiveActivity extends BaseTitleActivity implements  PullToRefreshB
 
     @Override
     public void afterInit(Bundle savedInstanceState) {
-        setTitle("我的收益");
+        setTitle("我的直播");
         mRViewList.setMode(PullToRefreshBase.Mode.BOTH);
         mRViewList.setOnRefreshListener(this);
-        List<InComeBean> mlist=new ArrayList<InComeBean>();
-        ;        mAdapter=new MyLiveAdapter(this,mlist);
-        for(int i=0;i<5;i++){
-            mlist.add(new InComeBean());
-        }
+       mAdapter=new MyLiveAdapter(this,null);
+
         mRViewList.getRefreshableView().setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         //添加自定义分割线
         DividerItemDecoration divider = new DividerItemDecoration(this,DividerItemDecoration.VERTICAL);
         divider.setDrawable(ContextCompat.getDrawable(this,R.drawable.border));
         mRViewList.getRefreshableView().addItemDecoration(divider);
         mRViewList.getRefreshableView().setAdapter(mAdapter);
+        request(0);
     }
 
     @OnClick(R.id.income_ib_timeFiler)
     public void timeFilerClick(){
         ToastUtils.showToast(this,"点击");
-        List<InComeBean> mlist=mAdapter.getmDatas();
-        for(int i=0;i<10;i++){
-            mlist.add(new InComeBean());
-        }
-        mAdapter.setDatas(mlist);
-        mAdapter.notifyDataSetChanged();
-
     }
 
+    private void request(int page){
+        BusinessInterface.getInstance().request(new LiveRecordListEvent(EventId.MY_LIVE_LIST, page));
+    }
+
+    @Subscribe
+    public void liveRecordListEvent(LiveRecordListEvent event){
+        mRViewList.onRefreshComplete();
+        page=event.request().getPage();
+        if(event.isSuccess()){
+            if(event.request().getPage()==0){
+                mAdapter.setDatas(event.response().getDataList());
+                mAdapter.notifyDataSetChanged();
+            }else{
+                mAdapter.addData(event.response().getDataList());
+            }
+            if(mAdapter.getItemCount()>=event.response().getTotal()){
+                mRViewList.setMode(PullToRefreshBase.Mode.PULL_FROM_START);
+            }else{
+                mRViewList.setMode(PullToRefreshBase.Mode.BOTH);
+            }
+        }
+
+    }
     @Override
     public void onPullDownToRefresh(PullToRefreshBase<RecyclerView> RecyclerView) {
-        ToastUtils.showToast(this,"下拉刷新");
-        mRViewList.onRefreshComplete();
+        request(0);
     }
 
     @Override
     public void onPullUpToRefresh(PullToRefreshBase<RecyclerView> RecyclerView) {
-        ToastUtils.showToast(this,"加载更多");
-        mRViewList.onRefreshComplete();
+        request(page+1);
 
     }
 }

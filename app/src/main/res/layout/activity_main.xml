@@ -79,9 +79,10 @@
             android:orientation="vertical"
             android:gravity="center">
             <TextView
+                android:id="@+id/main_tv_coin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5000000.00"
+                android:text="0.00"
                 android:textColor="@android:color/white"/>
             <TextView
                 android:layout_width="wrap_content"
