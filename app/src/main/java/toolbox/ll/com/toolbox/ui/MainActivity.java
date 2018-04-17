@@ -36,6 +36,7 @@ import toolbox.ll.com.toolbox.bean.MainMenu;
 import toolbox.ll.com.toolbox.ui.account.LoginActivity;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
 import toolbox.ll.com.toolbox.ui.live.LiveStreamingActivity;
+import toolbox.ll.com.toolbox.ui.live.StartLiveActivity;
 import toolbox.ll.com.toolbox.ui.setting.SettingActivity;
 import toolbox.ll.com.toolbox.ui.user.MyFanContributionsActivity;
 import toolbox.ll.com.toolbox.ui.user.MyFansActivity;
@@ -183,53 +184,30 @@ public class MainActivity extends BaseActivity {
             this.startActivity(new Intent(this, LoginActivity.class));
             return;
         }
-        DialogUtil.showInputDialog(this, "直播间设置", "请输入直播间名字", new DialogUtil.DialogClickListener() {
-            @Override
-            public void comfirm(Object ... obj) {
-                String [] posters={"http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg",
-                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/2.jpg",
-                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/3.jpg",
-                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/4.jpg",
-                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/5.jpg",
-                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/6.jpg",
-                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/7.jpg",
-                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/8.jpg",
-                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/9.jpg"};
-                String poster=posters[new Random().nextInt(6)];
-                BusinessInterface.getInstance().request(new CreateRoomEvent(EventId.ROOM_CREATE,(String)obj[0],"","http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg"));
-            }
-
-            @Override
-            public void cancel() {
-
-            }
-    });
+        startActivity(new Intent(this,StartLiveActivity.class));
+//        DialogUtil.showInputDialog(this, "直播间设置", "请输入直播间名字", new DialogUtil.DialogClickListener() {
+//            @Override
+//            public void comfirm(Object ... obj) {
+//                String [] posters={"http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg",
+//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/2.jpg",
+//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/3.jpg",
+//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/4.jpg",
+//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/5.jpg",
+//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/6.jpg",
+//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/7.jpg",
+//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/8.jpg",
+//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/9.jpg"};
+//                String poster=posters[new Random().nextInt(6)];
+//                BusinessInterface.getInstance().request(new CreateRoomEvent(EventId.ROOM_CREATE,(String)obj[0],"","http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg"));
+//            }
+//
+//            @Override
+//            public void cancel() {
+//
+//            }
+//    });
     }
 
-    /**
-     * 进入房间
-     * @param roomBean
-     */
-    public void gotoChatRoom(RoomBean roomBean){
-        Intent intent=new Intent(MainActivity.this,LiveStreamingActivity.class);
-        LiveStreamingBean liveStreamingBean=new LiveStreamingBean();
-        liveStreamingBean.setRoomId(roomBean.getRoomId());
-        liveStreamingBean.setPushUrl(roomBean.getLiveUrl());
-        liveStreamingBean.setLiveId(roomBean.getLiveId());
-        intent.putExtra("data",liveStreamingBean);
-        startActivity(intent);
-    }
-
-    @Subscribe
-    public void CreateRoomResponse(CreateRoomEvent event){
-        if(event.isSuccess()){
-            ToastUtils.showToast(this,"房间创建成功");
-            gotoChatRoom(event.response());
-            return;
-        }
-        ToastUtils.showToast(this,"房间创建失败");
-//        BusinessInterface.getInstance().request(new JoinRoomEvent(EventId.ROOM_JOIN,"room1", AVChatType.VIDEO));
-    }
 
 
 

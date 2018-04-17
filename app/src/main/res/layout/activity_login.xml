@@ -1,24 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/login_bg">
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical"
     android:gravity="center"
-    android:background="@drawable/login_bg"
+    android:background="@color/general_bg_black"
     style="@style/base_padding_horizontal"
     tools:context="toolbox.ll.com.toolbox.ui.account.LoginActivity">
+    <ImageView
+        android:layout_width="167dp"
+        android:layout_height="60dp"
+        android:src="@drawable/logo"
+        android:layout_marginBottom="80dp"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:gravity="center"
             style="@style/login_input_item">
+
             <TextView
                 android:layout_width="110px"
                 android:layout_height="wrap_content"
                 android:text="@string/login_account_txt"
+                android:textColor="@color/white"
                 />
             <EditText
                 android:id="@+id/login_et_account"
@@ -27,6 +39,8 @@
                 android:layout_weight="1"
                 android:hint="@string/login_account_hint"
                 android:theme="@style/base_edit"
+                android:textColorHint="@color/hint"
+                android:textColor="@color/white"
                />
         </LinearLayout>
         <LinearLayout
@@ -40,6 +54,7 @@
                 android:layout_width="110px"
                 android:layout_height="wrap_content"
                 android:text="@string/login_pwd_txt"
+                android:textColor="@color/white"
                 />
             <EditText
                 android:id="@+id/login_et_pwd"
@@ -47,6 +62,8 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/login_pwd_hint"
                 android:layout_weight="1"
+                android:textColorHint="@color/hint"
+                android:textColor="@color/white"
                 android:theme="@style/base_edit"/>
         </LinearLayout>
         <Button
@@ -56,3 +73,4 @@
             style="@style/login_button"
             android:text="@string/login_btn"/>
 </LinearLayout>
+</RelativeLayout>

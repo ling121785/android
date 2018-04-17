@@ -11,6 +11,7 @@
     <color name="fontRed">#FF635B</color>
     <color name="fontYellow">@color/colorPrimarySub</color>
     <color name="tabFontColor">#666666</color>
+    <color name="general_bg_black">#cc000000</color>
 
     <color name="white">@android:color/white</color>
 

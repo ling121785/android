@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/act_bg"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/base_padding"
-    android:background="@drawable/ic_effect_brooklyn"
+    android:background="@color/black"
     tools:context="toolbox.ll.com.toolbox.ui.live.StartLiveActivity">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        style="@style/base_padding"
+        android:background="@color/general_bg_black">
     <ImageView
         android:id="@+id/startLive_iv_close"
         android:layout_width="wrap_content"
@@ -24,16 +29,24 @@
         style="@style/base_padding"
         android:orientation="vertical"
         >
-        <TextView
-            android:id="@+id/startLive_tv_cover"
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/startLive_iv_cover"
             android:layout_width="@dimen/startLive_covor_size"
             android:layout_height="@dimen/startLive_covor_size"
             android:background="@drawable/dashad_border_white"
             android:layout_marginTop="@dimen/margin_small"
-            android:textColor="@color/white"
-            android:gravity="center"
-            android:text="@string/startLive_room_covor_hint"
             />
+            <TextView
+                android:id="@+id/startLive_tv_cover"
+                android:layout_width="@dimen/startLive_covor_size"
+                android:layout_height="@dimen/startLive_covor_size"
+                android:text="@string/startLive_room_covor_hint"
+                android:textColor="@color/white"
+                android:gravity="center"/>
+        </RelativeLayout>
 
         <EditText
             android:id="@+id/startLive_et_roomName"
@@ -131,5 +144,5 @@
         android:layout_alignParentBottom="true"
         />
 
-
+    </RelativeLayout>
 </RelativeLayout>
