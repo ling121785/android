@@ -63,8 +63,10 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
     private Calendar calendar=Calendar.getInstance();
 
 
-    public ChooseTimeDialog(@NonNull Context context) {
+    public ChooseTimeDialog(@NonNull Context context,long startTime,long endTime) {
         super(context);
+        this.startTime=startTime;
+        this.endTime=endTime;
     }
 
     public ChooseTimeDialog(@NonNull Context context, int themeResId) {
@@ -74,8 +76,8 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
     protected ChooseTimeDialog(@NonNull Context context, boolean cancelable, @Nullable OnCancelListener cancelListener) {
         super(context, cancelable, cancelListener);
     }
-    public static ChooseTimeDialog chooseTimeDialog(Context context , final DialogUtil.DialogClickListener listener) {
-        ChooseTimeDialog dialog = new ChooseTimeDialog(context);
+    public static ChooseTimeDialog chooseTimeDialog(Context context ,long startTime,long endTime ,final DialogUtil.DialogClickListener listener) {
+        ChooseTimeDialog dialog = new ChooseTimeDialog(context, startTime, endTime);
         dialog.setmListener(listener);
         return dialog;
     }
@@ -110,14 +112,17 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
         mTVTitle.setText("筛选");
         mTVRight.setText("完成");
         Date date=new Date();
-        calendar.setTime(date);
-        calendar.set(Calendar.HOUR_OF_DAY,0);
-        calendar.set(Calendar.MINUTE,0);
-        calendar.set(Calendar.SECOND,0);
-        calendar.set(Calendar.MILLISECOND,0);
-        this.startTime=calendar.getTimeInMillis();
-        calendar.add(Calendar.DAY_OF_MONTH,-7);
-        this.endTime=calendar.getTimeInMillis();
+        if(startTime==0){
+            calendar.setTime(date);
+            calendar.set(Calendar.HOUR_OF_DAY,0);
+            calendar.set(Calendar.MINUTE,0);
+            calendar.set(Calendar.SECOND,0);
+            calendar.set(Calendar.MILLISECOND,0);
+            this.startTime=calendar.getTimeInMillis();
+            calendar.add(Calendar.DAY_OF_MONTH,-7);
+            this.endTime=calendar.getTimeInMillis();
+        }
+
         mETStartTime.setText(DateUtils.cutYearAndMonthAndDay(this.startTime));
         mETEndTime.setText(DateUtils.cutYearAndMonthAndDay(this.endTime));
         resizeNumberPicker(mDatePicker);
@@ -161,6 +166,7 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
     public void confirmClick(){
         if(mListener!=null)
             mListener.comfirm(this.startTime,this.endTime);
+        this.hide();
     }
 
     @SuppressLint("WrongConstant")
@@ -172,25 +178,25 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
         calendar.set(Calendar.MINUTE,0);
         calendar.set(Calendar.SECOND,0);
         calendar.set(Calendar.MILLISECOND,0);
-        this.startTime=calendar.getTimeInMillis();
+        this.endTime=calendar.getTimeInMillis();
         switch (view.getId()){
             case R.id.dialog_btn_none:
                 calendar.add(Calendar.DAY_OF_MONTH,-7);
-                this.endTime=calendar.getTimeInMillis();
+                this.startTime=calendar.getTimeInMillis();
                 break;
             case R.id.dialog_btn_curMonth:
                 calendar.add(Calendar.MONTH,-1);
-                this.endTime=calendar.getTimeInMillis();
+                this.startTime=calendar.getTimeInMillis();
                 break;
             case R.id.dialog_btn_lastMonth:
                 calendar.add(Calendar.MONTH,-1);
-                this.startTime=calendar.getTimeInMillis();
-                calendar.add(Calendar.MONTH,-1);
                 this.endTime=calendar.getTimeInMillis();
+                calendar.add(Calendar.MONTH,-1);
+                this.startTime=calendar.getTimeInMillis();
                 break;
             case R.id.dialog_btn_curYear:
                 calendar.add(Calendar.YEAR,-1);
-                this.endTime=calendar.getTimeInMillis();
+                this.startTime=calendar.getTimeInMillis();
                 break;
         }
         mETStartTime.setText(DateUtils.cutYearAndMonthAndDay(this.startTime));

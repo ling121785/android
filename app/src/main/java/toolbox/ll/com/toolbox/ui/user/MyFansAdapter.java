@@ -36,7 +36,7 @@ public class MyFansAdapter extends BaseRListAdapter<FansBean,MyFansAdapter.ViewH
     }
 
     @Override
-    public void bindDataToViewHolder(MyFansAdapter.ViewHolder viewHolder, FansBean data) {
+    public void bindDataToViewHolder(MyFansAdapter.ViewHolder viewHolder, FansBean data,int postion) {
         ImageUtility.displayImage(viewHolder.mIVAvatar,data.getIcon(),ImageUtility.TYPE_PHOTO_AVATAR);
         viewHolder.mTVNick.setText(data.getNick());
     }

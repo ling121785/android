@@ -7,7 +7,7 @@
     android:orientation="vertical"
     style="@style/base_padding"
     android:gravity="center_horizontal"
-    android:background="@drawable/ic_effect_brooklyn"
+    android:background="@color/general_bg_black"
     tools:context="toolbox.ll.com.toolbox.ui.live.LiveEndActivity">
     <toolbox.ll.com.common.widget.CircleImageView
         android:id="@+id/liveEnd_iv_avatar"

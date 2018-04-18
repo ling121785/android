@@ -1,9 +1,8 @@
 package com.example.businessmodule.event.user;
 
+import com.example.businessmodule.bean.FansContriButionsBean;
 import com.example.businessmodule.bean.LiveBean;
-import com.example.businessmodule.bean.RoomBean;
 import com.example.businessmodule.event.BaseEvent;
-import com.example.businessmodule.event.room.CreateRoomEvent;
 import com.example.businessmodule.rest.BaseListResponse;
 
 import retrofit2.http.GET;
@@ -14,8 +13,8 @@ import rx.Observable;
  * Created by ll on 2018/4/16.
  */
 
-public class LiveRecordListEvent extends BaseEvent<LiveRecordListEvent.Request,BaseListResponse<LiveBean>> {
-    public LiveRecordListEvent(long eventId,int page,long startTime,long endTime) {
+public class FansContributionListEvent extends BaseEvent<FansContributionListEvent.Request,BaseListResponse<FansContriButionsBean>> {
+    public FansContributionListEvent(long eventId, int page, long startTime, long endTime) {
         super(eventId);
         setRequest(new Request(page,startTime,endTime));
     }
@@ -71,6 +70,6 @@ public class LiveRecordListEvent extends BaseEvent<LiveRecordListEvent.Request,B
 
     public interface Rest {
         @GET("live/statistics/log")
-        Observable<BaseListResponse<LiveBean>> request(@Query("access_token") String token, @Query("page") int page,@Query("start_time") long startTime,@Query("end_time") long endTime);
+        Observable<BaseListResponse<FansContriButionsBean>> request(@Query("access_token") String token, @Query("page") int page, @Query("start_time") long startTime, @Query("end_time") long endTime);
     }
 }

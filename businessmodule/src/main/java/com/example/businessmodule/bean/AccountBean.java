@@ -23,6 +23,9 @@ public class AccountBean implements Serializable{
     @SerializedName("coin")
     private int coin;
 
+    @SerializedName("fans_number")
+    private int fansNum;
+
     public AccountBean() {
     }
 
@@ -77,5 +80,13 @@ public class AccountBean implements Serializable{
 
     public void setCoin(int coin) {
         this.coin = coin;
+    }
+
+    public int getFansNum() {
+        return fansNum;
+    }
+
+    public void setFansNum(int fansNum) {
+        this.fansNum = fansNum;
     }
 }

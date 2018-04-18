@@ -14,25 +14,37 @@ import rx.Observable;
  */
 
 public class IncomeListEvent extends BaseEvent<IncomeListEvent.Request,BaseListResponse<InComeBean>> {
-    public IncomeListEvent(long eventId, int page) {
+    public IncomeListEvent(long eventId, int page,long startTime,long endTime) {
         super(eventId);
-        setRequest(new Request(page));
+        setRequest(new Request(page,startTime,endTime));
     }
 
     public class Request{
         private int page;
+        private long startTime;
+        private long endTime;
 
-        public Request(int page) {
+        public Request(int page,long startTime,long endTime) {
             this.page = page;
+            this.startTime=startTime;
+            this.endTime=endTime;
         }
 
         public int getPage() {
             return page;
         }
+
+        public long getStartTime() {
+            return startTime;
+        }
+
+        public long getEndTime() {
+            return endTime;
+        }
     }
 
     public interface Rest {
         @GET("account/income")
-        Observable<BaseListResponse<InComeBean>> request(@Query("access_token") String token, @Query("page") int page);
+        Observable<BaseListResponse<InComeBean>> request(@Query("access_token") String token, @Query("page") int page,@Query("start_time") long startTime, @Query("end_time") long endTime);
     }
 }

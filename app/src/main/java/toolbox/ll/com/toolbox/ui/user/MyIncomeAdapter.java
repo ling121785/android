@@ -38,7 +38,7 @@ public class MyIncomeAdapter extends BaseRListAdapter<InComeBean,MyIncomeAdapter
     }
 
     @Override
-    public void bindDataToViewHolder(MyIncomeAdapter.ViewHolder viewHolder, InComeBean data) {
+    public void bindDataToViewHolder(MyIncomeAdapter.ViewHolder viewHolder, InComeBean data ,int postion) {
         viewHolder.mTVdate.setText(DateUtils.cutYearAndMonthAndDay(data.getTime()*1000));
         viewHolder.mTVcoin.setText(data.getCoin()+"");
     }

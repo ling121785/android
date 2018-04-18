@@ -105,9 +105,10 @@
             android:orientation="vertical"
             android:layout_weight="1">
             <TextView
+                android:id="@+id/main_tv_fansNum"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="5000"
+                android:text="0"
                 android:textColor="@android:color/white"/>
             <TextView
                 android:layout_width="wrap_content"

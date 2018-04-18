@@ -44,6 +44,7 @@
                 android:textColor="@color/fontBlack"
                 android:textSize="@dimen/font_size"/>
             <TextView
+                android:id="@+id/live_tv_count"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/fontYellow"
@@ -66,6 +67,7 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/live_tv_maxWatch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/fontBlack"
@@ -86,6 +88,7 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/live_tv_minWatch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/fontBlack"
@@ -96,7 +99,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/fontGray"
                     android:textSize="@dimen/font_size_smaller"
-                    android:text="最高光看人数"/>
+                    android:text="最低光看人数"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -106,6 +109,7 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/live_tv_aveWatch"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/fontBlack"
@@ -116,7 +120,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/fontGray"
                     android:textSize="@dimen/font_size_smaller"
-                    android:text="最高光看人数"/>
+                    android:text="平均光看人数"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -126,6 +130,7 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/live_tv_maxCoin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/fontBlack"
@@ -136,7 +141,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/fontGray"
                     android:textSize="@dimen/font_size_smaller"
-                    android:text="最高光看人数"/>
+                    android:text="最高收礼"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -146,6 +151,7 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/live_tv_minCoin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/fontBlack"
@@ -156,7 +162,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/fontGray"
                     android:textSize="@dimen/font_size_smaller"
-                    android:text="最高光看人数"/>
+                    android:text="最低收礼"/>
             </LinearLayout>
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -166,6 +172,7 @@
                 android:gravity="center"
                 android:orientation="vertical">
                 <TextView
+                    android:id="@+id/live_tv_aveCoin"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/fontBlack"
@@ -176,7 +183,7 @@
                     android:layout_height="wrap_content"
                     android:textColor="@color/fontGray"
                     android:textSize="@dimen/font_size_smaller"
-                    android:text="最高光看人数"/>
+                    android:text="平均收礼"/>
             </LinearLayout>
         </GridLayout>
         <TextView

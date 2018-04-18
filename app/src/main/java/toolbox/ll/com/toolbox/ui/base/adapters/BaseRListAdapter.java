@@ -37,12 +37,12 @@ public abstract  class BaseRListAdapter<K,V extends BaseRListAdapter.ViewHolder>
 
     @Override
     public void onBindViewHolder(V v, int i) {
-        bindDataToViewHolder(v,getItem(i));
+        bindDataToViewHolder(v,getItem(i),i);
     }
 
 
     public abstract V createCustomViewHolder(ViewGroup parent,int viewType);
-    public abstract void bindDataToViewHolder(V viewHolder,K data);
+    public abstract void bindDataToViewHolder(V viewHolder,K data,int postion);
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
         public ViewHolder(View itemView) {

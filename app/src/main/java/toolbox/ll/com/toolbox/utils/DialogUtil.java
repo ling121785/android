@@ -59,8 +59,8 @@ public class DialogUtil {
         normalDialog.show();
     }
 
-    public static ChooseTimeDialog chooseTimeDialog(Context context,final DialogClickListener clickListener){
-        ChooseTimeDialog dialog =  ChooseTimeDialog.chooseTimeDialog(context,clickListener);
+    public static ChooseTimeDialog chooseTimeDialog(Context context,long startTime ,long endTime ,final DialogClickListener clickListener){
+        ChooseTimeDialog dialog =  ChooseTimeDialog.chooseTimeDialog(context,startTime,endTime,clickListener);
         return dialog;
     }
 

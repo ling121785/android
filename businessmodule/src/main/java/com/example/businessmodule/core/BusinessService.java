@@ -16,9 +16,11 @@ import com.example.businessmodule.event.room.GiftListEvent;
 import com.example.businessmodule.event.room.StartLiveEvent;
 import com.example.businessmodule.event.room.StopLiveEvent;
 import com.example.businessmodule.event.room.JoinRoomEvent;
+import com.example.businessmodule.event.user.FansContributionListEvent;
 import com.example.businessmodule.event.user.FansListEvent;
 import com.example.businessmodule.event.user.IncomeListEvent;
 import com.example.businessmodule.event.user.LiveRecordListEvent;
+import com.example.businessmodule.event.user.LiveStatisticsEvent;
 import com.squareup.otto.Subscribe;
 
 /**
@@ -122,4 +124,14 @@ public class BusinessService extends Service {
     public void processEvent(LiveRecordListEvent event){
         executeBusiness(new UserBusiness(event));
     }
+
+    @Subscribe
+    public void processEvent(LiveStatisticsEvent event){
+        executeBusiness(new UserBusiness(event));
+    }
+    @Subscribe
+    public void processEvent(FansContributionListEvent event){
+        executeBusiness(new UserBusiness(event));
+    }
+
 }

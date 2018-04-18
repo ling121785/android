@@ -38,7 +38,7 @@ public class RoomMemberAdapter extends BaseRListAdapter<ChatRoomMember,RoomMembe
     }
 
     @Override
-    public void bindDataToViewHolder(RoomMemberAdapter.ViewHolder viewHolder, ChatRoomMember data) {
+    public void bindDataToViewHolder(RoomMemberAdapter.ViewHolder viewHolder, ChatRoomMember data,int postion) {
         ImageUtility.displayImage(viewHolder.mIVAvatar,data.getAvatar(),ImageUtility.TYPE_PHOTO_AVATAR);
     }
 

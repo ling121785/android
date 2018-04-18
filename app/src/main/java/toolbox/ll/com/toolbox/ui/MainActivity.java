@@ -52,6 +52,8 @@ public class MainActivity extends BaseActivity {
     TextView mTVUserName;
     @BindView(R.id.main_tv_coin)
     TextView mTVCoin;
+    @BindView(R.id.main_tv_fansNum)
+    TextView mTVFansNum;
 
 //    @BindView(R.id.main_lv_menu)
 //    ListView mLVMenu;
@@ -185,27 +187,6 @@ public class MainActivity extends BaseActivity {
             return;
         }
         startActivity(new Intent(this,StartLiveActivity.class));
-//        DialogUtil.showInputDialog(this, "直播间设置", "请输入直播间名字", new DialogUtil.DialogClickListener() {
-//            @Override
-//            public void comfirm(Object ... obj) {
-//                String [] posters={"http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg",
-//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/2.jpg",
-//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/3.jpg",
-//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/4.jpg",
-//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/5.jpg",
-//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/6.jpg",
-//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/7.jpg",
-//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/8.jpg",
-//                        "http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/9.jpg"};
-//                String poster=posters[new Random().nextInt(6)];
-//                BusinessInterface.getInstance().request(new CreateRoomEvent(EventId.ROOM_CREATE,(String)obj[0],"","http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg"));
-//            }
-//
-//            @Override
-//            public void cancel() {
-//
-//            }
-//    });
     }
 
 
@@ -219,6 +200,7 @@ public class MainActivity extends BaseActivity {
                 mTVUserName.setText(mUserInfo.getName());
                 ImageUtility.displayImage(mIVAvatar,mUserInfo.getIcon(),ImageUtility.TYPE_PHOTO_AVATAR);
                 mTVCoin.setText(mUserInfo.getCoin()+"");
+                mTVFansNum.setText(mUserInfo.getFansNum()+"");
             }
 
             return;

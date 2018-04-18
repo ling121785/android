@@ -33,7 +33,7 @@ public class MyLiveAdapter extends BaseRListAdapter<LiveBean,MyLiveAdapter.ViewH
     }
 
     @Override
-    public void bindDataToViewHolder(MyLiveAdapter.ViewHolder viewHolder, LiveBean data) {
+    public void bindDataToViewHolder(MyLiveAdapter.ViewHolder viewHolder, LiveBean data ,int postion) {
 
     }
     public void addData(List<LiveBean> list){

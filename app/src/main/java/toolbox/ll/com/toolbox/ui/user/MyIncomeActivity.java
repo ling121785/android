@@ -1,5 +1,6 @@
 package toolbox.ll.com.toolbox.ui.user;
 
+import android.annotation.SuppressLint;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,11 +21,14 @@ import com.example.businessmodule.utils.EventId;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Logger;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import toolbox.ll.com.common.utility.DateUtils;
 import toolbox.ll.com.common.utility.ToastUtils;
 import toolbox.ll.com.pulltorefresh.pulltorefresh.PullToRefreshBase;
 import toolbox.ll.com.pulltorefresh.pulltorefresh.PullToRefreshListView;
@@ -44,6 +48,8 @@ public class MyIncomeActivity extends BaseTitleActivity implements  PullToRefres
     MyIncomeAdapter mAdapter;
 
     private int page=0;
+    private long startTime;
+    private long endTime;
 
 
     @Override
@@ -69,17 +75,37 @@ public class MyIncomeActivity extends BaseTitleActivity implements  PullToRefres
         divider.setDrawable(ContextCompat.getDrawable(this,R.drawable.border));
         mRViewList.getRefreshableView().addItemDecoration(divider);
         mRViewList.getRefreshableView().setAdapter(mAdapter);
+        initFilterFime();
         request(0);
+    }
+
+    @SuppressLint("WrongConstant")
+    private void initFilterFime(){
+        Calendar calendar=Calendar.getInstance();
+        Date date=new Date();
+        calendar.setTime(date);
+        calendar.set(Calendar.HOUR_OF_DAY,0);
+        calendar.set(Calendar.MINUTE,0);
+        calendar.set(Calendar.SECOND,0);
+        calendar.set(Calendar.MILLISECOND,0);
+        calendar.add(Calendar.DAY_OF_MONTH,-7);
+        this.startTime=calendar.getTimeInMillis();
+        calendar.add(Calendar.DAY_OF_MONTH,8);
+        calendar.add(Calendar.SECOND,-1);
+        this.endTime=calendar.getTimeInMillis();
+        mTVTime.setText(DateUtils.cutYearAndMonthAndDay(startTime)+"至"+DateUtils.cutYearAndMonthAndDay(endTime));
     }
 
     @OnClick(R.id.income_ib_timeFiler)
     public void timeFilerClick(){
 
-        DialogUtil.chooseTimeDialog(this, new DialogUtil.DialogClickListener() {
+        DialogUtil.chooseTimeDialog(this,startTime,endTime, new DialogUtil.DialogClickListener() {
             @Override
             public void comfirm(Object... obj) {
-                com.orhanobut.logger.Logger.i("startTime",obj[0]);
-                com.orhanobut.logger.Logger.i("startTime",obj[1]);
+                startTime=(long)obj[0];
+                endTime=(long)obj[1];
+                mTVTime.setText(DateUtils.cutYearAndMonthAndDay(startTime)+"至"+DateUtils.cutYearAndMonthAndDay(endTime));
+                request(0);
             }
 
             @Override
@@ -90,7 +116,7 @@ public class MyIncomeActivity extends BaseTitleActivity implements  PullToRefres
     }
 
     private void request(int page){
-        BusinessInterface.getInstance().request(new IncomeListEvent(EventId.MY_INCOME_LIST, page));
+        BusinessInterface.getInstance().request(new IncomeListEvent(EventId.MY_INCOME_LIST, page,startTime/1000,endTime/1000));
     }
 
     @Subscribe
