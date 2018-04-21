@@ -106,6 +106,7 @@ import toolbox.ll.com.toolbox.bean.LiveStreamingBean;
 import toolbox.ll.com.toolbox.core.inject.BarrageAttachment;
 import toolbox.ll.com.toolbox.core.inject.CoinChangeAttachment;
 import toolbox.ll.com.toolbox.core.inject.GiftAttachment;
+import toolbox.ll.com.toolbox.core.inject.GuardAttachment;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
 import toolbox.ll.com.toolbox.ui.widget.MixAudioDialog;
 import toolbox.ll.com.toolbox.ui.widget.NetWorkInfoDialog;
@@ -1727,6 +1728,10 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
             }
         });
     }
+    public void showAngle(GuardAttachment msg){
+        mLayoutAngel.setVisibility(View.VISIBLE);
+        ImageUtility.displayImage(mIVAngel,msg.getData().getIcon(),ImageUtility.TYPE_PHOTO_AVATAR);
+    }
     public void showGift(ChatRoomMessage msg){
         showGiftAnimation();
         mGiftAdapter.add(msg);
@@ -1772,6 +1777,8 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                     showBrrage(msg);
                 }else if(msg!=null&&msg.getAttachment() instanceof CoinChangeAttachment){
                     updateCoin((CoinChangeAttachment)msg.getAttachment());
+                }else if(msg!=null&&msg.getAttachment() instanceof GuardAttachment){
+                    showAngle((GuardAttachment)msg.getAttachment());
                 }
             }
 

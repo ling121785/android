@@ -37,7 +37,8 @@ public class CustomAttachParser implements MsgAttachmentParser {
                     break;
                 case CustomAttachmentType.COIN_CHANGE:
                     attachment=JsonUtils.jsonToObj(json,CoinChangeAttachment.class);
-
+                case CustomAttachmentType.GUARD:
+                    attachment=JsonUtils.jsonToObj(json,GuardAttachment.class);
 //                default:
 //                    attachment = new DefaultCustomAttachment();
 //                    break;

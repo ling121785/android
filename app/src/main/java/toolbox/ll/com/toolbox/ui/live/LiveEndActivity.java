@@ -14,6 +14,7 @@ import org.w3c.dom.Text;
 import butterknife.BindInt;
 import butterknife.BindView;
 import butterknife.OnClick;
+import toolbox.ll.com.common.utility.DateUtils;
 import toolbox.ll.com.common.widget.CircleImageView;
 import toolbox.ll.com.toolbox.R;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
@@ -66,6 +67,8 @@ public class LiveEndActivity extends BaseActivity {
         mTVCoin.setText(event.response().getCoin()+"");
         mTVWatchNum.setText(event.response().getTotalWatchNum()+"");
         mTVNewFansNum.setText(event.response().getNewFansNum()+"");
+        long during=event.response().getEndTime()-event.response().getStartTime();
+        mTVDuration.setText(String.format(getResources().getString(R.string.liveEnd_tv_during), DateUtils.formatCallDuration(during)));
       }
 
     }

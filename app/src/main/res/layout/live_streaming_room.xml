@@ -3,63 +3,64 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <LinearLayout
-        android:layout_width="100dp"
-        android:layout_height="36dp"
-        android:gravity="center"
-        android:layout_marginTop="15dp"
-        android:background="@drawable/bg_gray_default">
-        <toolbox.ll.com.common.widget.CircleImageView
-            android:id="@+id/live_iv_avatar"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            app:border_width="1dp"
-            android:layout_marginLeft="@dimen/margin_smallest"
-            android:layout_marginRight="@dimen/margin_smallest"
-            app:border_color="@android:color/white"
-            android:src="@drawable/ic_avatar_default"/>
-         <LinearLayout
-             android:id="@+id/live_room_info"
-             android:layout_width="match_parent"
-             android:layout_height="match_parent"
-             android:layout_weight="1"
-             android:orientation="vertical"
-            >
-             <TextView
-                 android:id="@+id/live_tv_nick"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_weight="1"
-                 android:text="直播LIVE"
-                 android:textSize="@dimen/font_size_smaller"
-                 android:textColor="@color/white"
-                 android:maxLength="@integer/name_max"
-                 android:maxEms="@integer/name_max"
-                 android:gravity="center_vertical"/>
-             <TextView
-                 android:id="@+id/live_tv_roomCount"
-                 android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 android:layout_weight="1"
-                 android:text="30万人"
-                 android:textSize="@dimen/font_size_smaller"
-                 android:textColor="@color/white"
-                 android:gravity="center_vertical"/>
 
-         </LinearLayout>
-    </LinearLayout>
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="55dp"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:gravity="bottom"
         >
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="36dp"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/bg_gray_default">
+            <toolbox.ll.com.common.widget.CircleImageView
+                android:id="@+id/live_iv_avatar"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                app:border_width="1dp"
+                android:layout_marginLeft="@dimen/margin_smallest"
+                android:layout_marginRight="@dimen/margin_smallest"
+                app:border_color="@android:color/white"
+                android:src="@drawable/ic_avatar_default"/>
+            <LinearLayout
+                android:id="@+id/live_room_info"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:id="@+id/live_tv_nick"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="直播LIVE"
+                    android:textSize="@dimen/font_size_smaller"
+                    android:textColor="@color/white"
+                    android:maxLength="@integer/name_max"
+                    android:maxEms="@integer/name_max"
+                    android:gravity="center_vertical"/>
+                <TextView
+                    android:id="@+id/live_tv_roomCount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="30万人"
+                    android:textSize="@dimen/font_size_smaller"
+                    android:textColor="@color/white"
+                    android:gravity="center_vertical"/>
+
+            </LinearLayout>
+        </LinearLayout>
         <RelativeLayout
             android:id="@+id/live_layout_angel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_angle_bg"
-            android:visibility="invisible">
+            android:visibility="visible">
         <ImageView
             android:id="@+id/live_iv_angel"
             android:layout_width="wrap_content"
@@ -70,7 +71,7 @@
         </RelativeLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/live_ls_member"
-            android:layout_width="150dp"
+            android:layout_width="0dp"
             android:layout_height="36dp"
             android:scrollbars="none"
             android:layout_weight="1"></android.support.v7.widget.RecyclerView>
@@ -85,8 +86,8 @@
         android:id="@+id/live_tv_coin"
         android:layout_width="100dp"
         android:layout_height="17dp"
-        android:paddingLeft="@dimen/margin_smaller"
-        android:paddingRight="@dimen/margin_smaller"
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
         android:background="@drawable/bg_yellow"
         android:layout_marginTop="65dp"
         android:textColor="@color/white"
@@ -97,8 +98,8 @@
         android:id="@+id/live_tv_roomId"
         android:layout_width="100dp"
         android:layout_height="17dp"
-        android:paddingLeft="@dimen/margin_smaller"
-        android:paddingRight="@dimen/margin_smaller"
+        android:paddingLeft="@dimen/margin_small"
+        android:paddingRight="@dimen/margin_small"
         android:background="@drawable/bg_gray_default"
         android:layout_marginTop="65dp"
         android:textColor="@color/white"
@@ -118,8 +119,7 @@
     <ListView
         android:id="@+id/live_lv_gift"
         android:layout_width="250dp"
-        android:layout_height="125dp"
-        android:layout_marginBottom="20dp"
+        android:layout_height="85dp"
         android:layout_above="@id/live_lv_msg"
         android:divider="@android:color/transparent"
         android:dividerHeight="5dp"

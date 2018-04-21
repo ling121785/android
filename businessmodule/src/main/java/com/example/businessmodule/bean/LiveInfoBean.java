@@ -40,6 +40,9 @@ public class LiveInfoBean {
     @SerializedName("start_time")
     private long  startTime;
 
+    @SerializedName("end_time")
+    private long endTime;
+
     @SerializedName("attention_status")
     private int attentionStatus;
 
@@ -247,5 +250,13 @@ public class LiveInfoBean {
 
     public void setLikeNum(int likeNum) {
         this.likeNum = likeNum;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
     }
 }
