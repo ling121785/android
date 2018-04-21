@@ -11,7 +11,7 @@
     <string name="live_item_during">时长：</string>
     <string name="title_activity_setting">SettingActivity</string>
     <string name="title_activity_my_fan_contributions">粉丝贡献榜</string>
-
+    <string name="fanContr_coin">贡献：%d</string>
 
     <!--startlive -->
     <string name="startLive_room_covor_hint">上传封面</string>
@@ -21,7 +21,7 @@
     <string name="startLive_room_charge_et_hint">设置收费金额</string>
     <string name="startLive_room_encryption_hint">私密直播</string>
     <string name="startLive_room_pwd_hint">设置6位数房间密码</string>
-    <string name="startLive_room_num_hint">设置可光看人数（不填为无上限）</string>
+    <string name="startLive_room_num_hint">设置可观看人数(不填为无上限)</string>
     <string name="startLive_btn_start">开始直播</string>
 
 

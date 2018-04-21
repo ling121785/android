@@ -1,5 +1,6 @@
 package toolbox.ll.com.toolbox.ui.user;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -56,11 +57,12 @@ public class MyFanContributionsAdapter extends BaseRListAdapter<FansContriBution
         return new MyFanContributionsAdapter.ViewHolder(view);
     }
 
+    @SuppressLint("StringFormatMatches")
     @Override
     public void bindDataToViewHolder(ViewHolder viewHolder, FansContriButionsBean data,int position) {
         ImageUtility.displayImage(viewHolder.mIVAvatar,data.getIcon(),ImageUtility.TYPE_PHOTO_AVATAR);
         viewHolder.mTVNick.setText(data.getNick());
-        viewHolder.mTVNick.setText(data.getContributeCoin()+"");
+        viewHolder.mTVCoin.setText(String.format(mContext.getResources().getString(R.string.fanContr_coin),data.getContributeCoin()));
         if(viewHolder.mTVNO!=null)
             viewHolder.mTVNO.setText(position+1+"");
         if(viewHolder.mIVCrown!=null){

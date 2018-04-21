@@ -69,7 +69,7 @@ public class FansContributionListEvent extends BaseEvent<FansContributionListEve
     }
 
     public interface Rest {
-        @GET("live/statistics/log")
+        @GET("account/fans/contribution")
         Observable<BaseListResponse<FansContriButionsBean>> request(@Query("access_token") String token, @Query("page") int page, @Query("start_time") long startTime, @Query("end_time") long endTime);
     }
 }

@@ -249,6 +249,10 @@ public class ImageUtility {
         }
     }
 
+    public static void loadImage(String url, ImageLoadingListener listener){
+        ImageLoader.getInstance().loadImage(url,listener);
+    }
+
     public static String getUrl(String url) {
         if (url == null)
             return url;

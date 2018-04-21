@@ -63,7 +63,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/fontGray"
             android:textSize="@dimen/font_size_smaller"
-            android:text="贡献：9万金币"/>
+            android:text="@string/fanContr_coin"/>
 
     </LinearLayout>
 </LinearLayout>

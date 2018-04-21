@@ -14,10 +14,10 @@ public class FansContriButionsBean {
     private String nick;
 
     @SerializedName("coin")
-    private String coin;
+    private int coin;
 
     @SerializedName("contribute_coin")
-    private String contributeCoin;
+    private int contributeCoin;
 
     public String getIcon() {
         return icon;
@@ -35,19 +35,19 @@ public class FansContriButionsBean {
         this.nick = nick;
     }
 
-    public String getCoin() {
+    public int getCoin() {
         return coin;
     }
 
-    public void setCoin(String coin) {
+    public void setCoin(int coin) {
         this.coin = coin;
     }
 
-    public String getContributeCoin() {
+    public int getContributeCoin() {
         return contributeCoin;
     }
 
-    public void setContributeCoin(String contributeCoin) {
+    public void setContributeCoin(int contributeCoin) {
         this.contributeCoin = contributeCoin;
     }
 }

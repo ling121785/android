@@ -8,13 +8,16 @@ import android.content.res.AssetManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.AnimationDrawable;
 import android.media.AudioManager;
 import android.media.effect.Effect;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.SystemClock;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -33,6 +36,7 @@ import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
+import com.example.businessmodule.bean.GiftAnimationBean;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.room.GiftListEvent;
@@ -68,6 +72,8 @@ import com.netease.nimlib.sdk.msg.model.CustomNotification;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.netease.vcloud.video.effect.VideoEffect;
 import com.netease.vcloud.video.render.NeteaseView;
+import com.nostra13.universalimageloader.core.assist.FailReason;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.orhanobut.logger.Logger;
 import com.squareup.otto.Subscribe;
 
@@ -104,6 +110,7 @@ import toolbox.ll.com.toolbox.ui.base.BaseActivity;
 import toolbox.ll.com.toolbox.ui.widget.MixAudioDialog;
 import toolbox.ll.com.toolbox.ui.widget.NetWorkInfoDialog;
 import toolbox.ll.com.toolbox.utils.DialogUtil;
+import toolbox.ll.com.toolbox.utils.GiftUtil;
 import toolbox.ll.com.toolbox.utils.ImageUtility;
 
 
@@ -113,8 +120,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     private static final String TAG = "LiveStreamingActivity";
     //Demo控件
     private View filterLayout;
-    @BindView(R.id.live_start_btn)
-    TextView startPauseResumeBtn;
+
     private TextView mFpsView;
     private final int MSG_FPS = 1000;
     private String mliveStreamingURL = null;
@@ -1038,7 +1044,8 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                 Log.i(TAG, "test: MSG_STOP_LIVESTREAMING_FINISHED");
                 showToast("直播已暂停");
                 m_liveStreamingOn = false;
-                startPauseResumeBtn.setClickable(true);
+                if(startPauseResumeBtn!=null)
+                    startPauseResumeBtn.setClickable(true);
                 {
                     mIntentLiveStreamingStopFinished.putExtra("LiveStreamingStopFinished", 1);
                     sendBroadcast(mIntentLiveStreamingStopFinished);
@@ -1254,8 +1261,8 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         return true;
     }
 
-    @OnClick({R.id.live_start_btn})
-    public void startBtnClick(){
+    @OnClick({R.id.live_start_btn,R.id.live_btn_restart})
+    public void startBtnClick(View view){
         //开始直播按钮初始化
                 long time = System.currentTimeMillis();
                 if(time - clickTime < 1000){
@@ -1263,6 +1270,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                 }
                 clickTime = time;
                 startPauseResumeBtn.setClickable(false);
+                mBtnRestart.setClickable(false);
                 if(!m_liveStreamingOn)
                 {
                     //8、初始化直播推流
@@ -1288,10 +1296,13 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                     };
                     mThread.start();
                     startPauseResumeBtn.setText("暂停");
+                    mLayoutStop.setVisibility(View.GONE);
                 }else {
                     showToast("停止直播中，请稍等。。。");
                     stopAV();
                     startPauseResumeBtn.setText("继续");
+                    mLayoutStop.setVisibility(View.VISIBLE);
+                    mBtnRestart.setClickable(true);
                 }
     }
 
@@ -1335,6 +1346,53 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
             return;
 
         }
+    }
+
+    public void showGiftAnimation(){
+        String url="http://p1nuv99yj.bkt.clouddn.com/web_1523690147596182.png";
+        final GiftAnimationBean giftInfo=new GiftAnimationBean(url,230,1760,1.5);
+        List<GiftAnimationBean.PieceBean> list=new ArrayList<>();
+        list.add(new GiftAnimationBean.PieceBean(230,293,0,0));
+        list.add(new GiftAnimationBean.PieceBean(230,293,293,0));
+        list.add(new GiftAnimationBean.PieceBean(230,293,586,0));
+        list.add(new GiftAnimationBean.PieceBean(230,293,879,0));
+        list.add(new GiftAnimationBean.PieceBean(230,293,1172,0));
+        list.add(new GiftAnimationBean.PieceBean(230,293,1460,0));
+        giftInfo.setList(list);
+
+
+
+        ImageUtility.loadImage(giftInfo.getUrl(), new ImageLoadingListener() {
+            @Override
+            public void onLoadingStarted(String imageUri, View view) {
+
+            }
+
+            @Override
+            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+
+            }
+
+            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+                AnimationDrawable animationDrawable=GiftUtil.showGiftAnimation(loadedImage,giftInfo);
+                mGiftAnimation.setBackground(animationDrawable);
+                mGiftAnimation.setVisibility(View.VISIBLE);
+                animationDrawable.start();
+                mHandler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mGiftAnimation.setVisibility(View.GONE);
+                    }
+                },(int)giftInfo.getSeconds()*1000);
+            }
+
+            @Override
+            public void onLoadingCancelled(String imageUri, View view) {
+
+            }
+        });
     }
 
     //用于接收Service发送的消息，伴音开关
@@ -1420,6 +1478,23 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     @BindView(R.id.live_et_input)
     EditText mETInput;
 
+    @BindView(R.id.live_iv_gift_animation)
+     ImageView mGiftAnimation;
+
+    @BindView(R.id.layout_stop)
+    View mLayoutStop;
+
+    @BindView(R.id.live_start_btn)
+    TextView startPauseResumeBtn;
+
+    @BindView(R.id.live_btn_restart)
+     View mBtnRestart;
+
+    @BindView(R.id.live_iv_angel)
+    ImageView mIVAngel;
+
+    @BindView(R.id.live_layout_angel)
+    View mLayoutAngel;
     List<LiveMenuBean> mMenuList;
 
 
@@ -1607,6 +1682,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
 
     @OnClick(R.id.live_tv_send)
     public void sendMsg(){
+
         final String msg=mETInput.getText().toString();
         if(StringUtils.isEmpty(msg))
             return;
@@ -1652,6 +1728,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         });
     }
     public void showGift(ChatRoomMessage msg){
+        showGiftAnimation();
         mGiftAdapter.add(msg);
         mLVGift.post(new Runnable() {
             @Override

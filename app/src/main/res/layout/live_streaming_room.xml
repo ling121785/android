@@ -7,6 +7,7 @@
         android:layout_width="100dp"
         android:layout_height="36dp"
         android:gravity="center"
+        android:layout_marginTop="15dp"
         android:background="@drawable/bg_gray_default">
         <toolbox.ll.com.common.widget.CircleImageView
             android:id="@+id/live_iv_avatar"
@@ -49,12 +50,27 @@
     </LinearLayout>
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
+        android:layout_height="55dp"
         android:layout_alignParentRight="true"
+        android:gravity="bottom"
         >
+        <RelativeLayout
+            android:id="@+id/live_layout_angel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_angle_bg"
+            android:visibility="invisible">
+        <ImageView
+            android:id="@+id/live_iv_angel"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:src="@drawable/ic_avatar_default"
+            android:layout_alignParentBottom="true"
+            />
+        </RelativeLayout>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/live_ls_member"
-            android:layout_width="200dp"
+            android:layout_width="150dp"
             android:layout_height="36dp"
             android:scrollbars="none"
             android:layout_weight="1"></android.support.v7.widget.RecyclerView>
@@ -72,7 +88,7 @@
         android:paddingLeft="@dimen/margin_smaller"
         android:paddingRight="@dimen/margin_smaller"
         android:background="@drawable/bg_yellow"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="65dp"
         android:textColor="@color/white"
         android:textSize="@dimen/font_size_smaller"
         android:text="贡献：0"
@@ -84,7 +100,7 @@
         android:paddingLeft="@dimen/margin_smaller"
         android:paddingRight="@dimen/margin_smaller"
         android:background="@drawable/bg_gray_default"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="65dp"
         android:textColor="@color/white"
         android:layout_alignParentRight="true"
         android:text="房间ID:5656787"
@@ -97,7 +113,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="66dp"
         android:divider="@android:color/transparent"
-        android:dividerHeight="5dp"></ListView>
+        android:dividerHeight="5dp"
+        android:clickable="false"></ListView>
     <ListView
         android:id="@+id/live_lv_gift"
         android:layout_width="250dp"
@@ -105,7 +122,8 @@
         android:layout_marginBottom="20dp"
         android:layout_above="@id/live_lv_msg"
         android:divider="@android:color/transparent"
-        android:dividerHeight="5dp"></ListView>
+        android:dividerHeight="5dp"
+        android:clickable="false"></ListView>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"

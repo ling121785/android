@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/general_bg_black"
+    android:gravity="center">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_live_stop"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="直播暂停中"
+        android:textColor="@color/white"
+        android:layout_margin="80dp"/>
+
+    <Button
+        android:id="@+id/live_btn_restart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/login_button"
+        android:text="继续直播"/>
+
+</LinearLayout>

@@ -31,4 +31,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
+    <include layout="@layout/gift_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <include
+        android:id="@+id/layout_stop"
+        layout="@layout/live_stop_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        />
 </RelativeLayout>

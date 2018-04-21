@@ -10,15 +10,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
 import com.example.businessmodule.bean.AccountBean;
+import com.example.businessmodule.bean.LiveStyleBean;
 import com.example.businessmodule.bean.RoomBean;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.room.CreateRoomEvent;
+import com.example.businessmodule.event.room.LiveStyleListEvent;
 import com.example.businessmodule.utils.EventId;
 import com.orhanobut.logger.Logger;
 import com.squareup.otto.Subscribe;
@@ -46,9 +53,15 @@ public class StartLiveActivity extends BaseActivity {
     @BindView(R.id.startLive_et_roomName)
     EditText mEtRoomName;
     @BindView(R.id.startLive_et_roomStyle)
-    EditText mEtRoomStyle;
+    Spinner mSPRoomStyle;
     @BindView(R.id.startLive_et_num)
     EditText mEtRoomNum;
+
+    @BindView(R.id.startLive_cb_room_charge)
+    CheckBox mCBRoomCharge;
+
+    @BindView(R.id.startLive_cb_room_cencryption)
+    CheckBox mCBRoomLock;
 
     @BindView(R.id.act_bg)
     View mViewBg;
@@ -85,6 +98,28 @@ public class StartLiveActivity extends BaseActivity {
         if(mUserInfo!=null){
 
         }
+        BusinessInterface.getInstance().request(new LiveStyleListEvent(EventId.ROOM_STYLE_LIST));
+    }
+
+    @Subscribe
+    public void liveStyleEvent(LiveStyleListEvent event){
+        if(event.isSuccess()) {
+            mSPRoomStyle.setAdapter(new StartLiveStyleAdapter(this,event.response().getDataList()));
+            if(event.response().getDataList().size()>0){
+                mSPRoomStyle.setSelection(0);
+            }
+            mSPRoomStyle.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                    mSPRoomStyle.setTag(adapterView.getItemAtPosition(i));
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> adapterView) {
+
+                }
+            });
+        }
     }
 
     @OnClick(R.id.startLive_tv_cover)
@@ -101,8 +136,29 @@ public class StartLiveActivity extends BaseActivity {
     public void startLive(){
         String roomName=mEtRoomName.getText().toString();
         String poster="http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg";
-
-        BusinessInterface.getInstance().request(new CreateRoomEvent(EventId.ROOM_CREATE,roomName,"",poster));
+        Integer style=mSPRoomStyle.getTag()!=null&&mSPRoomStyle.getTag()instanceof LiveStyleBean ?((LiveStyleBean)mSPRoomStyle.getTag()).getId():null;
+        Integer charge=null;
+        if(mCBRoomCharge.isChecked()){
+            if(mEtRoomCharge.getText().toString().trim().equals("")){
+                ToastUtils.showToast(this,"请设置收费金额");
+                return;
+            }
+            charge=Integer.parseInt(mEtRoomCharge.getText().toString().trim());
+        }
+        String pwd=null;
+        if(mCBRoomLock.isChecked()){
+            if(mEtRoomPwd.getText().toString().trim().equals("")){
+                ToastUtils.showToast(this,"请设置房间密码");
+                return;
+            }
+            if(mEtRoomPwd.getText().toString().trim().length()!=6){
+                ToastUtils.showToast(this,"房间密码未6位数");
+                return;
+            }
+            pwd=mEtRoomPwd.getText().toString().trim();
+        }
+        Integer maxNum=mEtRoomNum.getText().toString().trim().equals("")?null:Integer.parseInt(mEtRoomNum.getText().toString().trim());
+        BusinessInterface.getInstance().request(new CreateRoomEvent(EventId.ROOM_CREATE,roomName,"",poster,style,charge,pwd,maxNum));
     }
 
     @OnCheckedChanged(R.id.startLive_cb_room_charge)
@@ -110,7 +166,7 @@ public class StartLiveActivity extends BaseActivity {
         mEtRoomCharge.setVisibility(checked? View.VISIBLE:View.GONE);
     }
 
-    @OnCheckedChanged(R.id.startLive_cb_room_charge)
+    @OnCheckedChanged(R.id.startLive_cb_room_cencryption)
     public void roomcEncryption(boolean checked){
         mLayoutRoomEncryption.setVisibility(checked? View.VISIBLE:View.GONE);
     }

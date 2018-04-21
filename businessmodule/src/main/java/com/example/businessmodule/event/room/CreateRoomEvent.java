@@ -14,9 +14,9 @@ import rx.Observable;
  */
 
 public class CreateRoomEvent extends BaseEvent<CreateRoomEvent.Request,RoomBean> {
-    public CreateRoomEvent(long eventId,String roomName,String extraMessage,String poster) {
+    public CreateRoomEvent(long eventId,String roomName, String extraMessage, String poster, Integer styleType, Integer liveCharge, String livePwd, Integer liveMaxNumber) {
         super(eventId);
-        setRequest(new Request(roomName,extraMessage,poster));
+        setRequest(new Request( roomName,  extraMessage,  poster,  styleType,  liveCharge,livePwd,liveMaxNumber));
     }
 
     public class Request{
@@ -27,10 +27,66 @@ public class CreateRoomEvent extends BaseEvent<CreateRoomEvent.Request,RoomBean>
         @SerializedName("poster")
         private String poster;
 
-        public Request(String roomName, String extraMessage,String poster) {
+        @SerializedName("live_type")
+        private Integer styleType;
+
+        @SerializedName("live_charge")
+        private Integer liveCharge;
+
+        @SerializedName("live_pwd")
+        private String livePwd;
+
+        @SerializedName("live_max_number")
+        private Integer liveMaxNumber;
+
+        public Request(String roomName, String extraMessage, String poster, Integer styleType, Integer liveCharge, String livePwd, Integer liveMaxNumber) {
             this.roomName = roomName;
             this.extraMessage = extraMessage;
-            this.poster=poster;
+            this.poster = poster;
+            this.styleType = styleType;
+            this.liveCharge = liveCharge;
+            this.livePwd = livePwd;
+            this.liveMaxNumber = liveMaxNumber;
+        }
+
+        public String getPoster() {
+            return poster;
+        }
+
+        public void setPoster(String poster) {
+            this.poster = poster;
+        }
+
+        public Integer getStyleType() {
+            return styleType;
+        }
+
+        public void setStyleType(Integer styleType) {
+            this.styleType = styleType;
+        }
+
+        public Integer getLiveCharge() {
+            return liveCharge;
+        }
+
+        public void setLiveCharge(Integer liveCharge) {
+            this.liveCharge = liveCharge;
+        }
+
+        public String getLivePwd() {
+            return livePwd;
+        }
+
+        public void setLivePwd(String livePwd) {
+            this.livePwd = livePwd;
+        }
+
+        public Integer getLiveMaxNumber() {
+            return liveMaxNumber;
+        }
+
+        public void setLiveMaxNumber(Integer liveMaxNumber) {
+            this.liveMaxNumber = liveMaxNumber;
         }
 
         public String getRoomName() {
