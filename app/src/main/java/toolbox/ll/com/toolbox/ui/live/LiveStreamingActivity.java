@@ -113,7 +113,8 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     private static final String TAG = "LiveStreamingActivity";
     //Demo控件
     private View filterLayout;
-    private ImageView startPauseResumeBtn;
+    @BindView(R.id.live_start_btn)
+    TextView startPauseResumeBtn;
     private TextView mFpsView;
     private final int MSG_FPS = 1000;
     private String mliveStreamingURL = null;
@@ -462,7 +463,6 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         if(m_liveStreamingOn) {
             m_liveStreamingOn = false;
         }
-
         super.onDestroy();
     }
 
@@ -604,51 +604,6 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                         mLSMediaCapture.startSpeedCalc(mliveStreamingURL, 1024 * 500);
                         mSpeedCalcRunning = true;
                     }
-                }
-            }
-        });
-
-
-        //开始直播按钮初始化
-        startPauseResumeBtn = (ImageView) findViewById(R.id.live_start_btn);
-        startPauseResumeBtn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v)
-            {
-                long time = System.currentTimeMillis();
-                if(time - clickTime < 1000){
-                    return;
-                }
-                clickTime = time;
-                startPauseResumeBtn.setClickable(false);
-                if(!m_liveStreamingOn)
-                {
-                    //8、初始化直播推流
-                    if(mThread != null){
-                        showToast("正在开启直播，请稍后。。。");
-                        return;
-                    }
-                    showToast("初始化中。。。");
-                    mThread = new Thread(){
-                        public void run(){
-                            //正常网络下initLiveStream 1、2s就可完成，当网络很差时initLiveStream可能会消耗5-10s，因此另起线程防止UI卡住
-                            if(!startAV()){
-                                showToast("直播开启失败，请仔细检查推流地址, 正在退出当前界面。。。");
-                                mHandler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        LiveStreamingActivity.this.finish();
-                                    }
-                                },5000);
-                            }
-                            mThread = null;
-                        }
-                    };
-                    mThread.start();
-                    startPauseResumeBtn.setImageResource(R.drawable.stop);
-                }else {
-                    showToast("停止直播中，请稍等。。。");
-                    stopAV();
-                    startPauseResumeBtn.setImageResource(R.drawable.restart);
                 }
             }
         });
@@ -1299,8 +1254,49 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         return true;
     }
 
-    @Override
-    public void onBackPressed() {
+    @OnClick({R.id.live_start_btn})
+    public void startBtnClick(){
+        //开始直播按钮初始化
+                long time = System.currentTimeMillis();
+                if(time - clickTime < 1000){
+                    return;
+                }
+                clickTime = time;
+                startPauseResumeBtn.setClickable(false);
+                if(!m_liveStreamingOn)
+                {
+                    //8、初始化直播推流
+                    if(mThread != null){
+                        showToast("正在开启直播，请稍后。。。");
+                        return;
+                    }
+                    showToast("初始化中。。。");
+                    mThread = new Thread(){
+                        public void run(){
+                            //正常网络下initLiveStream 1、2s就可完成，当网络很差时initLiveStream可能会消耗5-10s，因此另起线程防止UI卡住
+                            if(!startAV()){
+                                showToast("直播开启失败，请仔细检查推流地址, 正在退出当前界面。。。");
+                                mHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        LiveStreamingActivity.this.finish();
+                                    }
+                                },5000);
+                            }
+                            mThread = null;
+                        }
+                    };
+                    mThread.start();
+                    startPauseResumeBtn.setText("暂停");
+                }else {
+                    showToast("停止直播中，请稍等。。。");
+                    stopAV();
+                    startPauseResumeBtn.setText("继续");
+                }
+    }
+
+    @OnClick(R.id.live_iv_merberClose)
+    public void showExitDialog(){
         DialogUtil.showComfimDialog(this,null,"是否退出直播？",new DialogUtil.DialogClickListener(){
             @Override
             public void comfirm(Object ... obj) {
@@ -1315,10 +1311,18 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         });
     }
 
+    @Override
+    public void onBackPressed() {
+        showExitDialog();
+    }
+
 
     @Subscribe
     public void stopLiveResponse(StopLiveEvent event){
         if(event.isSuccess()){
+            Intent intent=new Intent(this,LiveEndActivity.class);
+            intent.putExtra("data",mLSBean.getLiveId());
+            startActivity(intent);
             finish();
             return;
 
@@ -1416,6 +1420,8 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     @BindView(R.id.live_et_input)
     EditText mETInput;
 
+    List<LiveMenuBean> mMenuList;
+
 
     private NimUserInfo mUserInfo;
     private ChatRoomInfo mChartRoomInfo=null;
@@ -1440,7 +1446,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     public void afterInit(Bundle savedInstanceState) {
         mLVMsg.setAdapter(mBarrageAdapter);
         mLVGift.setAdapter(mGiftAdapter);
-        List<LiveMenuBean> mMenuList=new ArrayList<>();
+        mMenuList=new ArrayList<>();
         mMenuList.add(new LiveMenuBean("cinemaTurn","翻转镜头",R.drawable.live_menu_overturn,null,true));
         mMenuList.add(new LiveMenuBean("mirror","开启镜像",R.drawable.live_menu_mirror,null,true));
         mMenuList.add(new LiveMenuBean("screenshot","截图",R.drawable.ic_special_effect));
@@ -1595,6 +1601,8 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     @OnClick(R.id.live_iv_gift)
     public void toggleMenu(){
         mLayoutMenu.setVisibility(mLayoutMenu.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
+        mLiveMenuAdapter.setDatas(mMenuList);
+        mLiveMenuAdapter.notifyDataSetChanged();
     }
 
     @OnClick(R.id.live_tv_send)

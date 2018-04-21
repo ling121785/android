@@ -2,6 +2,7 @@ package com.example.businessmodule.business;
 
 import com.example.businessmodule.bean.AccountBean;
 import com.example.businessmodule.bean.GiftBean;
+import com.example.businessmodule.bean.LiveInfoBean;
 import com.example.businessmodule.bean.RoomBean;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessPrefences;
@@ -9,6 +10,7 @@ import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.BaseEvent;
 import com.example.businessmodule.event.room.CreateRoomEvent;
 import com.example.businessmodule.event.room.GiftListEvent;
+import com.example.businessmodule.event.room.LiveDetailEvent;
 import com.example.businessmodule.event.room.StartLiveEvent;
 import com.example.businessmodule.event.room.StopLiveEvent;
 import com.example.businessmodule.event.room.JoinRoomEvent;
@@ -52,6 +54,10 @@ public class RoomBusiness extends BaseBusiness{
         }
         if(this.getEvent() instanceof GiftListEvent){
             this.getGiftList((GiftListEvent)this.getEvent());
+            return;
+        }
+        if(this.getEvent() instanceof LiveDetailEvent){
+            this.getLiveDetail((LiveDetailEvent)this.getEvent());
             return;
         }
     }
@@ -156,6 +162,27 @@ public class RoomBusiness extends BaseBusiness{
                     BusinessSession.getInstance().setmGiftList(response.getDataList());
                     BusinessPrefences.getInstance().saveGiftList(response.getDataList());
                 }
+                return true;
+            }
+
+            @Override
+            public boolean onError() {
+                return false;
+            }
+        });
+    }
+
+
+    private void getLiveDetail(final LiveDetailEvent event){
+        LiveDetailEvent.Rest rest=getRetrofit().create(LiveDetailEvent.Rest.class);
+        AccountBean accountBean=BusinessSession.getInstance().getAccountInfo();
+        if(accountBean==null||accountBean.getUuid()==null){
+            responseError(ResultCode.AUTH_FAIL,"未登录");
+            return;
+        }
+        startRest(rest.request("live/"+event.request().getLiveId(),accountBean.getUuid()),new RestCallback<LiveInfoBean>(){
+            @Override
+            public boolean onResponse(LiveInfoBean response) {
                 return true;
             }
 

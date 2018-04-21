@@ -11,6 +11,7 @@ public class EventId {
     public static long ROOM_JOIN=0x4;
     public static long ROOM_EXIT=0x5;
     public static long ROOM_GIFT=0x6;
+    public static long ROOM_END_DETAIL=0x7;
 
     public static long MY_FNAS_LIST=0x11;
     public static long MY_INCOME_LIST=0x12;
@@ -20,4 +21,5 @@ public class EventId {
     public static long FANS_CONR_WEEK=0x22;
     public static long FANS_CONR_MONTH=0x23;
     public static long FANS_CONR_YEAR=0x24;
+
 }

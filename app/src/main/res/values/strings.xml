@@ -26,7 +26,7 @@
 
 
     <!-- liveEnd-->
-    <string name="liveEnd_tv_end">直播结束</string>
+    <string name="liveEnd_tv_end">直播已结束</string>
     <string name="liveEnd_tv_during">直播时长：%s</string>
     <string name="liveEnd_btn_exit">退出</string>
     <string name="liveEnd_tv_num">观看人数</string>

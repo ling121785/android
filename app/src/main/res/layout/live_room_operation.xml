@@ -35,20 +35,10 @@
     </RelativeLayout>
 
 
-    <ImageView
-        android:id="@+id/live_start_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/restart"
-        android:layout_marginBottom="60dp"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
-        android:layout_alignParentBottom="true"
-        />
+
 
     <LinearLayout
         android:id="@+id/live_btn_layout"
-        android:layout_toRightOf="@id/live_start_btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
