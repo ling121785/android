@@ -13,6 +13,7 @@ public class EventId {
     public static long ROOM_GIFT=0x6;
     public static long ROOM_END_DETAIL=0x7;
     public static long ROOM_STYLE_LIST=0x8;
+    public static long ROOM_ANGEL=0x7;
 
     public static long MY_FNAS_LIST=0x11;
     public static long MY_INCOME_LIST=0x12;

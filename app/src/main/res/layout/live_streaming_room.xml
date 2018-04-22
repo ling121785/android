@@ -60,13 +60,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@drawable/ic_angle_bg"
-            android:visibility="visible">
-        <ImageView
+            android:visibility="invisible">
+        <toolbox.ll.com.common.widget.CircleImageView
             android:id="@+id/live_iv_angel"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
             android:src="@drawable/ic_avatar_default"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
             />
         </RelativeLayout>
         <android.support.v7.widget.RecyclerView

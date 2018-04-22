@@ -17,6 +17,7 @@ import com.example.businessmodule.bean.InComeBean;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.event.user.FansListEvent;
 import com.example.businessmodule.event.user.IncomeListEvent;
+import com.example.businessmodule.event.user.LiveStatisticsEvent;
 import com.example.businessmodule.utils.EventId;
 import com.squareup.otto.Subscribe;
 
@@ -41,6 +42,9 @@ import toolbox.ll.com.toolbox.utils.DialogUtil;
 public class MyIncomeActivity extends BaseTitleActivity implements  PullToRefreshBase.OnRefreshListener2<RecyclerView>{
     @BindView(R.id.income_tv_time)
     TextView mTVTime;
+
+    @BindView(R.id.income_tv_total_coin)
+    TextView mTVTotalCoin;
 
     @BindView(R.id.income_lv_list)
     PullToRefreshRecyclerView mRViewList;
@@ -116,7 +120,17 @@ public class MyIncomeActivity extends BaseTitleActivity implements  PullToRefres
     }
 
     private void request(int page){
+        if(page==0){
+            BusinessInterface.getInstance().request(new LiveStatisticsEvent(EventId.MY_INCOME_LIST, 0,startTime/1000,endTime/1000));
+        }
         BusinessInterface.getInstance().request(new IncomeListEvent(EventId.MY_INCOME_LIST, page,startTime/1000,endTime/1000));
+    }
+
+    @Subscribe
+    public void liveStatisticsEvent(LiveStatisticsEvent event){
+        if(event.isSuccess()){
+            mTVTotalCoin.setText(event.response().getTotalCoin()+"");
+        }
     }
 
     @Subscribe

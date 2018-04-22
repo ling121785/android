@@ -2,13 +2,17 @@ package com.example.businessmodule.business;
 
 import com.example.businessmodule.bean.AccountBean;
 import com.example.businessmodule.bean.GiftBean;
+import com.example.businessmodule.bean.GuardBean;
 import com.example.businessmodule.bean.LiveInfoBean;
 import com.example.businessmodule.bean.LiveStyleBean;
+import com.example.businessmodule.bean.QiniuBean;
 import com.example.businessmodule.bean.RoomBean;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessPrefences;
 import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.BaseEvent;
+import com.example.businessmodule.event.common.QiniuInfoEvent;
+import com.example.businessmodule.event.room.AngelEvent;
 import com.example.businessmodule.event.room.CreateRoomEvent;
 import com.example.businessmodule.event.room.GiftListEvent;
 import com.example.businessmodule.event.room.LiveDetailEvent;
@@ -17,6 +21,7 @@ import com.example.businessmodule.event.room.StartLiveEvent;
 import com.example.businessmodule.event.room.StopLiveEvent;
 import com.example.businessmodule.event.room.JoinRoomEvent;
 import com.example.businessmodule.rest.BaseListResponse;
+import com.example.businessmodule.utils.FileUploadManager;
 import com.example.businessmodule.utils.ResultCode;
 import com.netease.nimlib.sdk.NIMClient;
 import com.netease.nimlib.sdk.RequestCallback;
@@ -25,6 +30,14 @@ import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomData;
 import com.netease.nimlib.sdk.chatroom.model.EnterChatRoomResultData;
 import com.netease.nimlib.sdk.uinfo.model.NimUserInfo;
 import com.orhanobut.logger.Logger;
+import com.qiniu.android.http.ResponseInfo;
+import com.qiniu.android.storage.UpCompletionHandler;
+import com.qiniu.android.storage.UploadOptions;
+
+import org.json.JSONObject;
+
+import rx.Subscriber;
+import rx.schedulers.Schedulers;
 
 
 /**
@@ -39,7 +52,7 @@ public class RoomBusiness extends BaseBusiness{
     @Override
     protected void process() {
         if(this.getEvent() instanceof CreateRoomEvent){
-            this.createRoom((CreateRoomEvent)this.getEvent());
+            this.createRoomWithFile((CreateRoomEvent)this.getEvent());
             return;
         }
         if(this.getEvent() instanceof JoinRoomEvent){
@@ -65,8 +78,53 @@ public class RoomBusiness extends BaseBusiness{
         if(this.getEvent() instanceof LiveStyleListEvent){
             this.getLiveStyle((LiveStyleListEvent)this.getEvent());
         }
+
+        if(this.getEvent() instanceof  AngelEvent){
+            this.getCurAngel((AngelEvent)getEvent());
+        }
     }
 
+    private void createRoomWithFile(final CreateRoomEvent event){
+        if(event.request().getmFile()==null) {
+            createRoom(event);
+        }else{
+            QiniuInfoEvent.Rest rest=getRetrofit().create(QiniuInfoEvent.Rest.class);
+            AccountBean accountBean=BusinessSession.getInstance().getAccountInfo();
+            if(accountBean==null||accountBean.getUuid()==null){
+                responseError(ResultCode.AUTH_FAIL,"未登录");
+                return;
+            }
+            rest.request(accountBean.getUuid())
+                    .subscribeOn(Schedulers.io())
+                    .subscribe(new Subscriber<QiniuBean>() {
+                        @Override
+                        public void onCompleted() {
+
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+                            responseError(e);
+                        }
+
+                        @Override
+                        public void onNext(QiniuBean qiniuBean) {
+                            UpCompletionHandler upCompletionHandler=new UpCompletionHandler() {
+                                @Override
+                                public void complete(String key, ResponseInfo info, JSONObject response) {
+                                    if(info!=null&&info.isOK()){
+                                        createRoom(event);
+                                    }
+
+                                }
+                            };
+                            UploadOptions uploadOptions=null;
+                            FileUploadManager.getInstance().uploadFiles(event.request().getmFile(),qiniuBean.getToken(),upCompletionHandler,uploadOptions);
+
+                        }
+                    });
+        }
+    }
     private void createRoom(final CreateRoomEvent event){
         CreateRoomEvent.Rest rest=getRetrofit().create(CreateRoomEvent.Rest.class);
         AccountBean accountBean=BusinessSession.getInstance().getAccountInfo();
@@ -209,6 +267,27 @@ public class RoomBusiness extends BaseBusiness{
         startRest(rest.request(accountBean.getUuid()),new RestCallback<BaseListResponse<LiveStyleBean>>(){
             @Override
             public boolean onResponse(BaseListResponse<LiveStyleBean> response) {
+                return true;
+            }
+
+            @Override
+            public boolean onError() {
+                return false;
+            }
+        });
+    }
+
+
+    private void getCurAngel(final AngelEvent event){
+        AngelEvent.Rest rest=getRetrofit().create(AngelEvent.Rest.class);
+        AccountBean accountBean=BusinessSession.getInstance().getAccountInfo();
+        if(accountBean==null||accountBean.getUuid()==null){
+            responseError(ResultCode.AUTH_FAIL,"未登录");
+            return;
+        }
+        startRest(rest.request(accountBean.getUuid(),event.request().getRoomId()),new RestCallback<GuardBean>(){
+            @Override
+            public boolean onResponse(GuardBean response) {
                 return true;
             }
 

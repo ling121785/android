@@ -77,6 +77,7 @@ public class StartLiveActivity extends BaseActivity {
     private static final String PHOTO_FILE_NAME = "temp_photo.jpg";
 
     private File tempFile;
+    private File mPostFile;
 
     @Override
     public void beforeInit(Bundle savedInstanceState) {
@@ -93,6 +94,7 @@ public class StartLiveActivity extends BaseActivity {
         File file = new File(this.getFilesDir(), "_head_icon.jpg");
         if (file.exists()) {
             mIVCovor.setImageURI(Uri.fromFile(file));
+            mPostFile=file;
         }
         AccountBean mUserInfo= BusinessSession.getInstance().getAccountInfo();
         if(mUserInfo!=null){
@@ -135,7 +137,7 @@ public class StartLiveActivity extends BaseActivity {
     @OnClick(R.id.startLive_btn_start)
     public void startLive(){
         String roomName=mEtRoomName.getText().toString();
-        String poster="http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg";
+//        String poster="http://onmxkx5tf.bkt.clouddn.com/zhibo/poster/1.jpg";
         Integer style=mSPRoomStyle.getTag()!=null&&mSPRoomStyle.getTag()instanceof LiveStyleBean ?((LiveStyleBean)mSPRoomStyle.getTag()).getId():null;
         Integer charge=null;
         if(mCBRoomCharge.isChecked()){
@@ -158,7 +160,7 @@ public class StartLiveActivity extends BaseActivity {
             pwd=mEtRoomPwd.getText().toString().trim();
         }
         Integer maxNum=mEtRoomNum.getText().toString().trim().equals("")?null:Integer.parseInt(mEtRoomNum.getText().toString().trim());
-        BusinessInterface.getInstance().request(new CreateRoomEvent(EventId.ROOM_CREATE,roomName,"",poster,style,charge,pwd,maxNum));
+        BusinessInterface.getInstance().request(new CreateRoomEvent(EventId.ROOM_CREATE,roomName,"",mPostFile,style,charge,pwd,maxNum));
     }
 
     @OnCheckedChanged(R.id.startLive_cb_room_charge)
@@ -235,6 +237,10 @@ public class StartLiveActivity extends BaseActivity {
                     outputStream.close();
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                File file = new File(this.getFilesDir(), "_head_icon.jpg");
+                if (file.exists()) {
+                    mPostFile=file;
                 }
             }
             try {

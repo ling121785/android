@@ -46,6 +46,9 @@ public class LiveStatisticsBean {
     @SerializedName("ave_gift_coin")
     private int aveGiftCoin;
 
+    @SerializedName("total_coin")
+    private int totalCoin;
+
     public int getLiveCount() {
         return liveCount;
     }
@@ -148,5 +151,13 @@ public class LiveStatisticsBean {
 
     public void setAveGiftCoin(int aveGiftCoin) {
         this.aveGiftCoin = aveGiftCoin;
+    }
+
+    public int getTotalCoin() {
+        return totalCoin;
+    }
+
+    public void setTotalCoin(int totalCoin) {
+        this.totalCoin = totalCoin;
     }
 }

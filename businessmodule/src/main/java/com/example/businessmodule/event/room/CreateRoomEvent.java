@@ -4,6 +4,8 @@ import com.example.businessmodule.bean.RoomBean;
 import com.example.businessmodule.event.BaseEvent;
 import com.google.gson.annotations.SerializedName;
 
+import java.io.File;
+
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
@@ -14,9 +16,9 @@ import rx.Observable;
  */
 
 public class CreateRoomEvent extends BaseEvent<CreateRoomEvent.Request,RoomBean> {
-    public CreateRoomEvent(long eventId,String roomName, String extraMessage, String poster, Integer styleType, Integer liveCharge, String livePwd, Integer liveMaxNumber) {
+    public CreateRoomEvent(long eventId, String roomName, String extraMessage, File mFile, Integer styleType, Integer liveCharge, String livePwd, Integer liveMaxNumber) {
         super(eventId);
-        setRequest(new Request( roomName,  extraMessage,  poster,  styleType,  liveCharge,livePwd,liveMaxNumber));
+        setRequest(new Request( roomName,  extraMessage,  mFile,  styleType,  liveCharge,livePwd,liveMaxNumber));
     }
 
     public class Request{
@@ -39,10 +41,12 @@ public class CreateRoomEvent extends BaseEvent<CreateRoomEvent.Request,RoomBean>
         @SerializedName("live_max_number")
         private Integer liveMaxNumber;
 
-        public Request(String roomName, String extraMessage, String poster, Integer styleType, Integer liveCharge, String livePwd, Integer liveMaxNumber) {
+        private  transient  File mFile;
+
+        public Request(String roomName, String extraMessage, File mFile, Integer styleType, Integer liveCharge, String livePwd, Integer liveMaxNumber) {
             this.roomName = roomName;
             this.extraMessage = extraMessage;
-            this.poster = poster;
+            this.mFile = mFile;
             this.styleType = styleType;
             this.liveCharge = liveCharge;
             this.livePwd = livePwd;
@@ -103,6 +107,14 @@ public class CreateRoomEvent extends BaseEvent<CreateRoomEvent.Request,RoomBean>
 
         public void setExtraMessage(String extraMessage) {
             this.extraMessage = extraMessage;
+        }
+
+        public File getmFile() {
+            return mFile;
+        }
+
+        public void setmFile(File mFile) {
+            this.mFile = mFile;
         }
     }
 

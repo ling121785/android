@@ -37,8 +37,10 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.businessmodule.bean.GiftAnimationBean;
+import com.example.businessmodule.bean.GuardBean;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessSession;
+import com.example.businessmodule.event.room.AngelEvent;
 import com.example.businessmodule.event.room.GiftListEvent;
 import com.example.businessmodule.event.room.StartLiveEvent;
 import com.example.businessmodule.event.room.StopLiveEvent;
@@ -1548,6 +1550,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         initLiveSream(savedInstanceState);
         BusinessInterface.getInstance().request(new JoinRoomEvent(EventId.ROOM_JOIN,mLSBean.getRoomId()));
         BusinessInterface.getInstance().request(new GiftListEvent(EventId.ROOM_GIFT,mLSBean.getRoomId()));
+        BusinessInterface.getInstance().request(new AngelEvent(EventId.ROOM_ANGEL,mLSBean.getRoomId()));
     }
     private void onMyDestory(){
         initRoomService(false);
@@ -1582,6 +1585,13 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
 
         }
 
+    }
+
+    @Subscribe
+    public void angleEvent(AngelEvent event){
+        if(event.isSuccess()&&event.response()!=null){
+            showAngle(event.response());
+        }
     }
 
     private void fetchRoomMember(){
@@ -1728,9 +1738,9 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
             }
         });
     }
-    public void showAngle(GuardAttachment msg){
+    public void showAngle(GuardBean guardBean){
         mLayoutAngel.setVisibility(View.VISIBLE);
-        ImageUtility.displayImage(mIVAngel,msg.getData().getIcon(),ImageUtility.TYPE_PHOTO_AVATAR);
+        ImageUtility.displayImage(mIVAngel,guardBean.getIcon(),ImageUtility.TYPE_PHOTO_AVATAR);
     }
     public void showGift(ChatRoomMessage msg){
         showGiftAnimation();
@@ -1778,7 +1788,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                 }else if(msg!=null&&msg.getAttachment() instanceof CoinChangeAttachment){
                     updateCoin((CoinChangeAttachment)msg.getAttachment());
                 }else if(msg!=null&&msg.getAttachment() instanceof GuardAttachment){
-                    showAngle((GuardAttachment)msg.getAttachment());
+                    showAngle(((GuardAttachment) msg.getAttachment()).getData());
                 }
             }
 
