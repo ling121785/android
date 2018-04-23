@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.example.businessmodule.bean.GiftAnimationBean;
+import com.example.businessmodule.bean.GiftBean;
 import com.example.businessmodule.bean.GuardBean;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessSession;
@@ -86,6 +87,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,6 +102,7 @@ import butterknife.BindView;
 import butterknife.OnClick;
 import butterknife.OnItemClick;
 import butterknife.OnTextChanged;
+import toolbox.ll.com.common.utility.JsonUtils;
 import toolbox.ll.com.common.utility.StringUtils;
 import toolbox.ll.com.common.utility.ToastUtils;
 import toolbox.ll.com.common.widget.CircleImageView;
@@ -1351,51 +1355,101 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         }
     }
 
-    public void showGiftAnimation(){
-        String url="http://p1nuv99yj.bkt.clouddn.com/web_1523690147596182.png";
-        final GiftAnimationBean giftInfo=new GiftAnimationBean(url,230,1760,1.5);
-        List<GiftAnimationBean.PieceBean> list=new ArrayList<>();
-        list.add(new GiftAnimationBean.PieceBean(230,293,0,0));
-        list.add(new GiftAnimationBean.PieceBean(230,293,293,0));
-        list.add(new GiftAnimationBean.PieceBean(230,293,586,0));
-        list.add(new GiftAnimationBean.PieceBean(230,293,879,0));
-        list.add(new GiftAnimationBean.PieceBean(230,293,1172,0));
-        list.add(new GiftAnimationBean.PieceBean(230,293,1460,0));
-        giftInfo.setList(list);
+    public void showGiftAnimation(int id){
+        GiftBean giftBean=GiftUtil.getGiftBean(id);
+        if(giftBean==null)
+            return;
+        try {
+            final GiftAnimationBean giftInfo= JsonUtils.jsonToObj(giftBean.getAnimate(),GiftAnimationBean.class);
+            if(giftInfo==null)
+                return;
+            //为了下载图片资源，开辟一个新的子线程
+            Thread t=new Thread(){
+                public void run() {
+                    //下载图片的路径
+                    try {
+                        //对资源链接
+                        URL url=new URL(giftInfo.getUrl());
+                        //打开输入流
+                        InputStream inputStream=url.openStream();
+                        //对网上资源进行下载转换位图图片
+                        final  Bitmap bitmap=BitmapFactory.decodeStream(inputStream);
+                        mHandler.post(new Runnable() {
+                            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+                            @Override
+                            public void run() {
+                                AnimationDrawable animationDrawable=GiftUtil.showGiftAnimation(bitmap,giftInfo);
+                                mGiftAnimation.setBackground(animationDrawable);
+                                mGiftAnimation.setVisibility(View.VISIBLE);
+                                animationDrawable.start();
+                                mHandler.postDelayed(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        mGiftAnimation.setVisibility(View.GONE);
+                                    }
+                                },(int)giftInfo.getSeconds()*1000);
+                            }
+                        });
+                        inputStream.close();
 
 
-
-        ImageUtility.loadImage(giftInfo.getUrl(), new ImageLoadingListener() {
-            @Override
-            public void onLoadingStarted(String imageUri, View view) {
-
-            }
-
-            @Override
-            public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-
-            }
-
-            @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-                AnimationDrawable animationDrawable=GiftUtil.showGiftAnimation(loadedImage,giftInfo);
-                mGiftAnimation.setBackground(animationDrawable);
-                mGiftAnimation.setVisibility(View.VISIBLE);
-                animationDrawable.start();
-                mHandler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        mGiftAnimation.setVisibility(View.GONE);
+                    } catch (MalformedURLException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                },(int)giftInfo.getSeconds()*1000);
-            }
+                };
+            };
+            t.start();
+//            ImageUtility.loadMxImage(giftInfo.getUrl(), new ImageLoadingListener() {
+//                @Override
+//                public void onLoadingStarted(String imageUri, View view) {
+//
+//                }
+//
+//                @Override
+//                public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
+//
+//                }
+//
+//                @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+//                @Override
+//                public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+//                    AnimationDrawable animationDrawable=GiftUtil.showGiftAnimation(loadedImage,giftInfo);
+//                    mGiftAnimation.setBackground(animationDrawable);
+//                    mGiftAnimation.setVisibility(View.VISIBLE);
+//                    animationDrawable.start();
+//                    mHandler.postDelayed(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            mGiftAnimation.setVisibility(View.GONE);
+//                        }
+//                    },(int)giftInfo.getSeconds()*1000);
+//                }
+//
+//                @Override
+//                public void onLoadingCancelled(String imageUri, View view) {
+//
+//                }
+//            });
+        }catch (Exception e){
+            Logger.i(e.getMessage());
+        }
 
-            @Override
-            public void onLoadingCancelled(String imageUri, View view) {
+//        String url="http://p1nuv99yj.bkt.clouddn.com/web_1523690147596182.png";
+//        final GiftAnimationBean giftInfo=new GiftAnimationBean(url,230,1760,1.5);
+//        List<GiftAnimationBean.PieceBean> list=new ArrayList<>();
+//        list.add(new GiftAnimationBean.PieceBean(230,293,0,0));
+//        list.add(new GiftAnimationBean.PieceBean(230,293,293,0));
+//        list.add(new GiftAnimationBean.PieceBean(230,293,586,0));
+//        list.add(new GiftAnimationBean.PieceBean(230,293,879,0));
+//        list.add(new GiftAnimationBean.PieceBean(230,293,1172,0));
+//        list.add(new GiftAnimationBean.PieceBean(230,293,1460,0));
+//        giftInfo.setList(list);
 
-            }
-        });
+
+
+
     }
 
     //用于接收Service发送的消息，伴音开关
@@ -1498,6 +1552,12 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
 
     @BindView(R.id.live_layout_angel)
     View mLayoutAngel;
+
+    @BindView(R.id.menu_iv_success)
+     View mViewMenuSuccess;
+
+    @BindView(R.id.menu_iv_back)
+    View mViewMenuBack;
     List<LiveMenuBean> mMenuList;
 
 
@@ -1641,12 +1701,14 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         if(item.hasChildren()){
             mLiveMenuAdapter.setDatas(item.getChildren());
             mLiveMenuAdapter.notifyDataSetChanged();
+            mViewMenuBack.setVisibility(View.VISIBLE);
+            mViewMenuSuccess.setVisibility(View.VISIBLE);
             return;
         }
         switch (item.getId()){
             case "effect":
                 mLSMediaCapture.setFilterType((VideoEffect.FilterType)item.getExtension());
-                break;
+                return;
             case "cinemaTurn":
                 item.setExtension(!(boolean)item.getExtension());
                 mLiveMenuAdapter.notifyDataSetChanged();
@@ -1681,14 +1743,17 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
 
     }
 
+    @OnClick({R.id.menu_beauty_cancel,R.id.menu_beauty_success})
     public void toggleBeautyMenu(){
         mLayoutBeauty.setVisibility(mLayoutBeauty.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
     }
-    @OnClick(R.id.live_iv_gift)
+    @OnClick({R.id.live_iv_gift,R.id.menu_iv_success,R.id.menu_iv_back})
     public void toggleMenu(){
         mLayoutMenu.setVisibility(mLayoutMenu.getVisibility()==View.VISIBLE?View.GONE:View.VISIBLE);
         mLiveMenuAdapter.setDatas(mMenuList);
         mLiveMenuAdapter.notifyDataSetChanged();
+        mViewMenuBack.setVisibility(View.INVISIBLE);
+        mViewMenuSuccess.setVisibility(View.INVISIBLE);
     }
 
     @OnClick(R.id.live_tv_send)
@@ -1743,7 +1808,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         ImageUtility.displayImage(mIVAngel,guardBean.getIcon(),ImageUtility.TYPE_PHOTO_AVATAR);
     }
     public void showGift(ChatRoomMessage msg){
-        showGiftAnimation();
+        showGiftAnimation(((GiftAttachment)msg.getAttachment()).getData().getId());
         mGiftAdapter.add(msg);
         mLVGift.post(new Runnable() {
             @Override

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.TextView;
 
 import com.example.businessmodule.bean.InComeBean;
+import com.example.businessmodule.bean.LiveBean;
 import com.example.businessmodule.core.BusinessInterface;
 import com.example.businessmodule.core.BusinessSession;
 import com.example.businessmodule.event.user.IncomeListEvent;
@@ -31,6 +32,7 @@ import toolbox.ll.com.pulltorefresh.pulltorefresh.PullToRefreshBase;
 import toolbox.ll.com.pulltorefresh.pulltorefresh.PullToRefreshRecyclerView;
 import toolbox.ll.com.toolbox.R;
 import toolbox.ll.com.toolbox.ui.base.BaseTitleActivity;
+import toolbox.ll.com.toolbox.ui.base.adapters.BaseRListAdapter;
 import toolbox.ll.com.toolbox.utils.DialogUtil;
 
 public class MyLiveActivity extends BaseTitleActivity implements  PullToRefreshBase.OnRefreshListener2<RecyclerView>{
@@ -86,7 +88,14 @@ public class MyLiveActivity extends BaseTitleActivity implements  PullToRefreshB
         setTitle("我的直播");
         mRViewList.setMode(PullToRefreshBase.Mode.BOTH);
         mRViewList.setOnRefreshListener(this);
-       mAdapter=new MyLiveAdapter(this,null);
+       mAdapter=new MyLiveAdapter(this,null,new BaseRListAdapter.OnItemClickListener<LiveBean>(){
+
+           @Override
+           public void onItemListener(int positon, LiveBean data) {
+               data.setCheck(!data.isCheck());
+               mAdapter.notifyDataSetChanged();
+           }
+       });
 
         mRViewList.getRefreshableView().setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
         //添加自定义分割线

@@ -29,24 +29,14 @@
         style="@style/base_padding"
         android:orientation="vertical"
         >
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
         <ImageView
             android:id="@+id/startLive_iv_cover"
             android:layout_width="@dimen/startLive_covor_size"
             android:layout_height="@dimen/startLive_covor_size"
-            android:background="@drawable/dashad_border_white"
+            android:background="@drawable/img_upload"
             android:layout_marginTop="@dimen/margin_small"
             />
-            <TextView
-                android:id="@+id/startLive_tv_cover"
-                android:layout_width="@dimen/startLive_covor_size"
-                android:layout_height="@dimen/startLive_covor_size"
-                android:text="@string/startLive_room_covor_hint"
-                android:textColor="@color/white"
-                android:gravity="center"/>
-        </RelativeLayout>
+
 
         <EditText
             android:id="@+id/startLive_et_roomName"

@@ -143,6 +143,18 @@ public class ImageUtility {
                 .tasksProcessingOrder(QueueProcessingType.LIFO)
                 .build();
         ImageLoader.getLocalThrumbInstance().init(loacalThrumbConfig);
+        ImageLoaderConfiguration maxLoaderConfig=new ImageLoaderConfiguration.Builder((context))
+                .threadPriority(Thread.NORM_PRIORITY - 2)
+                .denyCacheImageMultipleSizesInMemory()
+                .diskCacheFileNameGenerator(new Md5FileNameGenerator())
+                .memoryCacheExtraOptions(10000, 10000) // default = device screen dimensions:设备的屏幕尺寸
+                .memoryCacheSizePercentage(10)
+                .tasksProcessingOrder(QueueProcessingType.LIFO)
+                .diskCacheExtraOptions(10000, 10000, null)
+                .diskCacheSize(50 * 1024 * 1024)//SDCARD缓存:50M
+                .build();
+        ImageLoader.getMaxInstance().init(maxLoaderConfig);
+
         L.writeLogs(true);
     }
 
@@ -251,6 +263,9 @@ public class ImageUtility {
 
     public static void loadImage(String url, ImageLoadingListener listener){
         ImageLoader.getInstance().loadImage(url,listener);
+    }
+    public static void loadMxImage(String url, ImageLoadingListener listener){
+        ImageLoader.getMaxInstance().loadImage(url,listener);
     }
 
     public static String getUrl(String url) {

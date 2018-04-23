@@ -24,6 +24,7 @@ import toolbox.ll.com.toolbox.R;
 import toolbox.ll.com.toolbox.core.inject.BarrageAttachment;
 import toolbox.ll.com.toolbox.core.inject.GiftAttachment;
 import toolbox.ll.com.toolbox.ui.base.adapters.BaseListAdapter;
+import toolbox.ll.com.toolbox.utils.GiftUtil;
 import toolbox.ll.com.toolbox.utils.ImageUtility;
 
 /**
@@ -59,7 +60,7 @@ public class GiftListAdapter extends BaseListAdapter<ChatRoomMessage,GiftListAda
     public void bindDataToViewHolder(GiftListAdapter.ViewHolder viewHolder, ChatRoomMessage data) {
         if(data.getAttachment()instanceof GiftAttachment){
             GiftAttachment attachment=(GiftAttachment)data.getAttachment();
-            GiftBean gift=getGiftBean(attachment.getData().getId());
+            GiftBean gift= GiftUtil.getGiftBean(attachment.getData().getId());
 
             String nick=StringUtils.getString(data.getFromNick(), data.getChatRoomMessageExtension()!=null?data.getChatRoomMessageExtension().getSenderNick():null,data.getFromAccount());
 
@@ -74,16 +75,6 @@ public class GiftListAdapter extends BaseListAdapter<ChatRoomMessage,GiftListAda
             ImageUtility.displayImage(viewHolder.mIVGift,gift==null?"":gift.getIcon(),ImageUtility.TYPE_GIFT);
             ImageUtility.displayImage(viewHolder.mIVAvatar,data.getChatRoomMessageExtension()==null?"":data.getChatRoomMessageExtension().getSenderAvatar(),ImageUtility.TYPE_PHOTO_AVATAR);
         }
-    }
-    private GiftBean getGiftBean(int id){
-        List<GiftBean> list= BusinessSession.getInstance().getmGiftList();
-        if(list==null)
-            return null;
-        for(int i=0;i<list.size();i++){
-            if(list.get(i).getId()==id)
-                return list.get(i);
-        }
-        return null;
     }
 
     public class ViewHolder extends BaseListAdapter.ViewHolder{

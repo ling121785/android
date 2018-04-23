@@ -124,7 +124,7 @@ public class StartLiveActivity extends BaseActivity {
         }
     }
 
-    @OnClick(R.id.startLive_tv_cover)
+    @OnClick(R.id.startLive_iv_cover)
     public void choseImg(){
         startChooseImg();
     }

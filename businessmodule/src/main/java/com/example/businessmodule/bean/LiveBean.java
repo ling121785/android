@@ -28,8 +28,17 @@ public class LiveBean {
     @SerializedName("start_time")
     private long startTime;
 
+    @SerializedName("end_time")
+    private long endTime;
+
     @SerializedName("watch_num")
     private int watchNum;
+
+    @SerializedName("like_number")
+    private int likeNum;
+
+    @SerializedName("fans_numbe")
+    private int fansNum;
 
     @SerializedName("total_watch_num")
     private String totalWatchNum;
@@ -39,6 +48,8 @@ public class LiveBean {
 
     @SerializedName("is_private")
     private boolean isPrivate;
+
+    private  transient  boolean isCheck=false;
 
     public String getName() {
         return name;
@@ -126,5 +137,37 @@ public class LiveBean {
 
     public void setPrivate(boolean aPrivate) {
         isPrivate = aPrivate;
+    }
+
+    public boolean isCheck() {
+        return isCheck;
+    }
+
+    public void setCheck(boolean check) {
+        isCheck = check;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(long endTime) {
+        this.endTime = endTime;
+    }
+
+    public int getLikeNum() {
+        return likeNum;
+    }
+
+    public void setLikeNum(int likeNum) {
+        this.likeNum = likeNum;
+    }
+
+    public int getFansNum() {
+        return fansNum;
+    }
+
+    public void setFansNum(int fansNum) {
+        this.fansNum = fansNum;
     }
 }

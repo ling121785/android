@@ -10,6 +10,7 @@ public class GiftBean {
     private String name;
     private String coin;
     private String  description;
+    private String animate;
 
     public int getId() {
         return id;
@@ -49,5 +50,13 @@ public class GiftBean {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getAnimate() {
+        return animate;
+    }
+
+    public void setAnimate(String animate) {
+        this.animate = animate;
     }
 }

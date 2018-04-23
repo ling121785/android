@@ -57,7 +57,8 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:layout_above="@id/live_btn_layout"
-        android:src="@drawable/change"/>
+        android:src="@drawable/change"
+        android:visibility="gone"/>
 
 
     <TextView

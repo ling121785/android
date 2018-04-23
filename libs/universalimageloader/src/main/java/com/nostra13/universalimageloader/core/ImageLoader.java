@@ -66,6 +66,7 @@ public class ImageLoader {
 
 	private volatile static ImageLoader instance;
 	private volatile static ImageLoader localThrumbInstance;
+	private volatile static  ImageLoader maxInstance;
 
 	/** Returns singleton class instance */
 	public static ImageLoader getInstance() {
@@ -90,6 +91,17 @@ public class ImageLoader {
 		}
 		return localThrumbInstance;
 	}
+	public static ImageLoader getMaxInstance(){
+		if (maxInstance == null) {
+			synchronized (ImageLoader.class) {
+				if (maxInstance == null) {
+					maxInstance = new ImageLoader();
+				}
+			}
+		}
+		return maxInstance;
+	}
+
 
 	protected ImageLoader() {
 	}

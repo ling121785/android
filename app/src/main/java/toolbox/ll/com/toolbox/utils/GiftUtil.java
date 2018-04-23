@@ -6,6 +6,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.example.businessmodule.bean.GiftAnimationBean;
+import com.example.businessmodule.bean.GiftBean;
+import com.example.businessmodule.core.BusinessSession;
+import com.orhanobut.logger.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,13 +24,13 @@ public class GiftUtil {
         List<Drawable> pieces = new ArrayList<Drawable>();
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
-        int pieceWidth = width / 3;
-        int pieceHeight = height / 3;
         for (int i = 0; i < bean.getList().size(); i++) {
             GiftAnimationBean.PieceBean pieceInfo=bean.getList().get(i);
             if(pieceInfo==null)
                 continue;
-            Bitmap item = Bitmap.createBitmap(bitmap, pieceInfo.getX(), pieceInfo.getY(),
+            int x=pieceInfo.getX()>0?pieceInfo.getX():-pieceInfo.getX();
+            int y= pieceInfo.getY()>0? pieceInfo.getY():- pieceInfo.getY();
+            Bitmap item = Bitmap.createBitmap(bitmap, x, y,
                     pieceInfo.getWidth(), pieceInfo.getHeight());
                 pieces.add(new BitmapDrawable(item));
         }
@@ -45,5 +48,15 @@ public class GiftUtil {
         }
         return anination;
 
+    }
+    public static GiftBean getGiftBean(int id){
+        List<GiftBean> list= BusinessSession.getInstance().getmGiftList();
+        if(list==null)
+            return null;
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).getId()==id)
+                return list.get(i);
+        }
+        return null;
     }
 }
