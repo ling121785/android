@@ -142,7 +142,7 @@
             android:textColor="@color/white"
             android:text="开播"/>
         <EditText
-            android:id="@+id/live_et_input"
+
             android:layout_width="wrap_content"
             android:layout_height="34dp"
             android:background="@drawable/bg_gray_default"
@@ -152,7 +152,8 @@
             android:textColor="@color/white"
             android:paddingLeft="@dimen/margin"
             android:textSize="@dimen/font_size_small"
-            android:layout_marginRight="@dimen/margin_smaller"/>
+            android:layout_marginRight="@dimen/margin_smaller"
+            android:visibility="invisible"/>
         <!--<ImageView-->
             <!--android:id="@+id/live_iv_redPacket"-->
             <!--android:layout_width="40dp"-->
@@ -161,7 +162,7 @@
             <!--android:layout_marginLeft="@dimen/margin_smaller"-->
             <!--android:src="@drawable/ic_red_packet"/>-->
         <ImageView
-            android:id="@+id/live_tv_send"
+            android:id="@+id/live_tv_toggle_msg"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_marginRight="@dimen/margin_smaller"

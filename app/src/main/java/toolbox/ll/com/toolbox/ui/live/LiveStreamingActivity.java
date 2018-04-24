@@ -26,6 +26,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -1380,6 +1381,8 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                             public void run() {
                                 AnimationDrawable animationDrawable=GiftUtil.showGiftAnimation(bitmap,giftInfo);
                                 mGiftAnimation.setBackground(animationDrawable);
+                                mGiftAnimation.setMinimumHeight(animationDrawable.getIntrinsicHeight()*3);
+                                mGiftAnimation.setMinimumWidth(animationDrawable.getIntrinsicWidth()*3);
                                 mGiftAnimation.setVisibility(View.VISIBLE);
                                 animationDrawable.start();
                                 mHandler.postDelayed(new Runnable() {
@@ -1558,6 +1561,9 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
 
     @BindView(R.id.menu_iv_back)
     View mViewMenuBack;
+
+    @BindView(R.id.layout_input)
+     View mLayoutInput;
     List<LiveMenuBean> mMenuList;
 
 
@@ -1649,7 +1655,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
 
     @Subscribe
     public void angleEvent(AngelEvent event){
-        if(event.isSuccess()&&event.response()!=null){
+        if(event.isSuccess()&&event.response()!=null&&!StringUtils.isEmpty(event.response().getNickName())){
             showAngle(event.response());
         }
     }
@@ -1756,12 +1762,33 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         mViewMenuSuccess.setVisibility(View.INVISIBLE);
     }
 
+    @OnClick(R.id.live_tv_toggle_msg)
+    public void toggleSendMsg(){
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if(mLayoutInput.getVisibility()==View.VISIBLE){
+            mLayoutInput.setVisibility(View.GONE);
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(getWindow().getDecorView().getWindowToken(), 0);
+            }
+
+        }else{
+            mLayoutInput.setVisibility(View.VISIBLE);
+            mETInput.requestFocus();
+            if (imm != null) {
+                imm.showSoftInput(mETInput, 0);
+            }
+
+        }
+
+    }
+
     @OnClick(R.id.live_tv_send)
     public void sendMsg(){
 
         final String msg=mETInput.getText().toString();
         if(StringUtils.isEmpty(msg))
             return;
+
         mETInput.setText("");
 // 创建聊天室文本消息
         final ChatRoomMessage message = ChatRoomMessageBuilder.createChatRoomCustomMessage(mLSBean.getRoomId(),
@@ -1774,6 +1801,8 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                         // 成功
                         message.setFromAccount(mUserInfo.getName());
                         showBrrage(message);
+                        toggleSendMsg();
+
                     }
 
                     @Override

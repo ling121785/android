@@ -21,6 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/button_radius_small"
             android:text="不限"
            />
         <Button
@@ -28,18 +29,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/button_radius_small"
             android:text="本月"/>
         <Button
             android:id="@+id/dialog_btn_lastMonth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/button_radius_small"
             android:text="上月"/>
         <Button
             android:id="@+id/dialog_btn_curYear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@drawable/button_radius_small"
             android:text="今年"/>
 
     </LinearLayout>

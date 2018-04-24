@@ -58,6 +58,18 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
     @BindView(R.id.dialog_dataPicker)
     DatePicker mDatePicker;
 
+    @BindView(R.id.dialog_btn_none)
+    View mBtnNone;
+
+    @BindView(R.id.dialog_btn_curMonth)
+    View mBtnCurMonth;
+
+    @BindView(R.id.dialog_btn_lastMonth)
+    View mBtnLastMonth;
+
+    @BindView(R.id.dialog_btn_curYear)
+    View mBtnLastYear;
+
     private  long mCurEditID;
 
     private Calendar calendar=Calendar.getInstance();
@@ -172,31 +184,40 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
     @SuppressLint("WrongConstant")
     @OnClick({R.id.dialog_btn_none,R.id.dialog_btn_curMonth,R.id.dialog_btn_lastMonth,R.id.dialog_btn_curYear})
     public void chooseTimeClick(View view){
+        mBtnCurMonth.setSelected(false);
+        mBtnLastMonth.setSelected(false);
+        mBtnLastYear.setSelected(false);
+        mBtnNone.setSelected(false);
         Calendar calendar=Calendar.getInstance();
         calendar.setTime(new Date());
+        calendar.add(Calendar.DAY_OF_MONTH,1);
         calendar.set(Calendar.HOUR_OF_DAY,0);
         calendar.set(Calendar.MINUTE,0);
         calendar.set(Calendar.SECOND,0);
         calendar.set(Calendar.MILLISECOND,0);
-        this.endTime=calendar.getTimeInMillis();
+        this.endTime=calendar.getTimeInMillis()-1;
         switch (view.getId()){
             case R.id.dialog_btn_none:
                 calendar.add(Calendar.DAY_OF_MONTH,-7);
                 this.startTime=calendar.getTimeInMillis();
+                mBtnNone.setSelected(true);
                 break;
             case R.id.dialog_btn_curMonth:
-                calendar.add(Calendar.MONTH,-1);
+                calendar.set(Calendar.DAY_OF_MONTH,1);
                 this.startTime=calendar.getTimeInMillis();
+                mBtnCurMonth.setSelected(true);
                 break;
             case R.id.dialog_btn_lastMonth:
-                calendar.add(Calendar.MONTH,-1);
-                this.endTime=calendar.getTimeInMillis();
+                calendar.set(Calendar.DAY_OF_MONTH,1);
+                this.endTime=calendar.getTimeInMillis()-1;
                 calendar.add(Calendar.MONTH,-1);
                 this.startTime=calendar.getTimeInMillis();
+                mBtnLastMonth.setSelected(true);
                 break;
             case R.id.dialog_btn_curYear:
-                calendar.add(Calendar.YEAR,-1);
+                calendar.set(Calendar.DAY_OF_YEAR,1);
                 this.startTime=calendar.getTimeInMillis();
+                mBtnLastYear.setSelected(true);
                 break;
         }
         mETStartTime.setText(DateUtils.cutYearAndMonthAndDay(this.startTime));
@@ -219,6 +240,10 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
         calendar.set(Calendar.YEAR,year);
         calendar.set(Calendar.MONTH,month);
         calendar.set(Calendar.DAY_OF_MONTH,day);
+        mBtnCurMonth.setSelected(false);
+        mBtnLastMonth.setSelected(false);
+        mBtnLastYear.setSelected(false);
+        mBtnNone.setSelected(false);
         if(this.mCurEditID==R.id.dialog_et_startTime){
             this.startTime=calendar.getTimeInMillis();
             mETStartTime.setText(DateUtils.cutYearAndMonthAndDay(this.startTime));

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/live_layout_menu_beauty"
+    android:visibility="visible"
+     >
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="47dp"
+       android:background="#F6F5F8"
+       android:layout_alignParentBottom="true"
+       android:gravity="center_vertical"
+       >
+       <EditText
+           android:id="@+id/live_et_input"
+           android:layout_width="0dp"
+           android:layout_height="match_parent"
+           android:background="@color/white"
+           android:layout_marginTop="@dimen/margin_small"
+           android:layout_marginBottom="@dimen/margin_small"
+           android:layout_weight="1"
+           android:layout_marginLeft="@dimen/margin_larger"
+           />
+       <TextView
+           android:id="@+id/live_tv_send"
+           android:layout_width="wrap_content"
+           android:layout_height="match_parent"
+           android:textColor="@color/colorPrimarySub"
+           android:paddingLeft="@dimen/margin"
+           android:paddingRight="@dimen/margin"
+           android:textSize="@dimen/font_size_large"
+           android:gravity="center"
+           android:text="发送"/>
+
+   </LinearLayout>
+
+
+</RelativeLayout>

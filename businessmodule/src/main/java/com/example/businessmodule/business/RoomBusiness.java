@@ -85,7 +85,7 @@ public class RoomBusiness extends BaseBusiness{
     }
 
     private void createRoomWithFile(final CreateRoomEvent event){
-        if(event.request().getmFile()==null) {
+        if(event.request().getmFile()==null||event.request().getPoster()!=null) {
             createRoom(event);
         }else{
             QiniuInfoEvent.Rest rest=getRetrofit().create(QiniuInfoEvent.Rest.class);
@@ -108,12 +108,13 @@ public class RoomBusiness extends BaseBusiness{
                         }
 
                         @Override
-                        public void onNext(QiniuBean qiniuBean) {
+                        public void onNext(final QiniuBean qiniuBean) {
                             UpCompletionHandler upCompletionHandler=new UpCompletionHandler() {
                                 @Override
                                 public void complete(String key, ResponseInfo info, JSONObject response) {
                                     if(info!=null&&info.isOK()){
-                                        createRoom(event);
+                                        event.request().setPoster(qiniuBean.getUrl()+key);
+                                        BusinessInterface.getInstance().request(event);
                                     }
 
                                 }
