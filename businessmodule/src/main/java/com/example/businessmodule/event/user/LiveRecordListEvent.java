@@ -71,6 +71,6 @@ public class LiveRecordListEvent extends BaseEvent<LiveRecordListEvent.Request,B
 
     public interface Rest {
         @GET("live/statistics/log")
-        Observable<BaseListResponse<LiveBean>> request(@Query("access_token") String token, @Query("page") int page,@Query("start_time") long startTime,@Query("end_time") long endTime);
+        Observable<BaseListResponse<LiveBean>> request(@Query("access_token") String token, @Query("page") int page,@Query("start_time") Long startTime,@Query("end_time") long endTime);
     }
 }

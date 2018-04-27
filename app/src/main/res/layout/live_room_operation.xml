@@ -22,7 +22,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/flashstart"
-            android:layout_centerInParent="true"/>
+            android:layout_centerInParent="true"
+            android:visibility="invisible"/>
 
         <ImageView
             android:id="@+id/live_speed_test"

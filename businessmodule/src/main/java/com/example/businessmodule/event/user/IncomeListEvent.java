@@ -45,6 +45,6 @@ public class IncomeListEvent extends BaseEvent<IncomeListEvent.Request,BaseListR
 
     public interface Rest {
         @GET("account/income")
-        Observable<BaseListResponse<InComeBean>> request(@Query("access_token") String token, @Query("page") int page,@Query("start_time") long startTime, @Query("end_time") long endTime);
+        Observable<BaseListResponse<InComeBean>> request(@Query("access_token") String token, @Query("page") int page,@Query("start_time") Long startTime, @Query("end_time") long endTime);
     }
 }

@@ -29,11 +29,24 @@ public class MyFanContributionsActivity extends BaseTitleActivity {
     TabLayout mTableLayout;
     @BindView(R.id.viewPager)
     ViewPager mViewPage;
+
+    private boolean isLive=false;
+    private long liveStartTime;
+
+    @Override
+    public void beforeInit(Bundle savedInstanceState) {
+        super.beforeInit(savedInstanceState);
+        isLive=getIntent().getBooleanExtra("isLive",false);
+        liveStartTime=getIntent().getLongExtra("liveStartTime",0);
+
+    }
+
     @Override
     public void initView() {
         super.initView();
         addContent(R.layout.activity_my_fan_contributions);
     }
+
     @SuppressLint("WrongConstant")
     @Override
     public void afterInit(Bundle savedInstanceState) {
@@ -50,20 +63,27 @@ public class MyFanContributionsActivity extends BaseTitleActivity {
         long endTime=calendar.getTimeInMillis()-1;
         calendar.add(Calendar.DAY_OF_MONTH,-1);
         long startTime=calendar.getTimeInMillis();
+        if(isLive){
+            startTime=this.liveStartTime;
+            endTime=new Date().getTime();
+        }
         mFragments.add(new MyFanContributionsFragment().setTime(EventId.FANS_CONR_DAY,startTime,endTime));
-        calendar.set(Calendar.DAY_OF_MONTH,1);
-        startTime=calendar.getTimeInMillis();
-        mFragments.add(new MyFanContributionsFragment().setTime(EventId.FANS_CONR_MONTH,startTime,endTime));
         calendar.setTimeInMillis(endTime);
         calendar.set(Calendar.DAY_OF_WEEK,Calendar.SUNDAY);
         startTime=calendar.getTimeInMillis();
         mFragments.add(new MyFanContributionsFragment().setTime(EventId.FANS_CONR_WEEK,startTime,endTime));
+        calendar.set(Calendar.DAY_OF_MONTH,1);
+        startTime=calendar.getTimeInMillis();
+        mFragments.add(new MyFanContributionsFragment().setTime(EventId.FANS_CONR_MONTH,startTime,endTime));
         calendar.setTimeInMillis(endTime);
         calendar.set(Calendar.DAY_OF_YEAR,1);
         startTime=calendar.getTimeInMillis();
         mFragments.add(new MyFanContributionsFragment().setTime(EventId.FANS_CONR_YEAR,startTime,endTime));
 
-        String[] mTabTitles={"日版","月版","周版","总榜"};
+        String[] mTabTitles={"日版","周版","月版","总榜"};
+        if(isLive){
+           mTabTitles= new String[]{"本次", "周版", "月版", "总榜"};
+        }
         mViewPage.setAdapter(new SimpleFragmentAdapter(this.getSupportFragmentManager(),mFragments,mTabTitles));
         mViewPage.setOffscreenPageLimit(mFragments.size());
         mTableLayout.setupWithViewPager(mViewPage);

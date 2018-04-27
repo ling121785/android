@@ -93,11 +93,11 @@ public class MyIncomeActivity extends BaseTitleActivity implements  PullToRefres
         calendar.set(Calendar.SECOND,0);
         calendar.set(Calendar.MILLISECOND,0);
         calendar.add(Calendar.DAY_OF_MONTH,-7);
-        this.startTime=calendar.getTimeInMillis();
+        this.startTime=-1;
         calendar.add(Calendar.DAY_OF_MONTH,8);
         calendar.add(Calendar.SECOND,-1);
         this.endTime=calendar.getTimeInMillis();
-        mTVTime.setText(DateUtils.cutYearAndMonthAndDay(startTime)+"至"+DateUtils.cutYearAndMonthAndDay(endTime));
+        mTVTime.setText("截止至"+DateUtils.cutYearAndMonthAndDay(endTime));
     }
 
     @OnClick(R.id.income_ib_timeFiler)
@@ -108,7 +108,12 @@ public class MyIncomeActivity extends BaseTitleActivity implements  PullToRefres
             public void comfirm(Object... obj) {
                 startTime=(long)obj[0];
                 endTime=(long)obj[1];
-                mTVTime.setText(DateUtils.cutYearAndMonthAndDay(startTime)+"至"+DateUtils.cutYearAndMonthAndDay(endTime));
+                if(startTime==-1){
+                    mTVTime.setText("截止至"+DateUtils.cutYearAndMonthAndDay(endTime));
+                }else{
+                    mTVTime.setText(DateUtils.cutYearAndMonthAndDay(startTime)+"至"+DateUtils.cutYearAndMonthAndDay(endTime));
+                }
+
                 request(0);
             }
 

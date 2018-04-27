@@ -70,6 +70,9 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
     @BindView(R.id.dialog_btn_curYear)
     View mBtnLastYear;
 
+    @BindView(R.id.dialog_tv_during)
+    TextView mTVDuring;
+
     private  long mCurEditID;
 
     private Calendar calendar=Calendar.getInstance();
@@ -135,8 +138,7 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
             this.endTime=calendar.getTimeInMillis();
         }
 
-        mETStartTime.setText(DateUtils.cutYearAndMonthAndDay(this.startTime));
-        mETEndTime.setText(DateUtils.cutYearAndMonthAndDay(this.endTime));
+        updateTime();
         resizeNumberPicker(mDatePicker);
         mDatePicker.init(date.getYear(),date.getMonth(),date.getDay(), this);
     }
@@ -156,7 +158,22 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
             }
         }
     }
-
+    private void updateTime(){
+        if(this.startTime==-1){;
+            mETStartTime.setVisibility(View.GONE);
+            mTVDuring.setText("截止至");
+            mETEndTime.setText(DateUtils.cutYearAndMonthAndDay(this.endTime));
+            mBtnCurMonth.setSelected(false);
+            mBtnLastMonth.setSelected(false);
+            mBtnLastYear.setSelected(false);
+            mBtnNone.setSelected(true);
+        }else{
+            mETStartTime.setVisibility(View.VISIBLE);
+            mETStartTime.setText(DateUtils.cutYearAndMonthAndDay(this.startTime));
+            mETEndTime.setText(DateUtils.cutYearAndMonthAndDay(this.endTime));
+            mTVDuring.setText("至");
+        }
+    }
 
     @SuppressLint("WrongConstant")
     @OnClick({R.id.dialog_et_startTime,R.id.dialog_et_endTime})
@@ -199,7 +216,7 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
         switch (view.getId()){
             case R.id.dialog_btn_none:
                 calendar.add(Calendar.DAY_OF_MONTH,-7);
-                this.startTime=calendar.getTimeInMillis();
+                this.startTime=-1;
                 mBtnNone.setSelected(true);
                 break;
             case R.id.dialog_btn_curMonth:
@@ -220,8 +237,8 @@ public class ChooseTimeDialog extends Dialog implements  DatePicker.OnDateChange
                 mBtnLastYear.setSelected(true);
                 break;
         }
-        mETStartTime.setText(DateUtils.cutYearAndMonthAndDay(this.startTime));
-        mETEndTime.setText(DateUtils.cutYearAndMonthAndDay(this.endTime));
+       updateTime();
+
 
     }
 

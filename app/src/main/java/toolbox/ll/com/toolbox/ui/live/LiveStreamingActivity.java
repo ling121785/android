@@ -91,6 +91,7 @@ import java.io.OutputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static com.netease.LSMediaCapture.lsMediaCapture.StreamType.AUDIO;
@@ -115,6 +116,7 @@ import toolbox.ll.com.toolbox.core.inject.CoinChangeAttachment;
 import toolbox.ll.com.toolbox.core.inject.GiftAttachment;
 import toolbox.ll.com.toolbox.core.inject.GuardAttachment;
 import toolbox.ll.com.toolbox.ui.base.BaseActivity;
+import toolbox.ll.com.toolbox.ui.user.MyFanContributionsActivity;
 import toolbox.ll.com.toolbox.ui.widget.MixAudioDialog;
 import toolbox.ll.com.toolbox.ui.widget.NetWorkInfoDialog;
 import toolbox.ll.com.toolbox.utils.DialogUtil;
@@ -1306,11 +1308,22 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                     startPauseResumeBtn.setText("暂停");
                     mLayoutStop.setVisibility(View.GONE);
                 }else {
-                    showToast("停止直播中，请稍等。。。");
-                    stopAV();
-                    startPauseResumeBtn.setText("继续");
-                    mLayoutStop.setVisibility(View.VISIBLE);
-                    mBtnRestart.setClickable(true);
+                    DialogUtil.showComfimDialog(LiveStreamingActivity.this, "温馨提示", "是否暂停直播", new DialogUtil.DialogClickListener() {
+                        @Override
+                        public void comfirm(Object... obj) {
+                            showToast("停止直播中，请稍等。。。");
+                            stopAV();
+                            startPauseResumeBtn.setText("继续");
+                            mLayoutStop.setVisibility(View.VISIBLE);
+                            mBtnRestart.setClickable(true);
+                        }
+
+                        @Override
+                        public void cancel() {
+
+                        }
+                    });
+
                 }
     }
 
@@ -1351,6 +1364,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     public void startLiveResponse(StartLiveEvent event){
         if(event.isSuccess()){
             ToastUtils.showToast(this,"开始直播~");
+            this.startTime=new Date().getTime();
             return;
 
         }
@@ -1573,6 +1587,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
     private GiftListAdapter mGiftAdapter=new GiftListAdapter(this,null);
     private LiveMenuAdapter mLiveMenuAdapter=new LiveMenuAdapter(this,null);
     private RoomMemberAdapter mRoomMemberAdapter=new RoomMemberAdapter(this,null);
+    private long startTime=-1;
 
 
     @Override
@@ -1593,17 +1608,17 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         mMenuList=new ArrayList<>();
         mMenuList.add(new LiveMenuBean("cinemaTurn","翻转镜头",R.drawable.live_menu_overturn,null,true));
         mMenuList.add(new LiveMenuBean("mirror","开启镜像",R.drawable.live_menu_mirror,null,true));
-        mMenuList.add(new LiveMenuBean("screenshot","截图",R.drawable.ic_special_effect));
+//        mMenuList.add(new LiveMenuBean("screenshot","截图",R.drawable.ic_special_effect));
         mMenuList.add(new LiveMenuBean("beauty","美顔",R.drawable.live_menu_beauty,null,true));
         List<LiveMenuBean> mEffectList=new ArrayList<>();
         mEffectList.add(new LiveMenuBean("effect","怀旧",R.drawable.ic_effect_brooklyn,null,VideoEffect.FilterType.brooklyn));
         mEffectList.add(new LiveMenuBean("effect","干净",R.drawable.ic_effect_clean,null,VideoEffect.FilterType.calm));
         mEffectList.add(new LiveMenuBean("effect","自然",R.drawable.ic_effect_nature,null,VideoEffect.FilterType.nature));
         mEffectList.add(new LiveMenuBean("effect","健康",R.drawable.ic_effect_health,null,VideoEffect.FilterType.healthy));
-        mEffectList.add(new LiveMenuBean("effect","复古",R.drawable.ic_effect_pixar,null,VideoEffect.FilterType.pixar));
-        mEffectList.add(new LiveMenuBean("effect","温柔",R.drawable.ic_effect_tender,null,VideoEffect.FilterType.tender));
-        mEffectList.add(new LiveMenuBean("effect","美白",R.drawable.ic_effect_white,null,VideoEffect.FilterType.whiten));
-        mEffectList.add(new LiveMenuBean("effect","无",R.drawable.ic_effect_none,null,VideoEffect.FilterType.none));
+//        mEffectList.add(new LiveMenuBean("effect","复古",R.drawable.ic_effect_pixar,null,VideoEffect.FilterType.pixar));
+//        mEffectList.add(new LiveMenuBean("effect","温柔",R.drawable.ic_effect_tender,null,VideoEffect.FilterType.tender));
+//        mEffectList.add(new LiveMenuBean("effect","美白",R.drawable.ic_effect_white,null,VideoEffect.FilterType.whiten));
+//        mEffectList.add(new LiveMenuBean("effect","无",R.drawable.ic_effect_none,null,VideoEffect.FilterType.none));
         mMenuList.add(new LiveMenuBean("specialEffect","特效",R.drawable.ic_special_effect,mEffectList,true));
         mLiveMenuAdapter.setDatas(mMenuList);
         mGVMenu.setAdapter(mLiveMenuAdapter);
@@ -1746,6 +1761,18 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
                 break;
         }
         toggleMenu();
+
+    }
+
+    @OnClick(R.id.live_tv_coin)
+    public void fansContributions(){
+        if(this.startTime==-1){
+            ToastUtils.showToast(this,"还未开始直播哦~");
+            return;
+        }
+        Intent intent=new Intent(this, MyFanContributionsActivity.class);
+        intent.putExtra("isLive",true);
+        intent.putExtra("liveStartTime",this.startTime);
 
     }
 

@@ -74,7 +74,8 @@ public class UserBusiness extends BaseBusiness{
             responseError(ResultCode.AUTH_FAIL,"未登录");
             return;
         }
-        startRest(rest.request(accountBean.getUuid(),event.request().getPage(),event.request().getStartTime(),event.request().getEndTime()),new RestCallback<BaseListResponse<LiveBean>>(){
+        Long startTime=event.request().getStartTime()<0?null:event.request().getStartTime();
+        startRest(rest.request(accountBean.getUuid(),event.request().getPage(),startTime,event.request().getEndTime()),new RestCallback<BaseListResponse<LiveBean>>(){
             @Override
             public boolean onResponse(BaseListResponse<LiveBean> response) {
                 return true;
@@ -94,7 +95,8 @@ public class UserBusiness extends BaseBusiness{
             responseError(ResultCode.AUTH_FAIL,"未登录");
             return;
         }
-        startRest(rest.request(accountBean.getUuid(),event.request().getPage(),event.request().getStartTime(),event.request().getEndTime()),new RestCallback<LiveStatisticsBean>(){
+        Long startTime=event.request().getStartTime()<0?null:event.request().getStartTime();
+        startRest(rest.request(accountBean.getUuid(),event.request().getPage(),startTime,event.request().getEndTime()),new RestCallback<LiveStatisticsBean>(){
             @Override
             public boolean onResponse(LiveStatisticsBean response) {
                 return true;
@@ -114,7 +116,8 @@ public class UserBusiness extends BaseBusiness{
             responseError(ResultCode.AUTH_FAIL,"未登录");
             return;
         }
-        startRest(rest.request(accountBean.getUuid(),event.request().getPage(),event.request().getStartTime(),event.request().getEndTime()),new RestCallback<BaseListResponse<InComeBean>>(){
+        Long startTime=event.request().getStartTime()<0?null:event.request().getStartTime();
+        startRest(rest.request(accountBean.getUuid(),event.request().getPage(),startTime,event.request().getEndTime()),new RestCallback<BaseListResponse<InComeBean>>(){
             @Override
             public boolean onResponse(BaseListResponse<InComeBean> response) {
                 return true;

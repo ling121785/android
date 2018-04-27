@@ -70,6 +70,6 @@ public class LiveStatisticsEvent extends BaseEvent<LiveStatisticsEvent.Request,L
 
     public interface Rest {
         @GET("live/statistics")
-        Observable<LiveStatisticsBean> request(@Query("access_token") String token, @Query("page") int page, @Query("start_time") long startTime, @Query("end_time") long endTime);
+        Observable<LiveStatisticsBean> request(@Query("access_token") String token, @Query("page") int page, @Query("start_time") Long startTime, @Query("end_time") long endTime);
     }
 }

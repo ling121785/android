@@ -256,12 +256,12 @@ public class StartLiveActivity extends BaseActivity {
         Intent intent = new Intent("com.android.camera.action.CROP");
         intent.setDataAndType(uri, "image/*");
         intent.putExtra("crop", "true");
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
+        intent.putExtra("aspectX", 9998);
+        intent.putExtra("aspectY", 9999);
         intent.putExtra("outputX", 250);
         intent.putExtra("outputY", 250);
         intent.putExtra("outputFormat", "JPEG");
-        intent.putExtra("noFaceDetection", true);
+        intent.putExtra("noFaceDetection", false);
         intent.putExtra("return-data", true);
         startActivityForResult(intent, PHOTO_REQUEST_CUT);
     }
