@@ -117,7 +117,7 @@ public class UserBusiness extends BaseBusiness{
             return;
         }
         Long startTime=event.request().getStartTime()<0?null:event.request().getStartTime();
-        startRest(rest.request(accountBean.getUuid(),event.request().getPage(),startTime,event.request().getEndTime()),new RestCallback<BaseListResponse<InComeBean>>(){
+        startRest(rest.request(accountBean.getUuid(),event.request().getType(),event.request().getPage(),startTime,event.request().getEndTime()),new RestCallback<BaseListResponse<InComeBean>>(){
             @Override
             public boolean onResponse(BaseListResponse<InComeBean> response) {
                 return true;

@@ -1773,6 +1773,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         Intent intent=new Intent(this, MyFanContributionsActivity.class);
         intent.putExtra("isLive",true);
         intent.putExtra("liveStartTime",this.startTime);
+        startActivity(intent);
 
     }
 

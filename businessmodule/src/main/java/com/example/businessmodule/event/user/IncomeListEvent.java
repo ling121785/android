@@ -23,6 +23,7 @@ public class IncomeListEvent extends BaseEvent<IncomeListEvent.Request,BaseListR
         private int page;
         private long startTime;
         private long endTime;
+        private int type=0;//0:按天,1:按月，2:按年
 
         public Request(int page,long startTime,long endTime) {
             this.page = page;
@@ -41,10 +42,18 @@ public class IncomeListEvent extends BaseEvent<IncomeListEvent.Request,BaseListR
         public long getEndTime() {
             return endTime;
         }
+
+        public int getType() {
+            return type;
+        }
+
+        public void setType(int type) {
+            this.type = type;
+        }
     }
 
     public interface Rest {
-        @GET("account/income")
-        Observable<BaseListResponse<InComeBean>> request(@Query("access_token") String token, @Query("page") int page,@Query("start_time") Long startTime, @Query("end_time") long endTime);
+        @GET("live/statistics/time")
+        Observable<BaseListResponse<InComeBean>> request(@Query("access_token") String token,@Query("type") int type, @Query("page") int page,@Query("start_time") Long startTime, @Query("end_time") long endTime);
     }
 }
