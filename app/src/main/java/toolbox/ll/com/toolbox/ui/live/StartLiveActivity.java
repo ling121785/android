@@ -3,6 +3,7 @@ package toolbox.ll.com.toolbox.ui.live;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
@@ -32,6 +33,7 @@ import com.squareup.otto.Subscribe;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.Random;
 
@@ -78,6 +80,7 @@ public class StartLiveActivity extends BaseActivity {
 
     private File tempFile;
     private File mPostFile;
+    private Uri cropTemp;
 
     @Override
     public void beforeInit(Bundle savedInstanceState) {
@@ -204,7 +207,7 @@ public class StartLiveActivity extends BaseActivity {
         if (requestCode == PHOTO_REQUEST_GALLERY) {
             if (data != null) {
                 Uri uri = data.getData();
-                Logger.e("图片路径？？", data.getData() + "");
+                Logger.e("图片路径？？"+data.getData() + "");
                 crop(uri);
             }
 
@@ -219,11 +222,12 @@ public class StartLiveActivity extends BaseActivity {
 
         } else if (requestCode == PHOTO_REQUEST_CUT) {
             if (data != null) {
-                final Bitmap bitmap = data.getParcelableExtra("data");
-                mIVCovor.setImageBitmap(bitmap);
-                // 保存图片到internal storage
-                FileOutputStream outputStream;
+//                final Bitmap bitmap = data.getParcelableExtra("data");
                 try {
+                    final Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(cropTemp));
+                    mIVCovor.setImageBitmap(bitmap);
+                    // 保存图片到internal storage
+                    FileOutputStream outputStream;
                     ByteArrayOutputStream out = new ByteArrayOutputStream();
                     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                     out.flush();
@@ -235,7 +239,9 @@ public class StartLiveActivity extends BaseActivity {
                     out.writeTo(outputStream);
                     out.close();
                     outputStream.close();
-                } catch (Exception e) {
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                }catch (Exception e) {
                     e.printStackTrace();
                 }
                 File file = new File(this.getFilesDir(), "_head_icon.jpg");
@@ -262,7 +268,9 @@ public class StartLiveActivity extends BaseActivity {
         intent.putExtra("outputY", 250);
         intent.putExtra("outputFormat", "JPEG");
         intent.putExtra("noFaceDetection", false);
-        intent.putExtra("return-data", true);
+        intent.putExtra("return-data", false);
+        cropTemp= Uri.parse("file://" + "/" + Environment.getExternalStorageDirectory().getPath() + "/" + "small.jpg");
+        intent.putExtra(MediaStore.EXTRA_OUTPUT, cropTemp);
         startActivityForResult(intent, PHOTO_REQUEST_CUT);
     }
 
