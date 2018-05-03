@@ -278,7 +278,7 @@ public class StartLiveActivity extends BaseActivity {
     public void createRoomResponse(CreateRoomEvent event){
         if(event.isSuccess()){
             ToastUtils.showToast(this,"房间创建成功");
-            gotoChatRoom(event.response());
+            gotoChatRoom(event.response(),event.request().getPoster());
             return;
         }
         ToastUtils.showToast(this,"房间创建失败");
@@ -289,12 +289,13 @@ public class StartLiveActivity extends BaseActivity {
      * 进入房间
      * @param roomBean
      */
-    public void gotoChatRoom(RoomBean roomBean){
+    public void gotoChatRoom(RoomBean roomBean,String poster){
         Intent intent=new Intent(this,LiveStreamingActivity.class);
         LiveStreamingBean liveStreamingBean=new LiveStreamingBean();
         liveStreamingBean.setRoomId(roomBean.getRoomId());
         liveStreamingBean.setPushUrl(roomBean.getLiveUrl());
         liveStreamingBean.setLiveId(roomBean.getLiveId());
+        liveStreamingBean.setPoster(poster);
         intent.putExtra("data",liveStreamingBean);
         startActivity(intent);
         this.finish();

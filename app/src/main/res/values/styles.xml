@@ -85,4 +85,15 @@
         <item name="android:drawablePadding">@dimen/padding_smallest</item>
     </style>
 
+    <style name="ConfirmDialog" parent="@android:style/Theme.Dialog">
+        <!-- 无标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--<item name="android:background">@drawable/bg_transparent</item>-->
+        <!-- dialog背景样式 -->
+        <!-- 背景透明 -->
+        <item name="android:backgroundDimEnabled">true</item>
+        <item name="android:backgroundDimAmount">0.8</item>
+    </style>
+
 </resources>

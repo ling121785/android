@@ -43,7 +43,7 @@
             android:minHeight="@dimen/general_item_height"
             android:background="@android:color/white"
             style="@style/base_padding_horizontal"
-
+            android:visibility="gone"
             android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"
@@ -67,7 +67,8 @@
             android:minHeight="@dimen/general_item_height"
             android:background="@android:color/white"
             style="@style/base_padding_horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:visibility="gone">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/general_item_height"
@@ -93,7 +94,6 @@
             android:minHeight="@dimen/general_item_height"
             android:background="@android:color/white"
             style="@style/base_padding_horizontal"
-            android:layout_marginTop="@dimen/general_item_margin_large"
             android:gravity="center">
             <TextView
                 android:layout_width="wrap_content"
@@ -152,7 +152,8 @@
             android:minHeight="@dimen/general_item_height"
             android:background="@android:color/white"
             style="@style/base_padding_horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:visibility="gone">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/general_item_height"
@@ -176,7 +177,8 @@
             android:minHeight="@dimen/general_item_height"
             android:background="@android:color/white"
             style="@style/base_padding_horizontal"
-            android:gravity="center">
+            android:gravity="center"
+            android:visibility="gone">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/general_item_height"
@@ -199,8 +201,8 @@
         android:id="@+id/setting_btn_logout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/fontRed"
-        android:textColor="@color/white"
+        android:background="@color/white"
+        android:textColor="@color/fontBlack"
         android:text="退出登录"
         android:layout_marginTop="@dimen/general_item_margin_large"/>
 

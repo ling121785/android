@@ -1376,7 +1376,7 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
             return;
         try {
             final GiftAnimationBean giftInfo= JsonUtils.jsonToObj(giftBean.getAnimate(),GiftAnimationBean.class);
-            if(giftInfo==null)
+            if(giftInfo==null||giftInfo.isAnimation()!=true)
                 return;
             //为了下载图片资源，开辟一个新的子线程
             Thread t=new Thread(){
@@ -1715,6 +1715,12 @@ public class LiveStreamingActivity extends BaseActivity implements  lsMessageHan
         }
     }
 
+
+    @OnClick(R.id.live_iv_share)
+    public void share(){
+        String url="http://live.aptaid.com:5678/zhibo/#/AccountSelect/LiveRoomList/LiveRoom?liveId="+mLSBean.getLiveId()+"&poster="+mLSBean.getPoster();
+        DialogUtil.showShareDialog(this,url);
+    }
 
     @OnItemClick(R.id.live_gv_menu)
     public void menuItemClick(int index){

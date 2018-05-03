@@ -29,6 +29,7 @@ public class LiveStreamingBean implements Serializable {
     private int qosEncodeMode = 1; // 1:流畅优先, 2:清晰优先
     private boolean graffitiOn = false; //是否添加涂鸦
     private  boolean uploadLog = false; //是否上传SDK运行日志
+    private String poster=null;
 
     public String getPushUrl() {
         return pushUrl;
@@ -156,5 +157,13 @@ public class LiveStreamingBean implements Serializable {
 
     public void setLiveId(String liveId) {
         this.liveId = liveId;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 }

@@ -10,6 +10,7 @@ import com.netease.nimlib.sdk.msg.MsgService;
 import com.netease.nimlib.sdk.msg.attachment.MsgAttachmentParser;
 import com.netease.nimlib.sdk.util.NIMUtil;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.uuzuche.lib_zxing.activity.ZXingLibrary;
 
 import toolbox.ll.com.common.utility.CrashUtils;
 import toolbox.ll.com.toolbox.core.inject.CustomAttachParser;
@@ -24,6 +25,7 @@ public class MainApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        ZXingLibrary.initDisplayOpinion(this);
         CrashUtils.getInstance().init(this);
         // SDK初始化（启动后台服务，若已经存在用户登录信息， SDK 将完成自动登录）
         NIMClient.init(this, NeteaseUtil.loginInfo(), NeteaseUtil.options(this));

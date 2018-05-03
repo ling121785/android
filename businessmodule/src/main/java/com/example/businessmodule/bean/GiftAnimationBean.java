@@ -1,5 +1,7 @@
 package com.example.businessmodule.bean;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
@@ -11,6 +13,8 @@ public class GiftAnimationBean {
     private int height;
     private int width;
     private double seconds;
+    @SerializedName("isAnimation")
+    private boolean isAnimation;
     private List<PieceBean> list;
 
     public GiftAnimationBean() {
@@ -63,6 +67,14 @@ public class GiftAnimationBean {
         this.list = list;
     }
 
+    public boolean isAnimation() {
+        return isAnimation;
+    }
+
+    public void setAnimation(boolean animation) {
+        isAnimation = animation;
+    }
+
     public static class PieceBean{
         private int height;
         private int width;
@@ -78,6 +90,7 @@ public class GiftAnimationBean {
             this.x = x;
             this.y = y;
         }
+
 
         public int getHeight() {
             return height;

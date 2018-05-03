@@ -7,6 +7,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import toolbox.ll.com.toolbox.ui.dialog.ChooseTimeDialog;
+import toolbox.ll.com.toolbox.ui.dialog.ShareDialog;
 
 /**
  * Created by Administrator on 2018/3/31.
@@ -62,6 +63,11 @@ public class DialogUtil {
     public static ChooseTimeDialog chooseTimeDialog(Context context,long startTime ,long endTime ,final DialogClickListener clickListener){
         ChooseTimeDialog dialog =  ChooseTimeDialog.chooseTimeDialog(context,startTime,endTime,clickListener);
         return dialog;
+    }
+
+    public static void showShareDialog(Context context,String msg){
+        ShareDialog dialog=ShareDialog.showShareDialog(context,msg,null);
+        dialog.show();
     }
 
     public interface DialogClickListener{

@@ -80,9 +80,9 @@ public class MyFanContributionsActivity extends BaseTitleActivity {
         startTime=calendar.getTimeInMillis();
         mFragments.add(new MyFanContributionsFragment().setTime(EventId.FANS_CONR_YEAR,startTime,endTime));
 
-        String[] mTabTitles={"日版","周版","月版","总榜"};
+        String[] mTabTitles={"日榜","周榜","月榜","总榜"};
         if(isLive){
-           mTabTitles= new String[]{"本次", "周版", "月版", "总榜"};
+           mTabTitles= new String[]{"本次", "周榜", "月榜", "总榜"};
         }
         mViewPage.setAdapter(new SimpleFragmentAdapter(this.getSupportFragmentManager(),mFragments,mTabTitles));
         mViewPage.setOffscreenPageLimit(mFragments.size());

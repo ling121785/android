@@ -184,7 +184,8 @@
             android:layout_height="40dp"
             android:layout_marginRight="@dimen/margin_smaller"
             android:layout_marginLeft="@dimen/margin_smaller"
-            android:src="@drawable/ic_connecting_voice"/>
+            android:src="@drawable/ic_connecting_voice"
+            android:visibility="gone"/>
         <ImageView
             android:id="@+id/live_iv_gift"
             android:layout_width="40dp"

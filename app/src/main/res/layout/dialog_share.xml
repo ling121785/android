@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+<LinearLayout
+    android:layout_width="300dp"
+    android:layout_height="414dp"
+    android:background="@drawable/bg_dialog_white"
+    android:paddingTop="@dimen/padding_small"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="马上分享给朋友吧"
+        android:textColor="@color/fontBlack"
+        android:layout_marginTop="20dp"
+        android:layout_centerVertical="true"/>
+    <ImageView
+        android:id="@+id/dialog_iv_qrcode"
+        android:layout_width="173dp"
+        android:layout_height="173dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"/>
+    <TextView
+        android:id="@+id/dialog_tv_msg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:lines="1"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        android:ellipsize="end"
+        android:text="地址："/>
+
+    <Button
+        android:id="@+id/dialog_btn_copy"
+        style="@style/login_button"
+        android:layout_width="213dp"
+        android:layout_height="36dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="30dp"
+        android:text="复制链接"/>
+
+
+</LinearLayout>
+</RelativeLayout>
